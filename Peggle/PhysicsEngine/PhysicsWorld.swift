@@ -20,7 +20,7 @@ final class PhysicsWorld {
 
     func updateBodies(deltaTime seconds: CGFloat) {
         for body in bodies where body.isDynamic == true {
-            body.update(deltaTime: seconds)
+            body.update(deltaTime: seconds, speed: speed)
         }
     }
 

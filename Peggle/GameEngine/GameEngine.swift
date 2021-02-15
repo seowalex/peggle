@@ -139,7 +139,8 @@ final class GameEngine {
 
         // Only start new timer if previous timer invalidated or expired
         if ballTimer == nil || !(ballTimer?.isValid ?? true) {
-            ballTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { [self] _ in
+            ballTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(physicsWorld.speed),
+                                             repeats: false) { [self] _ in
                 let entities = entityManager.getEntities(for: LightComponent.self)
                 var minDistance = CGFloat.infinity
                 var minEntity: Entity?

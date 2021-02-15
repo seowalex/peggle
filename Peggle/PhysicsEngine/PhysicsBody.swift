@@ -112,12 +112,12 @@ final class PhysicsBody {
         forces.append(force)
     }
 
-    func update(deltaTime seconds: CGFloat) {
+    func update(deltaTime seconds: CGFloat, speed: CGFloat) {
         let resultantForce = forces.reduce(CGVector.zero, +)
         let acceleration = resultantForce / mass
 
-        position += velocity * seconds + 0.5 * acceleration * seconds * seconds
-        velocity += acceleration * seconds
+        position += (velocity * seconds + 0.5 * acceleration * seconds * seconds) * speed
+        velocity += acceleration * seconds * speed
 
         // TODO: Better resting calculations
         if isDynamic == true && velocity.magnitude() < 0.04 {
