@@ -116,7 +116,7 @@ final class PhysicsBody {
         let resultantForce = forces.reduce(CGVector.zero, +)
         let acceleration = resultantForce / mass
 
-        position += (velocity * seconds + 0.5 * acceleration * seconds * seconds) * speed
+        position += velocity * seconds * speed + 0.5 * acceleration * pow(seconds * speed, 2)
         velocity += acceleration * seconds * speed
 
         // TODO: Better resting calculations
