@@ -35,7 +35,7 @@ final class GameEngine {
             self?.physicsWorld.bodies = physicsBodies
         }
 
-        collisionCancellable = physicsWorld.collisionPublisher.sink { [weak self] physicsBody in
+        collisionCancellable = physicsWorld.collisionPublisher.sink { [weak self] bodyA, bodyB in
             guard let entities = self?.entityManager.getEntities(for: LightComponent.self) else {
                 return
             }
@@ -43,7 +43,7 @@ final class GameEngine {
             for entity in entities {
                 guard let lightComponent = self?.entityManager.getComponent(LightComponent.self, for: entity),
                       let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
-                      physicsComponent.physicsBody === physicsBody else {
+                      physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB else {
                     continue
                 }
 

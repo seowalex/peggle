@@ -6,11 +6,11 @@ final class PhysicsWorld {
     var speed: CGFloat = 1.0
     var bodies: [PhysicsBody] = []
 
-    var collisionPublisher: AnyPublisher<PhysicsBody, Never> {
+    var collisionPublisher: AnyPublisher<(PhysicsBody, PhysicsBody), Never> {
         subject.eraseToAnyPublisher()
     }
 
-    private let subject = PassthroughSubject<PhysicsBody, Never>()
+    private let subject = PassthroughSubject<(PhysicsBody, PhysicsBody), Never>()
 
     func applyGravity() {
         for index in bodies.indices where bodies[index].affectedByGravity == true {
@@ -32,7 +32,7 @@ final class PhysicsWorld {
                     continue
                 }
 
-                [bodies[i], bodies[j]].forEach(subject.send)
+                subject.send((bodies[i], bodies[j]))
 
                 // TODO: Dynamic collision
                 if bodies[j].isDynamic == false {
