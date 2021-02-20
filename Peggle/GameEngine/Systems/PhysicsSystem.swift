@@ -6,7 +6,7 @@ final class PhysicsSystem: System {
     }
 
     func update() {
-        let entities = entityManager.getEntities(for: RenderComponent.self)
+        let entities = entityManager.getEntities(for: PhysicsComponent.self)
 
         for entity in entities {
             guard let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity),
