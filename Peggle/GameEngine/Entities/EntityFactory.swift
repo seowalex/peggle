@@ -26,14 +26,12 @@ final class EntityFactory {
         let entity = Entity()
         entityManager.addComponent(RenderComponent(position: position,
                                                    size: CGSize(width: 0.16, height: 0.16),
-                                                   imageName: "cannon",
+                                                   imageNames: [.base: "cannon", .loaded: "cannon-loaded"],
                                                    rotation: rotation,
                                                    zIndex: 1),
                                    to: entity)
         entityManager.addComponent(TargetComponent(position: position,
                                                    initialAngle: .pi / 2,
-                                                   imageName: "cannon",
-                                                   targetedImageName: "cannon-loaded",
                                                    minAngle: -.pi / 3,
                                                    maxAngle: .pi / 3),
                                    to: entity)
@@ -48,7 +46,7 @@ final class EntityFactory {
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .circle,
                                                                              size: size,
                                                                              position: position,
-                                                                             restitution: 0.24,
+                                                                             restitution: 0.2,
                                                                              velocity: velocity)),
                                    to: entity)
         entityManager.addComponent(RenderComponent(position: position,
@@ -84,12 +82,12 @@ final class EntityFactory {
                                    to: entity)
         entityManager.addComponent(RenderComponent(position: position,
                                                    size: size,
-                                                   imageName: imageName,
+                                                   imageNames: [.base: imageName, .lit: "\(imageName)-glow"],
                                                    rotation: rotation,
                                                    transition: AnyTransition.opacity
                                                     .animation(.easeInOut(duration: 0.2))),
                                    to: entity)
-        entityManager.addComponent(LightComponent(imageName: "\(imageName)-glow"), to: entity)
+        entityManager.addComponent(LightComponent(), to: entity)
 
         return entity
     }

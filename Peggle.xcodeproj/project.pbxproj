@@ -26,6 +26,7 @@
 		0E2A452525BDC56800B0DCA7 /* LevelEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A452425BDC56800B0DCA7 /* LevelEditorView.swift */; };
 		0E2A452D25BDE62100B0DCA7 /* Peg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A452C25BDE62100B0DCA7 /* Peg.swift */; };
 		0E2A454025BFEABA00B0DCA7 /* LevelEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A453F25BFEABA00B0DCA7 /* LevelEditorViewModel.swift */; };
+		0E3BB28325E0DEBE0021A9F6 /* PhysicsSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */; };
 		0E3D4C9F25D9626600C3E8FB /* PhysicsBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3D4C9E25D9626600C3E8FB /* PhysicsBodyTests.swift */; };
 		0E61D56925D6C4EE0091D9D0 /* LightComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E61D56825D6C4EE0091D9D0 /* LightComponent.swift */; };
 		0E61D56D25D6C6200091D9D0 /* LightSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E61D56C25D6C6200091D9D0 /* LightSystem.swift */; };
@@ -81,6 +82,7 @@
 		0E2A452425BDC56800B0DCA7 /* LevelEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorView.swift; sourceTree = "<group>"; };
 		0E2A452C25BDE62100B0DCA7 /* Peg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peg.swift; sourceTree = "<group>"; };
 		0E2A453F25BFEABA00B0DCA7 /* LevelEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorViewModel.swift; sourceTree = "<group>"; };
+		0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsSystem.swift; sourceTree = "<group>"; };
 		0E3D4C9E25D9626600C3E8FB /* PhysicsBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsBodyTests.swift; sourceTree = "<group>"; };
 		0E61D56825D6C4EE0091D9D0 /* LightComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightComponent.swift; sourceTree = "<group>"; };
 		0E61D56C25D6C6200091D9D0 /* LightSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightSystem.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 			children = (
 				0E18E22125D635EE00A2B74A /* System.swift */,
 				0E61D56C25D6C6200091D9D0 /* LightSystem.swift */,
+				0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */,
 				0E18E22F25D63B1300A2B74A /* RenderSystem.swift */,
 				0E61D57A25D6CD2F0091D9D0 /* TargetSystem.swift */,
 			);
@@ -430,6 +433,7 @@
 				0E18E23E25D6412200A2B74A /* EntityManager.swift in Sources */,
 				0E18E21525D6296600A2B74A /* PhysicsComponent.swift in Sources */,
 				0E85317825C30034008B012D /* CGPoint+Extensions.swift in Sources */,
+				0E3BB28325E0DEBE0021A9F6 /* PhysicsSystem.swift in Sources */,
 				0E08491F25BD19F9004CE733 /* PeggleApp.swift in Sources */,
 				0E6F771725D6B7E900E4C8B8 /* EntityFactory.swift in Sources */,
 			);

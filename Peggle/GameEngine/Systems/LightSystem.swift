@@ -15,7 +15,7 @@ final class LightSystem: System {
                 continue
             }
 
-            renderComponent.imageName = lightComponent.imageName
+            renderComponent.state.formUnion(.lit)
         }
     }
 }

@@ -22,12 +22,9 @@ final class TargetSystem: System {
                 renderComponent.rotation = min(max(targetComponent.position.angle(to: normalizedTarget),
                                                    targetComponent.minAngle),
                                                targetComponent.maxAngle)
-            }
-
-            if targetComponent.isTargeting == true {
-                renderComponent.imageName = targetComponent.targetedImageName
+                renderComponent.state.formUnion(.loaded)
             } else {
-                renderComponent.imageName = targetComponent.imageName
+                renderComponent.state.subtract(.loaded)
             }
         }
     }

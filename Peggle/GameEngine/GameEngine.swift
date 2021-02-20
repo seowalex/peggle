@@ -18,9 +18,10 @@ final class GameEngine {
     init(pegs: [Peg]) {
         entityFactory = EntityFactory(entityManager: entityManager)
         systems = [
-            RenderSystem(entityManager: entityManager),
+            PhysicsSystem(entityManager: entityManager),
             LightSystem(entityManager: entityManager),
-            TargetSystem(entityManager: entityManager)
+            TargetSystem(entityManager: entityManager),
+            RenderSystem(entityManager: entityManager)
         ]
 
         createEntities(pegs: pegs)
@@ -81,7 +82,6 @@ final class GameEngine {
             }
 
             targetComponent.target = position
-            targetComponent.isTargeting = true
         }
     }
 
@@ -98,7 +98,6 @@ final class GameEngine {
             }
 
             targetComponent.target = nil
-            targetComponent.isTargeting = false
 
             // Clamp the firing angle between minAngle and maxAngle
             let normalizedTarget = position.rotate(around: targetComponent.position,
