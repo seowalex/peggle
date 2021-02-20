@@ -1,6 +1,6 @@
 import CoreGraphics
 
-final class TargetComponent: Component {
+final class AimComponent: Component {
     let position: CGPoint
     let initialAngle: CGFloat
     let minAngle: CGFloat

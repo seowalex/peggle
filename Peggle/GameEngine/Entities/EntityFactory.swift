@@ -30,10 +30,10 @@ final class EntityFactory {
                                                    rotation: rotation,
                                                    zIndex: 1),
                                    to: entity)
-        entityManager.addComponent(TargetComponent(position: position,
-                                                   initialAngle: .pi / 2,
-                                                   minAngle: -.pi / 3,
-                                                   maxAngle: .pi / 3),
+        entityManager.addComponent(AimComponent(position: position,
+                                                initialAngle: .pi / 2,
+                                                minAngle: -.pi / 3,
+                                                maxAngle: .pi / 3),
                                    to: entity)
 
         return entity

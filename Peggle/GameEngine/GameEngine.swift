@@ -20,7 +20,7 @@ final class GameEngine {
         systems = [
             PhysicsSystem(entityManager: entityManager),
             LightSystem(entityManager: entityManager),
-            TargetSystem(entityManager: entityManager),
+            AimSystem(entityManager: entityManager),
             RenderSystem(entityManager: entityManager)
         ]
 
@@ -74,14 +74,14 @@ final class GameEngine {
             return
         }
 
-        let entities = entityManager.getEntities(for: TargetComponent.self)
+        let entities = entityManager.getEntities(for: AimComponent.self)
 
         for entity in entities {
-            guard let targetComponent = entityManager.getComponent(TargetComponent.self, for: entity) else {
+            guard let aimComponent = entityManager.getComponent(AimComponent.self, for: entity) else {
                 continue
             }
 
-            targetComponent.target = position
+            aimComponent.target = position
         }
     }
 
@@ -90,29 +90,29 @@ final class GameEngine {
             return
         }
 
-        let entities = entityManager.getEntities(for: TargetComponent.self)
+        let entities = entityManager.getEntities(for: AimComponent.self)
 
         for entity in entities {
-            guard let targetComponent = entityManager.getComponent(TargetComponent.self, for: entity) else {
+            guard let aimComponent = entityManager.getComponent(AimComponent.self, for: entity) else {
                 continue
             }
 
-            targetComponent.target = nil
+            aimComponent.target = nil
 
             // Clamp the firing angle between minAngle and maxAngle
-            let normalizedTarget = position.rotate(around: targetComponent.position,
-                                                   by: -targetComponent.initialAngle)
-            let angle = targetComponent.position.angle(to: normalizedTarget)
-            let clampedAngle = min(max(targetComponent.position.angle(to: normalizedTarget),
-                                       targetComponent.minAngle),
-                                   targetComponent.maxAngle)
+            let normalizedTarget = position.rotate(around: aimComponent.position,
+                                                   by: -aimComponent.initialAngle)
+            let angle = aimComponent.position.angle(to: normalizedTarget)
+            let clampedAngle = min(max(aimComponent.position.angle(to: normalizedTarget),
+                                       aimComponent.minAngle),
+                                   aimComponent.maxAngle)
             let difference = clampedAngle - angle
-            let actualPosition = position.rotate(around: targetComponent.position, by: difference)
+            let actualPosition = position.rotate(around: aimComponent.position, by: difference)
 
             // Have to normalize the velocity so that the speed remains constant no matter
             // how far the tap is from the cannon
-            ballEntity = entityFactory.createBall(position: targetComponent.position,
-                                                  velocity: (actualPosition - targetComponent.position)
+            ballEntity = entityFactory.createBall(position: aimComponent.position,
+                                                  velocity: (actualPosition - aimComponent.position)
                                                     .normalized() * 1.2)
         }
     }
