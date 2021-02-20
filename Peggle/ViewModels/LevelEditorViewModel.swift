@@ -9,7 +9,7 @@ final class LevelEditorViewModel: ObservableObject {
     }
 
     enum PaletteSelection: Equatable {
-        case addPeg(Peg.Shape, Peg.Color)
+        case addPeg(Peg.Color)
         case deletePeg
     }
 
@@ -33,8 +33,8 @@ final class LevelEditorViewModel: ObservableObject {
 
     @Published var name = ""
     @Published private(set) var pegs: [Peg] = []
-    @Published var level = Level.new()
-    @Published var paletteSelection = PaletteSelection.addPeg(.circle, .blue)
+    @Published var level = Level(name: "")
+    @Published var paletteSelection = PaletteSelection.addPeg(.blue)
 
     let levelEditorListViewModel: LevelEditorListViewModel
 
@@ -47,32 +47,40 @@ final class LevelEditorViewModel: ObservableObject {
     }
 
     func dragBoard(position: CGPoint) {
-        guard case let .addPeg(shape, color) = paletteSelection else {
+        guard case let .addPeg(color) = paletteSelection else {
             return
         }
 
-        let placeholderPeg = Peg(position: position, shape: shape, color: color)
+        let physicsBody = PhysicsBody(shape: .circle, size: Peg.defaultSize, position: position)
 
-        if placeholderPeg.isColliding(with: frame) || placeholderPeg.isColliding(with: pegs) {
+        if !frame.contains(physicsBody.boundingBox)
+            || physicsBody.isColliding(with: pegs.map { PhysicsBody(shape: .circle,
+                                                                    size: $0.size,
+                                                                    position: $0.position)
+            }) {
             return
         }
 
-        pegs.append(placeholderPeg)
+        pegs.append(Peg(position: position, color: color))
     }
 
     func draggingBoard(position: CGPoint) -> DragState? {
-        guard case let .addPeg(shape, color) = paletteSelection else {
+        guard case let .addPeg(color) = paletteSelection else {
             return nil
         }
 
-        let placeholderPeg = Peg(position: position, shape: shape, color: color)
+        let physicsBody = PhysicsBody(shape: .circle, size: Peg.defaultSize, position: position)
         var isValid = true
 
-        if placeholderPeg.isColliding(with: frame) || placeholderPeg.isColliding(with: pegs) {
+        if !frame.contains(physicsBody.boundingBox)
+            || physicsBody.isColliding(with: pegs.map { PhysicsBody(shape: .circle,
+                                                                    size: $0.size,
+                                                                    position: $0.position)
+            }) {
             isValid = false
         }
 
-        return DragState(peg: placeholderPeg, location: position, isValid: isValid)
+        return DragState(peg: Peg(position: position, color: color), location: position, isValid: isValid)
     }
 
     func longPressPeg(peg: Peg) {
@@ -94,9 +102,13 @@ final class LevelEditorViewModel: ObservableObject {
         newLocation.x += translation.width
         newLocation.y += translation.height
 
-        let placeholderPeg = Peg(position: newLocation, size: peg.size, shape: peg.shape)
+        let physicsBody = PhysicsBody(shape: .circle, size: peg.size, position: newLocation)
 
-        if placeholderPeg.isColliding(with: frame) || placeholderPeg.isColliding(with: pegs.filter { $0 != peg }) {
+        if !frame.contains(physicsBody.boundingBox)
+            || physicsBody.isColliding(with: pegs.filter { $0 != peg }.map { PhysicsBody(shape: .circle,
+                                                                                         size: $0.size,
+                                                                                         position: $0.position)
+            }) {
             isValid = false
         }
 
@@ -116,9 +128,13 @@ final class LevelEditorViewModel: ObservableObject {
             newLocation.x += translation.width
             newLocation.y += translation.height
 
-            let placeholderPeg = Peg(position: newLocation, size: peg.size, shape: peg.shape)
+            let physicsBody = PhysicsBody(shape: .circle, size: peg.size, position: newLocation)
 
-            if placeholderPeg.isColliding(with: frame) || placeholderPeg.isColliding(with: pegs.filter { $0 != peg }) {
+            if !frame.contains(physicsBody.boundingBox)
+                || physicsBody.isColliding(with: pegs.filter { $0 != peg }.map { PhysicsBody(shape: .circle,
+                                                                                             size: $0.size,
+                                                                                             position: $0.position)
+                }) {
                 return
             }
 
@@ -158,6 +174,6 @@ final class LevelEditorViewModel: ObservableObject {
     func reset() {
         name = ""
         pegs.removeAll()
-        level = .new()
+        level = Level(name: "")
     }
 }

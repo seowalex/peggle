@@ -120,8 +120,8 @@ struct LevelEditorView: View {
 
     private func Palette() -> some View {
         HStack(spacing: 16) {
-            PaletteButton(selection: .addPeg(.circle, .blue), imageName: "peg-blue")
-            PaletteButton(selection: .addPeg(.circle, .orange), imageName: "peg-orange")
+            PaletteButton(selection: .addPeg(.blue), imageName: "peg-blue")
+            PaletteButton(selection: .addPeg(.orange), imageName: "peg-orange")
             Spacer()
             PaletteButton(selection: .deletePeg, imageName: "delete")
         }

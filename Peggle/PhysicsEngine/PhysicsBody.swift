@@ -89,7 +89,7 @@ final class PhysicsBody {
 
     func isColliding(with body: PhysicsBody) -> Bool {
         // Handle trivial case first
-        if !boundingBox.intersects(body.boundingBox) {
+        if self === body || !boundingBox.intersects(body.boundingBox) {
             return false
         }
 
@@ -108,11 +108,15 @@ final class PhysicsBody {
         return false
     }
 
+    func isColliding(with bodies: [PhysicsBody]) -> Bool {
+        !bodies.allSatisfy { !isColliding(with: $0) }
+    }
+
     func applyForce(_ force: CGVector) {
         forces.append(force)
     }
 
-    func update(deltaTime seconds: CGFloat, speed: CGFloat) {
+    func update(deltaTime seconds: CGFloat, speed: CGFloat = 1.0) {
         let actualSeconds = seconds * speed
         let resultantForce = forces.reduce(CGVector.zero, +)
         let acceleration = resultantForce / mass
@@ -134,14 +138,5 @@ final class PhysicsBody {
 extension PhysicsBody {
     enum Shape {
         case rectangle, circle, triangle
-
-        init(_ shape: Peg.Shape) {
-            switch shape {
-            case .circle:
-                self = .circle
-            case .triangle:
-                self = .triangle
-            }
-        }
     }
 }

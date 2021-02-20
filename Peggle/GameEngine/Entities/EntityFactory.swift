@@ -58,21 +58,10 @@ final class EntityFactory {
     }
 
     @discardableResult
-    func createPeg(position: CGPoint, shape: Peg.Shape, color: Peg.Color,
-                   rotation: CGFloat = 0.0, size: CGSize = Peg.defaultSize) -> Entity {
-        var imageName = ""
-
-        switch (shape, color) {
-        case (.circle, .blue):
-            imageName = "peg-blue"
-        case (.circle, .orange):
-            imageName = "peg-orange"
-        default:
-            imageName = ""
-        }
-
+    func createPeg(position: CGPoint, imageName: String, rotation: CGFloat = 0.0,
+                   size: CGSize = Peg.defaultSize) -> Entity {
         let entity = Entity()
-        entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: PhysicsBody.Shape(shape),
+        entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .circle,
                                                                              size: size,
                                                                              position: position,
                                                                              rotation: rotation,

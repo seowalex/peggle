@@ -60,8 +60,8 @@ final class GameEngine {
         entityFactory.createCannon(position: CGPoint(x: 0.5, y: 0.07))
 
         for peg in pegs {
-            entityFactory.createPeg(position: peg.position, shape: peg.shape, color: peg.color ?? .blue,
-                                    rotation: peg.rotation, size: peg.size)
+            entityFactory.createPeg(position: peg.position, imageName: peg.imageName, rotation: peg.rotation,
+                                    size: peg.size)
         }
     }
 

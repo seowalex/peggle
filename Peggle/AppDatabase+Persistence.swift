@@ -31,12 +31,5 @@ extension AppDatabase {
 
         return try! AppDatabase(dbQueue)
     }
-
-    static func random() -> AppDatabase {
-        let appDatabase = empty()
-        try! appDatabase.createRandomLevelsIfEmpty()
-
-        return appDatabase
-    }
     // swiftlint:enable force_try
 }

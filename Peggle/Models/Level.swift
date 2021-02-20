@@ -7,26 +7,6 @@ struct Level: Identifiable, Equatable {
     var name: String
 }
 
-extension Level {
-    private static let names = [
-        "Asteroid Blues", "Stray Dog Strut", "Honky Tonk Women", "Gateway Shuffle", "Ballad of Fallen Angels",
-        "Sympathy for the Devil", "Heavy Metal Queen", "Waltz for Venus", "Jamming with Edward", "Ganymede Elegy",
-        "Toys in the Attic", "Jupiter Jazz", "Bohemian Rhapsody", "My Funny Valentine", "Black Dog Serenade",
-        "Mushroom Samba", "Speak Like a Child", "Wild Horses", "Pierrot le Fou", "Boogie Woogie Feng Shui",
-        "Cowboy Funk", "Brain Scratch", "Hard Luck Woman", "The Real Folk Blues"
-    ]
-
-    static func new() -> Self {
-        Level(name: "")
-    }
-
-    static func newRandom() -> Self {
-        let name = names.randomElement() ?? ""
-
-        return Level(name: name)
-    }
-}
-
 // MARK: - Persistence
 
 extension Level: Codable, FetchableRecord, MutablePersistableRecord {

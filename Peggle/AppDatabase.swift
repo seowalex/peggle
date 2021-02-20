@@ -38,9 +38,6 @@ struct AppDatabase {
                     .check { $0 >= 0 && $0 < 2 * Double.pi }
                 t.column("size", .text)
                     .notNull()
-                t.column("shape", .text)
-                    .notNull()
-                    .check { Peg.Shape.allCases.map { $0.rawValue }.contains($0) }
                 t.column("color", .text)
                     .notNull()
                     .check { Peg.Color.allCases.map { $0.rawValue }.contains($0) }
@@ -67,7 +64,9 @@ extension AppDatabase {
                 throw DatabaseError(message: "Pegs do not have the correct level ID")
             }
 
-            guard pegs.allSatisfy({ peg in !peg.isColliding(with: pegs.filter { $0 != peg }) }) else {
+            let bodies = pegs.map { PhysicsBody(shape: .circle, size: $0.size, position: $0.position) }
+
+            guard bodies.allSatisfy({ !$0.isColliding(with: bodies) }) else {
                 throw DatabaseError(message: "Pegs are colliding with each other")
             }
 
@@ -90,37 +89,6 @@ extension AppDatabase {
     func deleteAllLevels() throws {
         try dbWriter.write { db in
             _ = try Level.deleteAll(db)
-        }
-    }
-
-    func createRandomLevelsIfEmpty(levelCount: Int = 10, pegCount: Int = 10) throws {
-        try dbWriter.write { db in
-            if try Level.fetchCount(db) == 0 {
-                try createRandomLevels(db, levelCount: levelCount, pegCount: pegCount)
-            }
-        }
-    }
-
-    private func createRandomLevels(_ db: Database, levelCount: Int, pegCount: Int) throws {
-        for _ in 0..<levelCount {
-            var level = Level.newRandom()
-            try level.insert(db)
-
-            // TODO: Seems like there should be a better way to ensure the pegs don't collide
-            var pegs: [Peg] = []
-
-            while pegs.count < pegCount {
-                var peg = Peg.newRandom()
-
-                if !peg.isColliding(with: pegs) {
-                    peg.levelId = level.id
-                    pegs.append(peg)
-                }
-            }
-
-            for var peg in pegs {
-                try peg.insert(db)
-            }
         }
     }
 }

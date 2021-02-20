@@ -29,7 +29,7 @@ class AppDatabaseTests: XCTestCase {
             let columns = try db.columns(in: "peg")
             let columnNames = Set(columns.map { $0.name })
 
-            XCTAssertEqual(columnNames, ["id", "levelId", "position", "rotation", "shape", "size", "color"])
+            XCTAssertEqual(columnNames, ["id", "levelId", "position", "rotation", "size", "color"])
         }
     }
 
@@ -38,9 +38,9 @@ class AppDatabaseTests: XCTestCase {
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, shape: .circle, color: .orange)
+            Peg(position: .zero, size: size, color: .blue),
+            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try appDatabase.saveLevel(&level, pegs: &pegs)
@@ -60,9 +60,9 @@ class AppDatabaseTests: XCTestCase {
         let size = CGSize(width: 40, height: 40)
         // Pegs that are colliding
         var pegs = [
-            Peg(position: .zero, size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 20, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 20), size: size, shape: .circle, color: .orange)
+            Peg(position: .zero, size: size, color: .blue),
+            Peg(position: CGPoint(x: 20, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 20), size: size, color: .orange)
         ]
 
         try XCTAssertThrowsError(appDatabase.saveLevel(&level, pegs: &pegs))
@@ -73,9 +73,9 @@ class AppDatabaseTests: XCTestCase {
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, shape: .circle, color: .orange)
+            Peg(position: .zero, size: size, color: .blue),
+            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -98,9 +98,9 @@ class AppDatabaseTests: XCTestCase {
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, shape: .circle, color: .orange)
+            Peg(position: .zero, size: size, color: .blue),
+            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -114,8 +114,8 @@ class AppDatabaseTests: XCTestCase {
 
         // Add some new pegs
         pegs.append(contentsOf: [
-            Peg(position: CGPoint(x: 80, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 80), size: size, shape: .circle, color: .orange)
+            Peg(position: CGPoint(x: 80, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 80), size: size, color: .orange)
         ])
 
         try appDatabase.saveLevel(&level, pegs: &pegs)
@@ -130,9 +130,9 @@ class AppDatabaseTests: XCTestCase {
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, shape: .circle, color: .orange)
+            Peg(position: .zero, size: size, color: .blue),
+            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -162,9 +162,9 @@ class AppDatabaseTests: XCTestCase {
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, shape: .circle, color: .orange)
+            Peg(position: .zero, size: size, color: .blue),
+            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -194,9 +194,9 @@ class AppDatabaseTests: XCTestCase {
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, shape: .circle, color: .orange)
+            Peg(position: .zero, size: size, color: .blue),
+            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -249,26 +249,6 @@ class AppDatabaseTests: XCTestCase {
         try XCTAssertEqual(dbWriter.read(Level.fetchCount), 0)
     }
 
-    func testCreateRandomLevelsIfEmpty_emptyDatabase_success() throws {
-        try appDatabase.createRandomLevelsIfEmpty()
-
-        try XCTAssertTrue(dbWriter.read(Level.fetchCount) > 0)
-    }
-
-    func testCreateRandomLevelsIfEmpty_nonEmptyDatabase_noChange() throws {
-        var level = Level(name: "Asteroid Blues")
-
-        try dbWriter.write { db in
-            try level.insert(db)
-        }
-
-        try appDatabase.createRandomLevelsIfEmpty()
-
-        let levels = try dbWriter.read(Level.fetchAll)
-
-        XCTAssertEqual(levels, [level])
-    }
-
     func testLevelsOrderedByNamePublisher_publishesWellOrderedLevels() throws {
         var level1 = Level(name: "Asteroid Blues")
         var level2 = Level(name: "Stray Dog Strut")
@@ -314,9 +294,9 @@ class AppDatabaseTests: XCTestCase {
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, shape: .circle, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, shape: .circle, color: .orange)
+            Peg(position: .zero, size: size, color: .blue),
+            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in

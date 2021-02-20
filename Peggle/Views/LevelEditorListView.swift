@@ -74,23 +74,13 @@ struct LevelEditorListView: View {
 
 struct LevelEditorListView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            EmptyView()
-                .sheet(isPresented: .constant(true)) {
-                    LevelEditorListView(
-                        viewModel: LevelEditorListViewModel(database: .random()),
-                        level: .constant(Level.new()),
-                        fetchLevel: {}
-                    )
-                }
-            EmptyView()
-                .sheet(isPresented: .constant(true)) {
-                    LevelEditorListView(
-                        viewModel: LevelEditorListViewModel(database: .empty()),
-                        level: .constant(Level.new()),
-                        fetchLevel: {}
-                    )
-                }
-        }
+        EmptyView()
+            .sheet(isPresented: .constant(true)) {
+                LevelEditorListView(
+                    viewModel: LevelEditorListViewModel(database: .empty()),
+                    level: .constant(Level(name: "")),
+                    fetchLevel: {}
+                )
+            }
     }
 }
