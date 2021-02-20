@@ -26,17 +26,17 @@ final class PhysicsWorld {
 
     func resolveCollisions() {
         // Optimises for the assumption that static bodies far outnumber dynamic bodies
-        for i in bodies.indices where bodies[i].isDynamic {
-            for j in bodies.indices {
-                guard bodies[i] !== bodies[j] && bodies[i].isColliding(with: bodies[j]) else {
+        for bodyA in bodies where bodyA.isDynamic {
+            for bodyB in bodies {
+                guard bodyA !== bodyB && bodyA.isColliding(with: bodyB) else {
                     continue
                 }
 
-                subject.send((bodies[i], bodies[j]))
+                subject.send((bodyA, bodyB))
 
                 // TODO: Dynamic collision
-                if bodies[j].isDynamic == false {
-                    resolveStaticCollision(dynamicBody: bodies[i], staticBody: bodies[j])
+                if bodyB.isDynamic == false {
+                    resolveStaticCollision(dynamicBody: bodyA, staticBody: bodyB)
                 }
             }
         }

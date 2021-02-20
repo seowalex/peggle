@@ -17,7 +17,7 @@ final class GameRenderer {
         self.gameEngine = gameEngine
 
         displayLink = CADisplayLink(target: self, selector: #selector(render))
-        displayLink.preferredFramesPerSecond = 60
+        displayLink.preferredFramesPerSecond = Int(preferredFramesPerSecond)
         displayLink.add(to: .main, forMode: .default)
     }
 
