@@ -1,5 +1,4 @@
-import CoreGraphics
-import Foundation
+import SwiftUI
 
 final class LevelEditorViewModel: ObservableObject {
     struct DragState {
@@ -46,26 +45,8 @@ final class LevelEditorViewModel: ObservableObject {
         levelEditorListViewModel = LevelEditorListViewModel(database: database)
     }
 
-    func dragBoard(position: CGPoint) {
-        guard case let .addPeg(color) = paletteSelection else {
-            return
-        }
-
-        let physicsBody = PhysicsBody(shape: .circle, size: Peg.defaultSize, position: position)
-
-        if !frame.contains(physicsBody.boundingBox)
-            || physicsBody.isColliding(with: pegs.map { PhysicsBody(shape: .circle,
-                                                                    size: $0.size,
-                                                                    position: $0.position)
-            }) {
-            return
-        }
-
-        pegs.append(Peg(position: position, color: color))
-    }
-
-    func draggingBoard(position: CGPoint) -> DragState? {
-        guard case let .addPeg(color) = paletteSelection else {
+    func onDrag(position: CGPoint) -> DragState? {
+        guard case .addPeg(let color) = paletteSelection else {
             return nil
         }
 
@@ -83,19 +64,31 @@ final class LevelEditorViewModel: ObservableObject {
         return DragState(peg: Peg(position: position, color: color), location: position, isValid: isValid)
     }
 
-    func longPressPeg(peg: Peg) {
-        guard let index = pegs.firstIndex(where: { $0 == peg }) else {
+    func onDragEnd(position: CGPoint) {
+        guard case .addPeg(let color) = paletteSelection else {
             return
         }
 
-        pegs.remove(at: index)
+        let physicsBody = PhysicsBody(shape: .circle, size: Peg.defaultSize, position: position)
+
+        if !frame.contains(physicsBody.boundingBox)
+            || physicsBody.isColliding(with: pegs.map { PhysicsBody(shape: .circle,
+                                                                    size: $0.size,
+                                                                    position: $0.position)
+            }) {
+            return
+        }
+
+        pegs.append(Peg(position: position, color: color))
     }
 
-    func draggingPeg(peg: Peg, translation: CGSize) -> DragState? {
-        if case .deletePeg = paletteSelection {
+    func onDrag(value: ExclusiveGesture<LongPressGesture, DragGesture>.Value,
+                peg: Peg, normalize: CGAffineTransform) -> DragState? {
+        guard case .addPeg = paletteSelection, case .second(let dragValue) = value else {
             return nil
         }
 
+        let translation = dragValue.translation.applying(normalize)
         var newLocation = peg.position
         var isValid = true
 
@@ -115,15 +108,17 @@ final class LevelEditorViewModel: ObservableObject {
         return DragState(peg: peg, location: newLocation, isValid: isValid)
     }
 
-    func dragPeg(peg: Peg, translation: CGSize) {
+    func onDragEnd(value: ExclusiveGesture<LongPressGesture, DragGesture>.Value,
+                   peg: Peg, normalize: CGAffineTransform) {
         guard let index = pegs.firstIndex(where: { $0 == peg }) else {
             return
         }
 
-        switch paletteSelection {
-        case .deletePeg:
+        switch (paletteSelection, value) {
+        case (.deletePeg, _), (.addPeg, .first):
             pegs.remove(at: index)
-        case .addPeg:
+        case (.addPeg, .second(let dragValue)):
+            let translation = dragValue.translation.applying(normalize)
             var newLocation = peg.position
             newLocation.x += translation.width
             newLocation.y += translation.height

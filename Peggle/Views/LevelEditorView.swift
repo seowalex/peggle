@@ -65,10 +65,10 @@ struct LevelEditorView: View {
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .updating($dragState) { value, state, _ in
-                        state = viewModel.draggingBoard(position: value.location.applying(normalize))
+                        state = viewModel.onDrag(position: value.location.applying(normalize))
                     }
                     .onEnded { value in
-                        viewModel.dragBoard(position: value.location.applying(normalize))
+                        viewModel.onDragEnd(position: value.location.applying(normalize))
                     }
             )
         }
@@ -81,18 +81,16 @@ struct LevelEditorView: View {
         return Image(peg.imageName)
             .resizable()
             .opacity(dragState?.peg == peg ? 0.4 : 1)
+            .rotationEffect(.radians(Double(peg.rotation)))
             .frame(width: peg.size.applying(denormalize).width, height: peg.size.applying(denormalize).height)
             .position(peg.position.applying(denormalize))
-            .onLongPressGesture {
-                viewModel.longPressPeg(peg: peg)
-            }
             .gesture(
-                DragGesture(minimumDistance: 0)
+                ExclusiveGesture(LongPressGesture(), DragGesture(minimumDistance: 0))
                     .updating($dragState) { value, state, _ in
-                        state = viewModel.draggingPeg(peg: peg, translation: value.translation.applying(normalize))
+                        state = viewModel.onDrag(value: value, peg: peg, normalize: normalize)
                     }
                     .onEnded { value in
-                        viewModel.dragPeg(peg: peg, translation: value.translation.applying(normalize))
+                        viewModel.onDragEnd(value: value, peg: peg, normalize: normalize)
                     }
             )
     }
@@ -102,6 +100,7 @@ struct LevelEditorView: View {
 
         return Image(state.peg.imageName)
             .resizable()
+            .rotationEffect(.radians(Double(state.peg.rotation)))
             .frame(width: state.peg.size.applying(denormalize).width,
                    height: state.peg.size.applying(denormalize).height)
             .position(state.location.applying(denormalize))
