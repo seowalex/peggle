@@ -19,6 +19,10 @@ class Element {
     }
     let physicsBody: PhysicsBody
 
+    var imageName: String {
+        ""
+    }
+
     init(position: CGPoint, rotation: CGFloat, size: CGSize, physicsBody: PhysicsBody) {
         self.position = position
         self.rotation = rotation

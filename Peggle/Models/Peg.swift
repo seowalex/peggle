@@ -5,7 +5,7 @@ final class Peg: Element {
 
     let color: Color
 
-    var imageName: String {
+    override var imageName: String {
         switch color {
         case .blue:
             return "peg-blue"
