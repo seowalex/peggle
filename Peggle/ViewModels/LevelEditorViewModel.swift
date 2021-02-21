@@ -2,13 +2,13 @@ import SwiftUI
 
 final class LevelEditorViewModel: ObservableObject {
     struct DragState {
-        let peg: PegRecord
+        let peg: Peg
         let location: CGPoint
         let isValid: Bool
     }
 
     enum PaletteSelection: Equatable {
-        case addPeg(PegRecord.Color)
+        case addPeg(Peg.Color)
         case deletePeg
     }
 
@@ -31,8 +31,7 @@ final class LevelEditorViewModel: ObservableObject {
     }
 
     @Published var name = ""
-    @Published private(set) var pegs: [PegRecord] = []
-    @Published var level = LevelRecord(name: "")
+    @Published private(set) var pegs: [Peg] = []
     @Published var paletteSelection = PaletteSelection.addPeg(.blue)
 
     let levelEditorListViewModel: LevelEditorListViewModel
@@ -50,18 +49,15 @@ final class LevelEditorViewModel: ObservableObject {
             return nil
         }
 
-        let physicsBody = PhysicsBody(shape: .circle, size: PegRecord.defaultSize, position: position)
+        let placeholderPeg = Peg(position: position, color: color)
         var isValid = true
 
-        if !frame.contains(physicsBody.boundingBox)
-            || physicsBody.isColliding(with: pegs.map { PhysicsBody(shape: .circle,
-                                                                    size: $0.size,
-                                                                    position: $0.position)
-            }) {
+        if !frame.contains(placeholderPeg.physicsBody.boundingBox)
+            || placeholderPeg.physicsBody.isColliding(with: pegs.map { $0.physicsBody }) {
             isValid = false
         }
 
-        return DragState(peg: PegRecord(position: position, color: color), location: position, isValid: isValid)
+        return DragState(peg: placeholderPeg, location: position, isValid: isValid)
     }
 
     func onDragEnd(position: CGPoint) {
@@ -69,21 +65,18 @@ final class LevelEditorViewModel: ObservableObject {
             return
         }
 
-        let physicsBody = PhysicsBody(shape: .circle, size: PegRecord.defaultSize, position: position)
+        let placeholderPeg = Peg(position: position, color: color)
 
-        if !frame.contains(physicsBody.boundingBox)
-            || physicsBody.isColliding(with: pegs.map { PhysicsBody(shape: .circle,
-                                                                    size: $0.size,
-                                                                    position: $0.position)
-            }) {
+        if !frame.contains(placeholderPeg.physicsBody.boundingBox)
+            || placeholderPeg.physicsBody.isColliding(with: pegs.map { $0.physicsBody }) {
             return
         }
 
-        pegs.append(PegRecord(position: position, color: color))
+        pegs.append(placeholderPeg)
     }
 
     func onDrag(value: ExclusiveGesture<LongPressGesture, DragGesture>.Value,
-                peg: PegRecord, normalize: CGAffineTransform) -> DragState? {
+                peg: Peg, normalize: CGAffineTransform) -> DragState? {
         guard case .addPeg = paletteSelection, case .second(let dragValue) = value else {
             return nil
         }
@@ -98,10 +91,7 @@ final class LevelEditorViewModel: ObservableObject {
         let physicsBody = PhysicsBody(shape: .circle, size: peg.size, position: newLocation)
 
         if !frame.contains(physicsBody.boundingBox)
-            || physicsBody.isColliding(with: pegs.filter { $0 != peg }.map { PhysicsBody(shape: .circle,
-                                                                                         size: $0.size,
-                                                                                         position: $0.position)
-            }) {
+            || physicsBody.isColliding(with: pegs.filter({ $0 !== peg }).map { $0.physicsBody }) {
             isValid = false
         }
 
@@ -109,14 +99,10 @@ final class LevelEditorViewModel: ObservableObject {
     }
 
     func onDragEnd(value: ExclusiveGesture<LongPressGesture, DragGesture>.Value,
-                   peg: PegRecord, normalize: CGAffineTransform) {
-        guard let index = pegs.firstIndex(where: { $0 == peg }) else {
-            return
-        }
-
+                   peg: Peg, normalize: CGAffineTransform) {
         switch (paletteSelection, value) {
         case (.deletePeg, _), (.addPeg, .first):
-            pegs.remove(at: index)
+            pegs.removeAll(where: { $0 === peg })
         case (.addPeg, .second(let dragValue)):
             let translation = dragValue.translation.applying(normalize)
             var newLocation = peg.position
@@ -126,14 +112,11 @@ final class LevelEditorViewModel: ObservableObject {
             let physicsBody = PhysicsBody(shape: .circle, size: peg.size, position: newLocation)
 
             if !frame.contains(physicsBody.boundingBox)
-                || physicsBody.isColliding(with: pegs.filter { $0 != peg }.map { PhysicsBody(shape: .circle,
-                                                                                             size: $0.size,
-                                                                                             position: $0.position)
-                }) {
+                || physicsBody.isColliding(with: pegs.filter({ $0 !== peg }).map { $0.physicsBody }) {
                 return
             }
 
-            pegs[index].position = newLocation
+            peg.position = newLocation
         }
     }
 
@@ -146,29 +129,27 @@ final class LevelEditorViewModel: ObservableObject {
             throw ValidationError.missingName
         }
 
-        // Save as a copy if the name is different
-        // TODO: Warn if overriding
-        if level.name != name {
-            level.id = nil
-            level.name = name
-
-            for index in 0..<pegs.count {
-                pegs[index].id = nil
-                pegs[index].levelId = nil
-            }
+        var level = LevelRecord(name: name)
+        var pegs = self.pegs.map { PegRecord(position: $0.position,
+                                             rotation: $0.rotation,
+                                             size: $0.size,
+                                             color: $0.color)
         }
 
         try database.saveLevel(&level, pegs: &pegs)
     }
 
-    func fetchLevel() throws {
+    func fetchLevel(_ level: LevelRecord) throws {
         name = level.name
-        pegs = try database.fetchPegs(level)
+        pegs = try database.fetchPegs(level).map { Peg(position: $0.position,
+                                                       color: $0.color,
+                                                       rotation: $0.rotation,
+                                                       size: $0.size)
+        }
     }
 
     func reset() {
         name = ""
         pegs.removeAll()
-        level = LevelRecord(name: "")
     }
 }

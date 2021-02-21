@@ -15,13 +15,13 @@ class PegRecordTests: XCTestCase {
 
     func testConstruct() {
         let position = CGPoint.zero
-        let color = PegRecord.Color.allCases.randomElement() ?? .blue
+        let color = Peg.Color.allCases.randomElement() ?? .blue
 
         let peg = PegRecord(position: position, color: color)
 
         XCTAssertEqual(peg.position, position)
         XCTAssertEqual(peg.rotation, 0)
-        XCTAssertEqual(peg.size, PegRecord.defaultSize)
+        XCTAssertEqual(peg.size, Peg.defaultSize)
         XCTAssertEqual(peg.color, color)
     }
 

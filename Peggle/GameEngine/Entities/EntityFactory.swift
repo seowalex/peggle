@@ -59,7 +59,7 @@ final class EntityFactory {
 
     @discardableResult
     func createPeg(position: CGPoint, imageName: String, rotation: CGFloat = 0.0,
-                   size: CGSize = PegRecord.defaultSize) -> Entity {
+                   size: CGSize = Peg.defaultSize) -> Entity {
         let entity = Entity()
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .circle,
                                                                              size: size,

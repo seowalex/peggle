@@ -15,7 +15,7 @@ final class GameEngine {
     private var componentsCancellable: AnyCancellable?
     private var collisionCancellable: AnyCancellable?
 
-    init(pegs: [PegRecord]) {
+    init(pegs: [Peg]) {
         entityFactory = EntityFactory(entityManager: entityManager)
         systems = [
             PhysicsSystem(entityManager: entityManager),
@@ -52,7 +52,7 @@ final class GameEngine {
         }
     }
 
-    func createEntities(pegs: [PegRecord]) {
+    func createEntities(pegs: [Peg]) {
         entityFactory.createWall(position: CGPoint(x: 0.5, y: -0.2), size: CGSize(width: 1, height: 0.4))
         entityFactory.createWall(position: CGPoint(x: -0.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
         entityFactory.createWall(position: CGPoint(x: 1.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
@@ -60,8 +60,8 @@ final class GameEngine {
         entityFactory.createCannon(position: CGPoint(x: 0.5, y: 0.07))
 
         for peg in pegs {
-            entityFactory.createPeg(position: peg.position, imageName: peg.imageName, rotation: peg.rotation,
-                                    size: peg.size)
+            entityFactory.createPeg(position: peg.position.applying(CGAffineTransform(translationX: 0, y: 0.4)),
+                                    imageName: peg.imageName, rotation: peg.rotation, size: peg.size)
         }
     }
 

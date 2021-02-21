@@ -3,37 +3,14 @@ import GRDB
 
 // Position and size are normalised to a maximum of 1
 struct PegRecord: Equatable {
-    static let defaultSize = CGSize(width: 0.04, height: 0.04)
-
     // Ensure ID is a 64-bit signed integer even on 32-bit platforms
     // See https://sqlite.org/lang_createtable.html#rowid
     var id: Int64?
     var levelId: Int64?
     var position: CGPoint
     var rotation: CGFloat = 0.0
-    var size: CGSize = defaultSize
-    var color: Color
-}
-
-extension PegRecord {
-    var imageName: String {
-        switch color {
-        case .blue:
-            return "peg-blue"
-        case .orange:
-            return "peg-orange"
-        case .green:
-            return "peg-green"
-        case .purple:
-            return "peg-purple"
-        }
-    }
-}
-
-extension PegRecord {
-    enum Color: String, Codable, CaseIterable {
-        case blue, orange, green, purple
-    }
+    var size: CGSize = Peg.defaultSize
+    var color: Peg.Color
 }
 
 // MARK: - Persistence

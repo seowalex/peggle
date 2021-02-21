@@ -26,7 +26,6 @@ struct LevelEditorView: View {
         .sheet(isPresented: $levelEditorListIsPresented) {
             LevelEditorListView(
                 viewModel: viewModel.levelEditorListViewModel,
-                level: $viewModel.level,
                 fetchLevel: viewModel.fetchLevel
             )
         }
@@ -51,7 +50,7 @@ struct LevelEditorView: View {
             let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
 
             ZStack {
-                ForEach(viewModel.pegs, id: \.position) { peg in
+                ForEach(viewModel.pegs, id: \.self) { peg in
                     PegView(peg: peg, frame: frame)
                 }
 
@@ -74,13 +73,13 @@ struct LevelEditorView: View {
         }
     }
 
-    private func PegView(peg: PegRecord, frame: CGRect) -> some View {
+    private func PegView(peg: Peg, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
         let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
 
         return Image(peg.imageName)
             .resizable()
-            .opacity(dragState?.peg == peg ? 0.4 : 1)
+            .opacity(dragState?.peg === peg ? 0.4 : 1)
             .rotationEffect(.radians(Double(peg.rotation)))
             .frame(width: peg.size.applying(denormalize).width, height: peg.size.applying(denormalize).height)
             .position(peg.position.applying(denormalize))

@@ -3,9 +3,8 @@ import SwiftUI
 struct LevelEditorListView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: LevelEditorListViewModel
-    @Binding var level: LevelRecord
 
-    let fetchLevel: () throws -> Void
+    let fetchLevel: (LevelRecord) throws -> Void
 
     @State private var alertIsPresented = false
     @State private var alertTitle = ""
@@ -46,8 +45,7 @@ struct LevelEditorListView: View {
             ForEach(viewModel.levels) { level in
                 Button(action: {
                     do {
-                        self.level = level
-                        try fetchLevel()
+                        try fetchLevel(level)
                         presentationMode.wrappedValue.dismiss()
                     } catch {
                         alertTitle = "Database error"
@@ -78,8 +76,7 @@ struct LevelEditorListView_Previews: PreviewProvider {
             .sheet(isPresented: .constant(true)) {
                 LevelEditorListView(
                     viewModel: LevelEditorListViewModel(database: .empty()),
-                    level: .constant(LevelRecord(name: "")),
-                    fetchLevel: {}
+                    fetchLevel: { _ in }
                 )
             }
     }

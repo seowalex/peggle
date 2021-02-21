@@ -13,8 +13,8 @@ final class PhysicsWorld {
     private let subject = PassthroughSubject<(PhysicsBody, PhysicsBody), Never>()
 
     func applyGravity() {
-        for index in bodies.indices where bodies[index].affectedByGravity == true {
-            bodies[index].applyForce(bodies[index].mass * gravity)
+        for body in bodies where body.affectedByGravity == true {
+            body.applyForce(body.mass * gravity)
         }
     }
 

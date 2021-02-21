@@ -2,7 +2,7 @@ import CoreGraphics
 
 final class PhysicsBody {
     let shape: Shape
-    let size: CGSize
+    var size: CGSize
     var mass: CGFloat {
         get {
             density * area
@@ -29,7 +29,7 @@ final class PhysicsBody {
     var linearDamping: CGFloat
 
     var position: CGPoint
-    let rotation: CGFloat
+    var rotation: CGFloat
     var velocity: CGVector
     var isResting: Bool
 

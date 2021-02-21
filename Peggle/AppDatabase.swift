@@ -40,7 +40,7 @@ struct AppDatabase {
                     .notNull()
                 t.column("color", .text)
                     .notNull()
-                    .check { PegRecord.Color.allCases.map { $0.rawValue }.contains($0) }
+                    .check { Peg.Color.allCases.map { $0.rawValue }.contains($0) }
             }
         }
 

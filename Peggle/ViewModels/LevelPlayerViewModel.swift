@@ -8,13 +8,8 @@ final class LevelPlayerViewModel: ObservableObject {
     private let gameRenderer: GameRenderer
     private var cancellable: AnyCancellable?
 
-    init(pegs: [PegRecord]) {
-        gameEngine = GameEngine(pegs: pegs.map { peg in
-            var peg = peg
-            peg.position = peg.position.applying(CGAffineTransform(translationX: 0, y: 0.4))
-
-            return peg
-        })
+    init(pegs: [Peg]) {
+        gameEngine = GameEngine(pegs: pegs)
         gameRenderer = GameRenderer(gameEngine: gameEngine)
 
         cancellable = gameRenderer.publisher.sink { [weak self] components in

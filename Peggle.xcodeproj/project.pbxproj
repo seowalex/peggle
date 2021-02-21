@@ -41,6 +41,7 @@
 		0E8531F525C5CC1C008B012D /* AppDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8531F425C5CC1C008B012D /* AppDatabaseTests.swift */; };
 		0EA3451625BDB53000DD1BBB /* LevelEditorListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */; };
 		0EA3451B25BDBFA000DD1BBB /* LevelEditorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */; };
+		0ED13CED25E2104800B0428C /* Peg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CEC25E2104800B0428C /* Peg.swift */; };
 		0EE69DCF25D14B6A00BD142A /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DCE25D14B6A00BD142A /* CGRect+Extensions.swift */; };
 		0EE69DD325D17A1000BD142A /* CGAffineTransform+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DD225D17A1000BD142A /* CGAffineTransform+Extensions.swift */; };
 		0EE69DD925D1804200BD142A /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DD825D1804200BD142A /* CGVector+Extensions.swift */; };
@@ -97,6 +98,7 @@
 		0E8531F425C5CC1C008B012D /* AppDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabaseTests.swift; sourceTree = "<group>"; };
 		0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListViewModel.swift; sourceTree = "<group>"; };
 		0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListView.swift; sourceTree = "<group>"; };
+		0ED13CEC25E2104800B0428C /* Peg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peg.swift; sourceTree = "<group>"; };
 		0EE69DCE25D14B6A00BD142A /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		0EE69DD225D17A1000BD142A /* CGAffineTransform+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Extensions.swift"; sourceTree = "<group>"; };
 		0EE69DD825D1804200BD142A /* CGVector+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extensions.swift"; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 			children = (
 				0E22A94925BD2CDC002441A5 /* LevelRecord.swift */,
 				0E2A452C25BDE62100B0DCA7 /* PegRecord.swift */,
+				0ED13CEC25E2104800B0428C /* Peg.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -407,6 +410,7 @@
 				0E61D56D25D6C6200091D9D0 /* LightSystem.swift in Sources */,
 				0EE69DD325D17A1000BD142A /* CGAffineTransform+Extensions.swift in Sources */,
 				0E18E21125D628F600A2B74A /* RenderComponent.swift in Sources */,
+				0ED13CED25E2104800B0428C /* Peg.swift in Sources */,
 				0EFC551B25D1A9E100C053FF /* LevelPlayerViewModel.swift in Sources */,
 				0E08495E25BD2724004CE733 /* AppDatabase.swift in Sources */,
 				0E18E23025D63B1300A2B74A /* RenderSystem.swift in Sources */,
