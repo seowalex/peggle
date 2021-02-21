@@ -58,11 +58,9 @@ struct AppDatabase {
 extension AppDatabase {
     func saveLevel(_ level: inout LevelRecord, pegs: inout [PegRecord]) throws {
         try dbWriter.write { db in
+            level = try LevelRecord.filter(LevelRecord.Columns.name == level.name).fetchOne(db) ?? level
             try level.save(db)
-
-            guard pegs.compactMap({ $0.levelId }).allSatisfy({ $0 == level.id }) else {
-                throw DatabaseError(message: "Pegs do not have the correct level ID")
-            }
+            try level.pegs.deleteAll(db)
 
             let bodies = pegs.map { PhysicsBody(shape: .circle, size: $0.size, position: $0.position) }
 
@@ -70,11 +68,8 @@ extension AppDatabase {
                 throw DatabaseError(message: "Pegs are colliding with each other")
             }
 
-            // Delete pegs that are not in the peg array
-            try level.pegs.filter(!pegs.compactMap { $0.id }.contains(PegRecord.Columns.id)).deleteAll(db)
-
             for index in pegs.indices {
-                pegs[index].levelId = pegs[index].levelId ?? level.id
+                pegs[index].levelId = level.id
                 try pegs[index].save(db)
             }
         }
