@@ -2,7 +2,7 @@ import SwiftUI
 
 final class LevelEditorViewModel: ObservableObject {
     struct DragState {
-        let peg: Peg
+        let element: Element
         let position: CGPoint
         let rotation: CGFloat
         let size: CGSize
@@ -63,7 +63,7 @@ final class LevelEditorViewModel: ObservableObject {
 
         selectedElement = placeholderPeg
 
-        return DragState(peg: placeholderPeg, position: position, rotation: placeholderPeg.rotation,
+        return DragState(element: placeholderPeg, position: position, rotation: placeholderPeg.rotation,
                          size: placeholderPeg.size, isValid: isValid)
     }
 
@@ -108,7 +108,7 @@ final class LevelEditorViewModel: ObservableObject {
 
         selectedElement = peg
 
-        return DragState(peg: peg, position: newPosition, rotation: peg.rotation, size: peg.size, isValid: isValid)
+        return DragState(element: peg, position: newPosition, rotation: peg.rotation, size: peg.size, isValid: isValid)
     }
 
     func onDragEnd(value: ExclusiveGesture<LongPressGesture, DragGesture>.Value, peg: Peg, frame: CGRect) {
@@ -133,6 +133,78 @@ final class LevelEditorViewModel: ObservableObject {
             selectedElement = peg
             peg.position = newPosition
         }
+    }
+
+    func onResize(length: CGFloat, element: Element) -> DragState? {
+        var isValid = true
+
+        let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
+                                      size: CGSize(width: length, height: length),
+                                      position: element.physicsBody.position)
+
+        if !frame.contains(physicsBody.boundingBox)
+            || physicsBody.isColliding(with: pegs.filter({ $0 !== element }).map { $0.physicsBody }) {
+            isValid = false
+        }
+
+        return LevelEditorViewModel.DragState(element: element,
+                                              position: element.position,
+                                              rotation: element.rotation,
+                                              size: CGSize(width: length, height: length),
+                                              isValid: isValid)
+    }
+
+    func onResizeEnd(length: CGFloat, element: Element) {
+        let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
+                                      size: CGSize(width: length, height: length),
+                                      position: element.physicsBody.position)
+
+        if !frame.contains(physicsBody.boundingBox)
+            || physicsBody.isColliding(with: pegs.filter({ $0 !== element }).map { $0.physicsBody }) {
+            return
+        }
+
+        element.size = CGSize(width: length, height: length)
+    }
+
+    func onRotate(position: CGPoint, element: Element) -> DragState? {
+        let normalizedPosition = position.rotate(around: element.position,
+                                                 by: CGFloat.pi / 2)
+        let rotation = element.position.angle(to: normalizedPosition)
+        var isValid = true
+
+        let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
+                                      size: element.physicsBody.size,
+                                      position: element.physicsBody.position,
+                                      rotation: rotation)
+
+        if !frame.contains(physicsBody.boundingBox)
+            || physicsBody.isColliding(with: pegs.filter({ $0 !== element }).map { $0.physicsBody }) {
+            isValid = false
+        }
+
+        return LevelEditorViewModel.DragState(element: element,
+                                              position: element.position,
+                                              rotation: rotation,
+                                              size: element.size,
+                                              isValid: isValid)
+    }
+
+    func onRotateEnd(position: CGPoint, element: Element) {
+        let normalizedPosition = position.rotate(around: element.position,
+                                                 by: CGFloat.pi / 2)
+        let rotation = element.position.angle(to: normalizedPosition)
+        let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
+                                      size: element.physicsBody.size,
+                                      position: element.physicsBody.position,
+                                      rotation: rotation)
+
+        if !frame.contains(physicsBody.boundingBox)
+            || physicsBody.isColliding(with: pegs.filter({ $0 !== element }).map { $0.physicsBody }) {
+            return
+        }
+
+        element.rotation = rotation
     }
 
     // MARK: - Level Management

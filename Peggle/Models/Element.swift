@@ -13,7 +13,7 @@ class Element {
     }
     var size: CGSize {
         didSet {
-            size = CGSize(width: max(0.04, size.width), height: max(0.04, size.height))
+            size = CGSize(width: max(size.width, 0.04), height: max(size.height, 0.04))
             physicsBody.size = size
         }
     }
