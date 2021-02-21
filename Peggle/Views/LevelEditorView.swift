@@ -92,6 +92,16 @@ struct LevelEditorView: View {
                         viewModel.onDragEnd(value: value, peg: peg, normalize: normalize)
                     }
             )
+            .overlay(viewModel.selectedElement === peg
+                ? AnyView(Rectangle()
+                            .stroke()
+                            .rotationEffect(.radians(Double(peg.rotation)))
+                            .frame(width: peg.size.applying(denormalize).width,
+                                   height: peg.size.applying(denormalize).height)
+                            .position(peg.position.applying(denormalize))
+                            .allowsHitTesting(false))
+                : AnyView(EmptyView())
+            )
     }
 
     private func PlaceholderPegView(state: LevelEditorViewModel.DragState, frame: CGRect) -> some View {
@@ -99,10 +109,10 @@ struct LevelEditorView: View {
 
         return Image(state.peg.imageName)
             .resizable()
-            .rotationEffect(.radians(Double(state.peg.rotation)))
-            .frame(width: state.peg.size.applying(denormalize).width,
-                   height: state.peg.size.applying(denormalize).height)
-            .position(state.location.applying(denormalize))
+            .rotationEffect(.radians(Double(state.rotation)))
+            .frame(width: state.size.applying(denormalize).width,
+                   height: state.size.applying(denormalize).height)
+            .position(state.position.applying(denormalize))
             .colorMultiply(state.isValid ? .white : .gray)
     }
 

@@ -42,6 +42,8 @@
 		0EA3451625BDB53000DD1BBB /* LevelEditorListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */; };
 		0EA3451B25BDBFA000DD1BBB /* LevelEditorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */; };
 		0ED13CED25E2104800B0428C /* Peg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CEC25E2104800B0428C /* Peg.swift */; };
+		0ED13CF125E23CEE00B0428C /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CF025E23CEE00B0428C /* Element.swift */; };
+		0ED13CF725E24D4C00B0428C /* CGSize+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CF625E24D4C00B0428C /* CGSize+Extensions.swift */; };
 		0EE69DCF25D14B6A00BD142A /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DCE25D14B6A00BD142A /* CGRect+Extensions.swift */; };
 		0EE69DD325D17A1000BD142A /* CGAffineTransform+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DD225D17A1000BD142A /* CGAffineTransform+Extensions.swift */; };
 		0EE69DD925D1804200BD142A /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DD825D1804200BD142A /* CGVector+Extensions.swift */; };
@@ -99,6 +101,8 @@
 		0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListViewModel.swift; sourceTree = "<group>"; };
 		0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListView.swift; sourceTree = "<group>"; };
 		0ED13CEC25E2104800B0428C /* Peg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peg.swift; sourceTree = "<group>"; };
+		0ED13CF025E23CEE00B0428C /* Element.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Element.swift; sourceTree = "<group>"; };
+		0ED13CF625E24D4C00B0428C /* CGSize+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+Extensions.swift"; sourceTree = "<group>"; };
 		0EE69DCE25D14B6A00BD142A /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		0EE69DD225D17A1000BD142A /* CGAffineTransform+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Extensions.swift"; sourceTree = "<group>"; };
 		0EE69DD825D1804200BD142A /* CGVector+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extensions.swift"; sourceTree = "<group>"; };
@@ -253,6 +257,7 @@
 			children = (
 				0E22A94925BD2CDC002441A5 /* LevelRecord.swift */,
 				0E2A452C25BDE62100B0DCA7 /* PegRecord.swift */,
+				0ED13CF025E23CEE00B0428C /* Element.swift */,
 				0ED13CEC25E2104800B0428C /* Peg.swift */,
 			);
 			path = Models;
@@ -264,6 +269,7 @@
 				0EE69DD225D17A1000BD142A /* CGAffineTransform+Extensions.swift */,
 				0E85317725C30034008B012D /* CGPoint+Extensions.swift */,
 				0EE69DCE25D14B6A00BD142A /* CGRect+Extensions.swift */,
+				0ED13CF625E24D4C00B0428C /* CGSize+Extensions.swift */,
 				0EE69DD825D1804200BD142A /* CGVector+Extensions.swift */,
 				0EFC552A25D27DC000C053FF /* LazyView.swift */,
 			);
@@ -425,8 +431,10 @@
 				0E61D57525D6CCE70091D9D0 /* AimComponent.swift in Sources */,
 				0E20620725D048CC004DF11C /* PhysicsWorld.swift in Sources */,
 				0E61D56925D6C4EE0091D9D0 /* LightComponent.swift in Sources */,
+				0ED13CF125E23CEE00B0428C /* Element.swift in Sources */,
 				0EA3451625BDB53000DD1BBB /* LevelEditorListViewModel.swift in Sources */,
 				0E18E20725D627C400A2B74A /* Component.swift in Sources */,
+				0ED13CF725E24D4C00B0428C /* CGSize+Extensions.swift in Sources */,
 				0E6F76FB25D6642100E4C8B8 /* GameEngine.swift in Sources */,
 				0E6D679B25D64C9D0096FE5B /* GameRenderer.swift in Sources */,
 				0EE69DD925D1804200BD142A /* CGVector+Extensions.swift in Sources */,
