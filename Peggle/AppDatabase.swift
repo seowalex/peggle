@@ -35,7 +35,7 @@ struct AppDatabase {
                     .notNull()
                 t.column("rotation", .double)
                     .notNull()
-                    .check { $0 >= 0 && $0 < 2 * Double.pi }
+                    .check { -Double.pi < $0 && $0 <= Double.pi }
                 t.column("size", .text)
                     .notNull()
                 t.column("color", .text)

@@ -1,7 +1,7 @@
 import CoreGraphics
 
 final class Peg: Element {
-    static let defaultSize = CGSize(width: 0.1, height: 0.1)
+    static let defaultSize = CGSize(width: 0.04, height: 0.04)
 
     let color: Color
 
