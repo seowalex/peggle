@@ -2,7 +2,7 @@ import CoreGraphics
 import GRDB
 
 // Position and size are normalised to a maximum of 1
-struct Peg: Equatable {
+struct PegRecord: Equatable {
     static let defaultSize = CGSize(width: 0.04, height: 0.04)
 
     // Ensure ID is a 64-bit signed integer even on 32-bit platforms
@@ -12,10 +12,10 @@ struct Peg: Equatable {
     var position: CGPoint
     var rotation: CGFloat = 0.0
     var size: CGSize = defaultSize
-    var color: Peg.Color
+    var color: Color
 }
 
-extension Peg {
+extension PegRecord {
     var imageName: String {
         switch color {
         case .blue:
@@ -30,7 +30,7 @@ extension Peg {
     }
 }
 
-extension Peg {
+extension PegRecord {
     enum Color: String, Codable, CaseIterable {
         case blue, orange, green, purple
     }
@@ -38,7 +38,7 @@ extension Peg {
 
 // MARK: - Persistence
 
-extension Peg: Codable, FetchableRecord, MutablePersistableRecord {
+extension PegRecord: Codable, FetchableRecord, MutablePersistableRecord {
     enum Columns {
         static let id = Column(CodingKeys.id)
         static let levelId = Column(CodingKeys.levelId)
@@ -47,6 +47,8 @@ extension Peg: Codable, FetchableRecord, MutablePersistableRecord {
         static let size = Column(CodingKeys.size)
         static let color = Column(CodingKeys.color)
     }
+
+    static let databaseTableName = "peg"
 
     // Updates a peg ID after it has been inserted in the database
     mutating func didInsert(with rowID: Int64, for column: String?) {

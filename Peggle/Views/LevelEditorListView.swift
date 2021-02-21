@@ -3,7 +3,7 @@ import SwiftUI
 struct LevelEditorListView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: LevelEditorListViewModel
-    @Binding var level: Level
+    @Binding var level: LevelRecord
 
     let fetchLevel: () throws -> Void
 
@@ -78,7 +78,7 @@ struct LevelEditorListView_Previews: PreviewProvider {
             .sheet(isPresented: .constant(true)) {
                 LevelEditorListView(
                     viewModel: LevelEditorListViewModel(database: .empty()),
-                    level: .constant(Level(name: "")),
+                    level: .constant(LevelRecord(name: "")),
                     fetchLevel: {}
                 )
             }

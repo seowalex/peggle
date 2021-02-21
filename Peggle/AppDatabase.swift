@@ -40,7 +40,7 @@ struct AppDatabase {
                     .notNull()
                 t.column("color", .text)
                     .notNull()
-                    .check { Peg.Color.allCases.map { $0.rawValue }.contains($0) }
+                    .check { PegRecord.Color.allCases.map { $0.rawValue }.contains($0) }
             }
         }
 
@@ -56,7 +56,7 @@ struct AppDatabase {
 // MARK: - Database Access: Writes
 
 extension AppDatabase {
-    func saveLevel(_ level: inout Level, pegs: inout [Peg]) throws {
+    func saveLevel(_ level: inout LevelRecord, pegs: inout [PegRecord]) throws {
         try dbWriter.write { db in
             try level.save(db)
 
@@ -71,7 +71,7 @@ extension AppDatabase {
             }
 
             // Delete pegs that are not in the peg array
-            try level.pegs.filter(!pegs.compactMap { $0.id }.contains(Peg.Columns.id)).deleteAll(db)
+            try level.pegs.filter(!pegs.compactMap { $0.id }.contains(PegRecord.Columns.id)).deleteAll(db)
 
             for index in pegs.indices {
                 pegs[index].levelId = pegs[index].levelId ?? level.id
@@ -82,13 +82,13 @@ extension AppDatabase {
 
     func deleteLevels(ids: [Int64]) throws {
         try dbWriter.write { db in
-            _ = try Level.deleteAll(db, keys: ids)
+            _ = try LevelRecord.deleteAll(db, keys: ids)
         }
     }
 
     func deleteAllLevels() throws {
         try dbWriter.write { db in
-            _ = try Level.deleteAll(db)
+            _ = try LevelRecord.deleteAll(db)
         }
     }
 }
@@ -96,14 +96,14 @@ extension AppDatabase {
 // MARK: - Database Access: Reads
 
 extension AppDatabase {
-    func levelsOrderedByNamePublisher() -> AnyPublisher<[Level], Error> {
+    func levelsOrderedByNamePublisher() -> AnyPublisher<[LevelRecord], Error> {
         ValueObservation
-            .tracking(Level.all().orderedByName().fetchAll)
+            .tracking(LevelRecord.all().orderedByName().fetchAll)
             .publisher(in: dbWriter, scheduling: .immediate)
             .eraseToAnyPublisher()
     }
 
-    func fetchPegs(_ level: Level) throws -> [Peg] {
+    func fetchPegs(_ level: LevelRecord) throws -> [PegRecord] {
         try dbWriter.read(level.pegs.fetchAll)
     }
 }

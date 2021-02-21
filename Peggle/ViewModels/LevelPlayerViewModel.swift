@@ -8,7 +8,7 @@ final class LevelPlayerViewModel: ObservableObject {
     private let gameRenderer: GameRenderer
     private var cancellable: AnyCancellable?
 
-    init(pegs: [Peg]) {
+    init(pegs: [PegRecord]) {
         gameEngine = GameEngine(pegs: pegs.map { peg in
             var peg = peg
             peg.position = peg.position.applying(CGAffineTransform(translationX: 0, y: 0.4))

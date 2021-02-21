@@ -21,10 +21,10 @@
 		0E18E23E25D6412200A2B74A /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E23D25D6412200A2B74A /* EntityManager.swift */; };
 		0E2061F925D03EB4004DF11C /* PhysicsBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2061F825D03EB4004DF11C /* PhysicsBody.swift */; };
 		0E20620725D048CC004DF11C /* PhysicsWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E20620625D048CC004DF11C /* PhysicsWorld.swift */; };
-		0E22A94A25BD2CDC002441A5 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E22A94925BD2CDC002441A5 /* Level.swift */; };
+		0E22A94A25BD2CDC002441A5 /* LevelRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E22A94925BD2CDC002441A5 /* LevelRecord.swift */; };
 		0E22A95425BD4FC0002441A5 /* AppDatabase+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E22A95325BD4FC0002441A5 /* AppDatabase+Persistence.swift */; };
 		0E2A452525BDC56800B0DCA7 /* LevelEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A452425BDC56800B0DCA7 /* LevelEditorView.swift */; };
-		0E2A452D25BDE62100B0DCA7 /* Peg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A452C25BDE62100B0DCA7 /* Peg.swift */; };
+		0E2A452D25BDE62100B0DCA7 /* PegRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A452C25BDE62100B0DCA7 /* PegRecord.swift */; };
 		0E2A454025BFEABA00B0DCA7 /* LevelEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A453F25BFEABA00B0DCA7 /* LevelEditorViewModel.swift */; };
 		0E3BB28325E0DEBE0021A9F6 /* PhysicsSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */; };
 		0E3D4C9F25D9626600C3E8FB /* PhysicsBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3D4C9E25D9626600C3E8FB /* PhysicsBodyTests.swift */; };
@@ -36,8 +36,8 @@
 		0E6F76FB25D6642100E4C8B8 /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F76FA25D6642100E4C8B8 /* GameEngine.swift */; };
 		0E6F771725D6B7E900E4C8B8 /* EntityFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6F771625D6B7E900E4C8B8 /* EntityFactory.swift */; };
 		0E85317825C30034008B012D /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E85317725C30034008B012D /* CGPoint+Extensions.swift */; };
-		0E8531E525C5A14F008B012D /* LevelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8531E425C5A14F008B012D /* LevelTests.swift */; };
-		0E8531EA25C5C464008B012D /* PegTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8531E925C5C463008B012D /* PegTests.swift */; };
+		0E8531E525C5A14F008B012D /* LevelRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8531E425C5A14F008B012D /* LevelRecordTests.swift */; };
+		0E8531EA25C5C464008B012D /* PegRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8531E925C5C463008B012D /* PegRecordTests.swift */; };
 		0E8531F525C5CC1C008B012D /* AppDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8531F425C5CC1C008B012D /* AppDatabaseTests.swift */; };
 		0EA3451625BDB53000DD1BBB /* LevelEditorListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */; };
 		0EA3451B25BDBFA000DD1BBB /* LevelEditorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */; };
@@ -77,10 +77,10 @@
 		0E18E23D25D6412200A2B74A /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		0E2061F825D03EB4004DF11C /* PhysicsBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsBody.swift; sourceTree = "<group>"; };
 		0E20620625D048CC004DF11C /* PhysicsWorld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsWorld.swift; sourceTree = "<group>"; };
-		0E22A94925BD2CDC002441A5 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		0E22A94925BD2CDC002441A5 /* LevelRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelRecord.swift; sourceTree = "<group>"; };
 		0E22A95325BD4FC0002441A5 /* AppDatabase+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDatabase+Persistence.swift"; sourceTree = "<group>"; };
 		0E2A452425BDC56800B0DCA7 /* LevelEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorView.swift; sourceTree = "<group>"; };
-		0E2A452C25BDE62100B0DCA7 /* Peg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peg.swift; sourceTree = "<group>"; };
+		0E2A452C25BDE62100B0DCA7 /* PegRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PegRecord.swift; sourceTree = "<group>"; };
 		0E2A453F25BFEABA00B0DCA7 /* LevelEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorViewModel.swift; sourceTree = "<group>"; };
 		0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsSystem.swift; sourceTree = "<group>"; };
 		0E3D4C9E25D9626600C3E8FB /* PhysicsBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsBodyTests.swift; sourceTree = "<group>"; };
@@ -92,8 +92,8 @@
 		0E6F76FA25D6642100E4C8B8 /* GameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngine.swift; sourceTree = "<group>"; };
 		0E6F771625D6B7E900E4C8B8 /* EntityFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityFactory.swift; sourceTree = "<group>"; };
 		0E85317725C30034008B012D /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
-		0E8531E425C5A14F008B012D /* LevelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelTests.swift; sourceTree = "<group>"; };
-		0E8531E925C5C463008B012D /* PegTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PegTests.swift; sourceTree = "<group>"; };
+		0E8531E425C5A14F008B012D /* LevelRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelRecordTests.swift; sourceTree = "<group>"; };
+		0E8531E925C5C463008B012D /* PegRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PegRecordTests.swift; sourceTree = "<group>"; };
 		0E8531F425C5CC1C008B012D /* AppDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabaseTests.swift; sourceTree = "<group>"; };
 		0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListViewModel.swift; sourceTree = "<group>"; };
 		0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListView.swift; sourceTree = "<group>"; };
@@ -173,8 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				0E8531F425C5CC1C008B012D /* AppDatabaseTests.swift */,
-				0E8531E425C5A14F008B012D /* LevelTests.swift */,
-				0E8531E925C5C463008B012D /* PegTests.swift */,
+				0E8531E425C5A14F008B012D /* LevelRecordTests.swift */,
+				0E8531E925C5C463008B012D /* PegRecordTests.swift */,
 				0E3D4C9E25D9626600C3E8FB /* PhysicsBodyTests.swift */,
 				0E08493225BD19FD004CE733 /* Info.plist */,
 			);
@@ -249,8 +249,8 @@
 		0E22A94825BD2CD2002441A5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				0E22A94925BD2CDC002441A5 /* Level.swift */,
-				0E2A452C25BDE62100B0DCA7 /* Peg.swift */,
+				0E22A94925BD2CDC002441A5 /* LevelRecord.swift */,
+				0E2A452C25BDE62100B0DCA7 /* PegRecord.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -403,7 +403,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0E2A452D25BDE62100B0DCA7 /* Peg.swift in Sources */,
+				0E2A452D25BDE62100B0DCA7 /* PegRecord.swift in Sources */,
 				0E61D56D25D6C6200091D9D0 /* LightSystem.swift in Sources */,
 				0EE69DD325D17A1000BD142A /* CGAffineTransform+Extensions.swift in Sources */,
 				0E18E21125D628F600A2B74A /* RenderComponent.swift in Sources */,
@@ -416,7 +416,7 @@
 				0E22A95425BD4FC0002441A5 /* AppDatabase+Persistence.swift in Sources */,
 				0E18E23825D640F300A2B74A /* Entity.swift in Sources */,
 				0E18E22225D635EE00A2B74A /* System.swift in Sources */,
-				0E22A94A25BD2CDC002441A5 /* Level.swift in Sources */,
+				0E22A94A25BD2CDC002441A5 /* LevelRecord.swift in Sources */,
 				0E2A452525BDC56800B0DCA7 /* LevelEditorView.swift in Sources */,
 				0E61D57525D6CCE70091D9D0 /* AimComponent.swift in Sources */,
 				0E20620725D048CC004DF11C /* PhysicsWorld.swift in Sources */,
@@ -443,9 +443,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0E8531E525C5A14F008B012D /* LevelTests.swift in Sources */,
+				0E8531E525C5A14F008B012D /* LevelRecordTests.swift in Sources */,
 				0E3D4C9F25D9626600C3E8FB /* PhysicsBodyTests.swift in Sources */,
-				0E8531EA25C5C464008B012D /* PegTests.swift in Sources */,
+				0E8531EA25C5C464008B012D /* PegRecordTests.swift in Sources */,
 				0E8531F525C5CC1C008B012D /* AppDatabaseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -74,7 +74,7 @@ struct LevelEditorView: View {
         }
     }
 
-    private func PegView(peg: Peg, frame: CGRect) -> some View {
+    private func PegView(peg: PegRecord, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
         let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
 

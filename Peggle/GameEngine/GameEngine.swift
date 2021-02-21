@@ -15,7 +15,7 @@ final class GameEngine {
     private var componentsCancellable: AnyCancellable?
     private var collisionCancellable: AnyCancellable?
 
-    init(pegs: [Peg]) {
+    init(pegs: [PegRecord]) {
         entityFactory = EntityFactory(entityManager: entityManager)
         systems = [
             PhysicsSystem(entityManager: entityManager),
@@ -52,7 +52,7 @@ final class GameEngine {
         }
     }
 
-    func createEntities(pegs: [Peg]) {
+    func createEntities(pegs: [PegRecord]) {
         entityFactory.createWall(position: CGPoint(x: 0.5, y: -0.2), size: CGSize(width: 1, height: 0.4))
         entityFactory.createWall(position: CGPoint(x: -0.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
         entityFactory.createWall(position: CGPoint(x: 1.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))

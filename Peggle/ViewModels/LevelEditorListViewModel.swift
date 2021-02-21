@@ -2,7 +2,7 @@ import Combine
 import Foundation
 
 final class LevelEditorListViewModel: ObservableObject {
-    @Published private(set) var levels: [Level] = []
+    @Published private(set) var levels: [LevelRecord] = []
 
     private let database: AppDatabase
     private var levelsCancellable: AnyCancellable?
@@ -28,10 +28,10 @@ final class LevelEditorListViewModel: ObservableObject {
 
     // MARK: - Private
 
-    private func levelsPublisher(in database: AppDatabase) -> AnyPublisher<[Level], Never> {
+    private func levelsPublisher(in database: AppDatabase) -> AnyPublisher<[LevelRecord], Never> {
         database.levelsOrderedByNamePublisher()
             .catch { _ in
-                Just<[Level]>([])
+                Just<[LevelRecord]>([])
             }
             .eraseToAnyPublisher()
     }

@@ -2,7 +2,7 @@ import XCTest
 import GRDB
 @testable import Peggle
 
-class LevelTests: XCTestCase {
+class LevelRecordTests: XCTestCase {
     var dbWriter: DatabaseWriter!
     var database: AppDatabase!
 
@@ -15,13 +15,13 @@ class LevelTests: XCTestCase {
 
     func testConstruct() {
         let name = "Asteroid Blues"
-        let level = Level(name: name)
+        let level = LevelRecord(name: name)
 
         XCTAssertEqual(level.name, name)
     }
 
     func testInsert_validName_success() throws {
-        var level = Level(name: "Asteroid Blues")
+        var level = LevelRecord(name: "Asteroid Blues")
 
         try dbWriter.write { db in
             try level.insert(db)
@@ -31,7 +31,7 @@ class LevelTests: XCTestCase {
     }
 
     func testInsert_invalidName_throwsError() throws {
-        var level = Level(name: "")
+        var level = LevelRecord(name: "")
 
         try dbWriter.write { db in
             try XCTAssertThrowsError(level.insert(db))
@@ -39,20 +39,20 @@ class LevelTests: XCTestCase {
     }
 
     func testRoundtrip() throws {
-        var insertedLevel = Level(name: "Asteroid Blues")
-        let fetchedLevel: Level? = try dbWriter.write { db in
+        var insertedLevel = LevelRecord(name: "Asteroid Blues")
+        let fetchedLevel: LevelRecord? = try dbWriter.write { db in
             try insertedLevel.insert(db)
-            return try Level.fetchOne(db, key: insertedLevel.id)
+            return try LevelRecord.fetchOne(db, key: insertedLevel.id)
         }
 
         XCTAssertEqual(insertedLevel, fetchedLevel)
     }
 
     func testOrderedByName() throws {
-        var level1 = Level(name: "Asteroid Blues")
-        var level2 = Level(name: "Stray Dog Strut")
-        var level3 = Level(name: "Honky Tonk Women")
-        var level4 = Level(name: "Gateway Shuffle")
+        var level1 = LevelRecord(name: "Asteroid Blues")
+        var level2 = LevelRecord(name: "Stray Dog Strut")
+        var level3 = LevelRecord(name: "Honky Tonk Women")
+        var level4 = LevelRecord(name: "Gateway Shuffle")
 
         try dbWriter.write { db in
             try level1.insert(db)
@@ -61,7 +61,7 @@ class LevelTests: XCTestCase {
             try level4.insert(db)
         }
 
-        let levels = try dbWriter.read(Level.all().orderedByName().fetchAll)
+        let levels = try dbWriter.read(LevelRecord.all().orderedByName().fetchAll)
 
         XCTAssertEqual(levels, [level1, level4, level3, level2])
     }

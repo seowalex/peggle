@@ -2,13 +2,13 @@ import SwiftUI
 
 final class LevelEditorViewModel: ObservableObject {
     struct DragState {
-        let peg: Peg
+        let peg: PegRecord
         let location: CGPoint
         let isValid: Bool
     }
 
     enum PaletteSelection: Equatable {
-        case addPeg(Peg.Color)
+        case addPeg(PegRecord.Color)
         case deletePeg
     }
 
@@ -31,8 +31,8 @@ final class LevelEditorViewModel: ObservableObject {
     }
 
     @Published var name = ""
-    @Published private(set) var pegs: [Peg] = []
-    @Published var level = Level(name: "")
+    @Published private(set) var pegs: [PegRecord] = []
+    @Published var level = LevelRecord(name: "")
     @Published var paletteSelection = PaletteSelection.addPeg(.blue)
 
     let levelEditorListViewModel: LevelEditorListViewModel
@@ -50,7 +50,7 @@ final class LevelEditorViewModel: ObservableObject {
             return nil
         }
 
-        let physicsBody = PhysicsBody(shape: .circle, size: Peg.defaultSize, position: position)
+        let physicsBody = PhysicsBody(shape: .circle, size: PegRecord.defaultSize, position: position)
         var isValid = true
 
         if !frame.contains(physicsBody.boundingBox)
@@ -61,7 +61,7 @@ final class LevelEditorViewModel: ObservableObject {
             isValid = false
         }
 
-        return DragState(peg: Peg(position: position, color: color), location: position, isValid: isValid)
+        return DragState(peg: PegRecord(position: position, color: color), location: position, isValid: isValid)
     }
 
     func onDragEnd(position: CGPoint) {
@@ -69,7 +69,7 @@ final class LevelEditorViewModel: ObservableObject {
             return
         }
 
-        let physicsBody = PhysicsBody(shape: .circle, size: Peg.defaultSize, position: position)
+        let physicsBody = PhysicsBody(shape: .circle, size: PegRecord.defaultSize, position: position)
 
         if !frame.contains(physicsBody.boundingBox)
             || physicsBody.isColliding(with: pegs.map { PhysicsBody(shape: .circle,
@@ -79,11 +79,11 @@ final class LevelEditorViewModel: ObservableObject {
             return
         }
 
-        pegs.append(Peg(position: position, color: color))
+        pegs.append(PegRecord(position: position, color: color))
     }
 
     func onDrag(value: ExclusiveGesture<LongPressGesture, DragGesture>.Value,
-                peg: Peg, normalize: CGAffineTransform) -> DragState? {
+                peg: PegRecord, normalize: CGAffineTransform) -> DragState? {
         guard case .addPeg = paletteSelection, case .second(let dragValue) = value else {
             return nil
         }
@@ -109,7 +109,7 @@ final class LevelEditorViewModel: ObservableObject {
     }
 
     func onDragEnd(value: ExclusiveGesture<LongPressGesture, DragGesture>.Value,
-                   peg: Peg, normalize: CGAffineTransform) {
+                   peg: PegRecord, normalize: CGAffineTransform) {
         guard let index = pegs.firstIndex(where: { $0 == peg }) else {
             return
         }
@@ -169,6 +169,6 @@ final class LevelEditorViewModel: ObservableObject {
     func reset() {
         name = ""
         pegs.removeAll()
-        level = Level(name: "")
+        level = LevelRecord(name: "")
     }
 }

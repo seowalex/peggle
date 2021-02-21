@@ -1,6 +1,6 @@
 import GRDB
 
-struct Level: Identifiable, Equatable {
+struct LevelRecord: Identifiable, Equatable {
     // Ensure ID is a 64-bit signed integer even on 32-bit platforms
     // See https://sqlite.org/lang_createtable.html#rowid
     var id: Int64?
@@ -9,15 +9,16 @@ struct Level: Identifiable, Equatable {
 
 // MARK: - Persistence
 
-extension Level: Codable, FetchableRecord, MutablePersistableRecord {
+extension LevelRecord: Codable, FetchableRecord, MutablePersistableRecord {
     enum Columns {
         static let id = Column(CodingKeys.id)
         static let name = Column(CodingKeys.name)
     }
 
-    static let pegs = hasMany(Peg.self)
-    var pegs: QueryInterfaceRequest<Peg> {
-        request(for: Level.pegs)
+    static let databaseTableName = "level"
+    static let pegs = hasMany(PegRecord.self)
+    var pegs: QueryInterfaceRequest<PegRecord> {
+        request(for: LevelRecord.pegs)
     }
 
     // Updates a level ID after it has been inserted in the database
@@ -28,8 +29,8 @@ extension Level: Codable, FetchableRecord, MutablePersistableRecord {
 
 // MARK: - Player Database Requests
 
-extension DerivableRequest where RowDecoder == Level {
+extension DerivableRequest where RowDecoder == LevelRecord {
     func orderedByName() -> Self {
-        order(Level.Columns.name)
+        order(LevelRecord.Columns.name)
     }
 }

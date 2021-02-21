@@ -34,13 +34,13 @@ class AppDatabaseTests: XCTestCase {
     }
 
     func testSaveLevel_insertsValidPegs_success() throws {
-        var level = Level(name: "Asteroid Blues")
+        var level = LevelRecord(name: "Asteroid Blues")
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
+            PegRecord(position: .zero, size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try appDatabase.saveLevel(&level, pegs: &pegs)
@@ -55,27 +55,27 @@ class AppDatabaseTests: XCTestCase {
     }
 
     func testSaveLevel_insertsInvalidPegs_throwsError() throws {
-        var level = Level(name: "Asteroid Blues")
+        var level = LevelRecord(name: "Asteroid Blues")
 
         let size = CGSize(width: 40, height: 40)
         // Pegs that are colliding
         var pegs = [
-            Peg(position: .zero, size: size, color: .blue),
-            Peg(position: CGPoint(x: 20, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 20), size: size, color: .orange)
+            PegRecord(position: .zero, size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 20, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 20), size: size, color: .orange)
         ]
 
         try XCTAssertThrowsError(appDatabase.saveLevel(&level, pegs: &pegs))
     }
 
     func testSaveLevel_insertsNewLevelOldPegs_throwsError() throws {
-        var oldLevel = Level(name: "Asteroid Blues")
+        var oldLevel = LevelRecord(name: "Asteroid Blues")
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
+            PegRecord(position: .zero, size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -87,20 +87,20 @@ class AppDatabaseTests: XCTestCase {
             }
         }
 
-        var newLevel = Level(name: "Stray Dog Strut")
+        var newLevel = LevelRecord(name: "Stray Dog Strut")
 
         // Trying to save a level with another level's pegs should throw an error
         try XCTAssertThrowsError(appDatabase.saveLevel(&newLevel, pegs: &pegs))
     }
 
     func testSaveLevel_updatesAddPegs_success() throws {
-        var level = Level(name: "Asteroid Blues")
+        var level = LevelRecord(name: "Asteroid Blues")
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
+            PegRecord(position: .zero, size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -114,8 +114,8 @@ class AppDatabaseTests: XCTestCase {
 
         // Add some new pegs
         pegs.append(contentsOf: [
-            Peg(position: CGPoint(x: 80, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 80), size: size, color: .orange)
+            PegRecord(position: CGPoint(x: 80, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 80), size: size, color: .orange)
         ])
 
         try appDatabase.saveLevel(&level, pegs: &pegs)
@@ -126,13 +126,13 @@ class AppDatabaseTests: XCTestCase {
     }
 
     func testSaveLevel_updatesEditPegs_success() throws {
-        var level = Level(name: "Asteroid Blues")
+        var level = LevelRecord(name: "Asteroid Blues")
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
+            PegRecord(position: .zero, size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -158,13 +158,13 @@ class AppDatabaseTests: XCTestCase {
     }
 
     func testSaveLevel_updatesDeletePegs_success() throws {
-        var level = Level(name: "Asteroid Blues")
+        var level = LevelRecord(name: "Asteroid Blues")
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
+            PegRecord(position: .zero, size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -187,16 +187,16 @@ class AppDatabaseTests: XCTestCase {
     }
 
     func testDeleteLevels() throws {
-        var level1 = Level(name: "Asteroid Blues")
-        var level2 = Level(name: "Stray Dog Strut")
-        var level3 = Level(name: "Honky Tonk Women")
-        var level4 = Level(name: "Gateway Shuffle")
+        var level1 = LevelRecord(name: "Asteroid Blues")
+        var level2 = LevelRecord(name: "Stray Dog Strut")
+        var level3 = LevelRecord(name: "Honky Tonk Women")
+        var level4 = LevelRecord(name: "Gateway Shuffle")
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
+            PegRecord(position: .zero, size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
@@ -228,14 +228,14 @@ class AppDatabaseTests: XCTestCase {
             }
         }
 
-        try XCTAssertEqual(dbWriter.read(Level.fetchCount), 2)
+        try XCTAssertEqual(dbWriter.read(LevelRecord.fetchCount), 2)
     }
 
     func testDeleteAllLevels() throws {
-        var level1 = Level(name: "Asteroid Blues")
-        var level2 = Level(name: "Stray Dog Strut")
-        var level3 = Level(name: "Honky Tonk Women")
-        var level4 = Level(name: "Gateway Shuffle")
+        var level1 = LevelRecord(name: "Asteroid Blues")
+        var level2 = LevelRecord(name: "Stray Dog Strut")
+        var level3 = LevelRecord(name: "Honky Tonk Women")
+        var level4 = LevelRecord(name: "Gateway Shuffle")
 
         try dbWriter.write { db in
             try level1.insert(db)
@@ -246,12 +246,12 @@ class AppDatabaseTests: XCTestCase {
 
         try appDatabase.deleteAllLevels()
 
-        try XCTAssertEqual(dbWriter.read(Level.fetchCount), 0)
+        try XCTAssertEqual(dbWriter.read(LevelRecord.fetchCount), 0)
     }
 
     func testLevelsOrderedByNamePublisher_publishesWellOrderedLevels() throws {
-        var level1 = Level(name: "Asteroid Blues")
-        var level2 = Level(name: "Stray Dog Strut")
+        var level1 = LevelRecord(name: "Asteroid Blues")
+        var level2 = LevelRecord(name: "Stray Dog Strut")
 
         try dbWriter.write { db in
             try level1.insert(db)
@@ -259,7 +259,7 @@ class AppDatabaseTests: XCTestCase {
         }
 
         let exp = expectation(description: "Levels")
-        var levels: [Level]?
+        var levels: [LevelRecord]?
         let cancellable = appDatabase.levelsOrderedByNamePublisher().sink { completion in
             if case let .failure(error) = completion {
                 XCTFail("Unexpected error \(error)")
@@ -277,7 +277,7 @@ class AppDatabaseTests: XCTestCase {
     }
 
     func testLevelsOrderedByNamePublisher_publishesRightOnSubscription() throws {
-        var levels: [Level]?
+        var levels: [LevelRecord]?
         _ = appDatabase.levelsOrderedByNamePublisher().sink { completion in
             if case let .failure(error) = completion {
                 XCTFail("Unexpected error \(error)")
@@ -290,13 +290,13 @@ class AppDatabaseTests: XCTestCase {
     }
 
     func testFetchPegs() throws {
-        var level = Level(name: "Asteroid Blues")
+        var level = LevelRecord(name: "Asteroid Blues")
 
         let size = CGSize(width: 40, height: 40)
         var pegs = [
-            Peg(position: .zero, size: size, color: .blue),
-            Peg(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
-            Peg(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
+            PegRecord(position: .zero, size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 40, y: 0), size: size, color: .blue),
+            PegRecord(position: CGPoint(x: 0, y: 40), size: size, color: .orange)
         ]
 
         try dbWriter.write { db in
