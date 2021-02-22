@@ -16,9 +16,15 @@ extension LevelRecord: Codable, FetchableRecord, MutablePersistableRecord {
     }
 
     static let databaseTableName = "level"
+
     static let pegs = hasMany(PegRecord.self)
     var pegs: QueryInterfaceRequest<PegRecord> {
         request(for: LevelRecord.pegs)
+    }
+
+    static let blocks = hasMany(BlockRecord.self)
+    var blocks: QueryInterfaceRequest<BlockRecord> {
+        request(for: LevelRecord.blocks)
     }
 
     // Updates a level ID after it has been inserted in the database

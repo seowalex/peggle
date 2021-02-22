@@ -44,6 +44,23 @@ struct AppDatabase {
             }
         }
 
+        migrator.registerMigration("CreateBlock") { db in
+            try db.create(table: "block") { t in
+                t.autoIncrementedPrimaryKey("id")
+                t.column("levelId", .integer)
+                    .notNull()
+                    .indexed()
+                    .references("level", onDelete: .cascade)
+                t.column("position", .text)
+                    .notNull()
+                t.column("rotation", .double)
+                    .notNull()
+                    .check { -Double.pi < $0 && $0 <= Double.pi }
+                t.column("size", .text)
+                    .notNull()
+            }
+        }
+
         return migrator
     }
 
@@ -56,21 +73,36 @@ struct AppDatabase {
 // MARK: - Database Access: Writes
 
 extension AppDatabase {
-    func saveLevel(_ level: inout LevelRecord, pegs: inout [PegRecord]) throws {
+    func saveLevel(_ level: inout LevelRecord, pegs: inout [PegRecord], blocks: inout [BlockRecord]) throws {
         try dbWriter.write { db in
             level = try LevelRecord.filter(LevelRecord.Columns.name == level.name).fetchOne(db) ?? level
             try level.save(db)
             try level.pegs.deleteAll(db)
+            try level.blocks.deleteAll(db)
 
-            let bodies = pegs.map { PhysicsBody(shape: .circle, size: $0.size, position: $0.position) }
+            let bodies = pegs.map { PhysicsBody(shape: .circle,
+                                                size: $0.size,
+                                                position: $0.position,
+                                                rotation: $0.rotation)
+            }
+                + blocks.map { PhysicsBody(shape: .rectangle,
+                                           size: $0.size,
+                                           position: $0.position,
+                                           rotation: $0.rotation)
+                }
 
             guard bodies.allSatisfy({ !$0.isColliding(with: bodies) }) else {
-                throw DatabaseError(message: "Pegs are colliding with each other")
+                throw DatabaseError(message: "Pegs/blocks are colliding with each other")
             }
 
             for index in pegs.indices {
                 pegs[index].levelId = level.id
                 try pegs[index].save(db)
+            }
+
+            for index in blocks.indices {
+                blocks[index].levelId = level.id
+                try blocks[index].save(db)
             }
         }
     }
@@ -100,5 +132,9 @@ extension AppDatabase {
 
     func fetchPegs(_ level: LevelRecord) throws -> [PegRecord] {
         try dbWriter.read(level.pegs.fetchAll)
+    }
+
+    func fetchBlocks(_ level: LevelRecord) throws -> [BlockRecord] {
+        try dbWriter.read(level.blocks.fetchAll)
     }
 }

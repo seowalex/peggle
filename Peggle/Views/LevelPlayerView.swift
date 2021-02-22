@@ -83,6 +83,6 @@ struct LevelPlayerView: View {
 
 struct LevelPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        LevelPlayerView(viewModel: LevelPlayerViewModel(pegs: []))
+        LevelPlayerView(viewModel: LevelPlayerViewModel(elements: []))
     }
 }

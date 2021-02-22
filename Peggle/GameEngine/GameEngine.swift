@@ -15,7 +15,7 @@ final class GameEngine {
     private var componentsCancellable: AnyCancellable?
     private var collisionCancellable: AnyCancellable?
 
-    init(pegs: [Peg]) {
+    init(elements: [Element]) {
         entityFactory = EntityFactory(entityManager: entityManager)
         systems = [
             PhysicsSystem(entityManager: entityManager),
@@ -24,7 +24,7 @@ final class GameEngine {
             RenderSystem(entityManager: entityManager)
         ]
 
-        createEntities(pegs: pegs)
+        createEntities(elements: elements)
 
         componentsCancellable = entityManager.$components.sink { [weak self] components in
             guard let values = components[String(describing: PhysicsComponent.self)]?.values,
@@ -52,16 +52,23 @@ final class GameEngine {
         }
     }
 
-    func createEntities(pegs: [Peg]) {
+    func createEntities(elements: [Element]) {
         entityFactory.createWall(position: CGPoint(x: 0.5, y: -0.2), size: CGSize(width: 1, height: 0.4))
         entityFactory.createWall(position: CGPoint(x: -0.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
         entityFactory.createWall(position: CGPoint(x: 1.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
 
         entityFactory.createCannon(position: CGPoint(x: 0.5, y: 0.07))
 
-        for peg in pegs {
-            entityFactory.createPeg(position: peg.position.applying(CGAffineTransform(translationX: 0, y: 0.4)),
-                                    imageName: peg.imageName, rotation: peg.rotation, size: peg.size)
+        for element in elements {
+            let position = element.position.applying(CGAffineTransform(translationX: 0, y: 0.4))
+            let rotation = element.rotation
+            let size = element.size
+
+            if let peg = element as? Peg {
+                entityFactory.createPeg(position: position, imageName: peg.imageName, rotation: rotation, size: size)
+            } else if element is Block {
+                entityFactory.createBlock(position: position, rotation: rotation, size: size)
+            }
         }
     }
 

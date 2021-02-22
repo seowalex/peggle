@@ -50,8 +50,8 @@ struct LevelEditorView: View {
             let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
 
             ZStack {
-                ForEach(viewModel.pegs, id: \.self) { peg in
-                    PegView(peg: peg, frame: frame)
+                ForEach(viewModel.elements, id: \.self) { element in
+                    ElementView(element: element, frame: frame)
                 }
 
                 if let state = dragState {
@@ -77,22 +77,22 @@ struct LevelEditorView: View {
         }
     }
 
-    private func PegView(peg: Peg, frame: CGRect) -> some View {
+    private func ElementView(element: Element, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
 
-        return Image(peg.imageName)
+        return Image(element.imageName)
             .resizable()
-            .opacity(dragState?.element === peg ? 0.4 : 1)
-            .rotationEffect(.radians(Double(peg.rotation)))
-            .frame(width: peg.size.applying(denormalize).width, height: peg.size.applying(denormalize).height)
-            .position(peg.position.applying(denormalize))
+            .opacity(dragState?.element === element ? 0.4 : 1)
+            .rotationEffect(.radians(Double(element.rotation)))
+            .frame(width: element.size.applying(denormalize).width, height: element.size.applying(denormalize).height)
+            .position(element.position.applying(denormalize))
             .gesture(
                 ExclusiveGesture(LongPressGesture(), DragGesture(minimumDistance: 0))
                     .updating($dragState) { value, state, _ in
-                        state = viewModel.onDrag(value: value, peg: peg, frame: frame)
+                        state = viewModel.onDrag(value: value, element: element, frame: frame)
                     }
                     .onEnded { value in
-                        viewModel.onDragEnd(value: value, peg: peg, frame: frame)
+                        viewModel.onDragEnd(value: value, element: element, frame: frame)
                     }
             )
     }
@@ -140,10 +140,10 @@ struct LevelEditorView: View {
                        height: size.applying(denormalize).height)
                 .position(position.applying(denormalize))
                 .allowsHitTesting(false)
-            ResizeHandleView(element: element, frame: frame, position: topHandle)
-            ResizeHandleView(element: element, frame: frame, position: bottomHandle)
-            ResizeHandleView(element: element, frame: frame, position: leftHandle)
-            ResizeHandleView(element: element, frame: frame, position: rightHandle)
+            ResizeHandleView(element: element, frame: frame, position: topHandle, isHeight: true)
+            ResizeHandleView(element: element, frame: frame, position: bottomHandle, isHeight: true)
+            ResizeHandleView(element: element, frame: frame, position: leftHandle, isHeight: false)
+            ResizeHandleView(element: element, frame: frame, position: rightHandle, isHeight: false)
             RotateHandleView(element: element, frame: frame, position: rotateHandle)
             Rectangle()
                 .rotation(.radians(Double(rotation)))
@@ -155,7 +155,7 @@ struct LevelEditorView: View {
         }
     }
 
-    private func ResizeHandleView(element: Element, frame: CGRect, position: CGPoint) -> some View {
+    private func ResizeHandleView(element: Element, frame: CGRect, position: CGPoint, isHeight: Bool) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
         let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
 
@@ -171,14 +171,24 @@ struct LevelEditorView: View {
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .updating($dragState) { value, state, _ in
-                        state = viewModel.onResize(length: value.location.applying(normalize)
-                                                    .distance(to: element.position) * 2,
-                                                   element: element)
+                        let width = element is Block && isHeight == true
+                            ? element.size.width
+                            : value.location.applying(normalize).distance(to: element.position) * 2
+                        let height = element is Block && isHeight == false
+                            ? element.size.height
+                            : value.location.applying(normalize).distance(to: element.position) * 2
+
+                        state = viewModel.onResize(width: width, height: height, element: element)
                     }
                     .onEnded { value in
-                        viewModel.onResizeEnd(length: value.location.applying(normalize)
-                                                .distance(to: element.position) * 2,
-                                              element: element)
+                        let width = element is Block && isHeight == true
+                            ? element.size.width
+                            : value.location.applying(normalize).distance(to: element.position) * 2
+                        let height = element is Block && isHeight == false
+                            ? element.size.height
+                            : value.location.applying(normalize).distance(to: element.position) * 2
+
+                        viewModel.onResizeEnd(width: width, height: height, element: element)
                     }
             )
     }
@@ -221,8 +231,9 @@ struct LevelEditorView: View {
         HStack(spacing: 16) {
             PaletteButtonView(selection: .addPeg(.blue), imageName: "peg-blue")
             PaletteButtonView(selection: .addPeg(.orange), imageName: "peg-orange")
+            PaletteButtonView(selection: .addBlock, imageName: "block")
             Spacer()
-            PaletteButtonView(selection: .deletePeg, imageName: "delete")
+            PaletteButtonView(selection: .delete, imageName: "delete")
         }
     }
 
@@ -242,7 +253,7 @@ struct LevelEditorView: View {
             TextField("Level Name", text: $viewModel.name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             NavigationLink(destination: LazyView {
-                LevelPlayerView(viewModel: LevelPlayerViewModel(pegs: viewModel.pegs))
+                LevelPlayerView(viewModel: LevelPlayerViewModel(elements: viewModel.elements))
             }) {
                 Text("Start")
             }
@@ -251,7 +262,7 @@ struct LevelEditorView: View {
 
     private func PaletteButtonView(selection: LevelEditorViewModel.PaletteSelection, imageName: String) -> some View {
         Button(action: {
-            if case .deletePeg = selection {
+            if case .delete = selection {
                 viewModel.selectedElement = nil
             }
 

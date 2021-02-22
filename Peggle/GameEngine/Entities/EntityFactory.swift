@@ -80,4 +80,24 @@ final class EntityFactory {
 
         return entity
     }
+
+    @discardableResult
+    func createBlock(position: CGPoint, rotation: CGFloat = 0.0, size: CGSize = Block.defaultSize) -> Entity {
+        let entity = Entity()
+        entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .rectangle,
+                                                                             size: size,
+                                                                             position: position,
+                                                                             rotation: rotation,
+                                                                             isResting: true,
+                                                                             affectedByGravity: false,
+                                                                             isDynamic: false)),
+                                   to: entity)
+        entityManager.addComponent(RenderComponent(position: position,
+                                                   size: size,
+                                                   imageName: "block",
+                                                   rotation: rotation),
+                                   to: entity)
+
+        return entity
+    }
 }
