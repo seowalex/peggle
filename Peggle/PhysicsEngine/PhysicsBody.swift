@@ -128,7 +128,7 @@ final class PhysicsBody {
     static func isColliding(rectangle: PhysicsBody, circle: PhysicsBody) -> Bool {
         guard let vertices = rectangle.vertices,
               let closestVertex = vertices.min(by: { $0.distance(to: circle.position)
-                                                      < $1.distance(to: circle.position) }) else {
+                                                < $1.distance(to: circle.position) }) else {
             return true
         }
 

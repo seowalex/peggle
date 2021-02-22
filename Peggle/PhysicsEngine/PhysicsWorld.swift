@@ -56,7 +56,13 @@ final class PhysicsWorld {
                 return
             }
 
-            if dynamicBody.position.distance(to: (vertices[0], vertices[1])) < dynamicBody.size.width / 2 {
+            // First check for corners, then each side
+            if let closestVertex = vertices.min(by: { $0.distance(to: dynamicBody.position)
+                                                    < $1.distance(to: dynamicBody.position) }),
+               dynamicBody.position.distance(to: closestVertex) < dynamicBody.size.width / 2 {
+                normalVector = (dynamicBody.position - closestVertex).normalized()
+                difference = dynamicBody.size.width / 2 - dynamicBody.position.distance(to: closestVertex)
+            } else if dynamicBody.position.distance(to: (vertices[0], vertices[1])) < dynamicBody.size.width / 2 {
                 normalVector = (vertices[0] - vertices[2]).normalized()
                 difference = dynamicBody.size.width / 2 - dynamicBody.position.distance(to: (vertices[0], vertices[1]))
             } else if dynamicBody.position.distance(to: (vertices[0], vertices[2])) < dynamicBody.size.width / 2 {
