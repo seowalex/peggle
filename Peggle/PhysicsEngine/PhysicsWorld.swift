@@ -56,6 +56,7 @@ final class PhysicsWorld {
                 return
             }
 
+            // TODO: Check if corner hit is head-on collision
             // First check for corners, then each side
             if let closestVertex = vertices.min(by: { $0.distance(to: dynamicBody.position)
                                                     < $1.distance(to: dynamicBody.position) }),
