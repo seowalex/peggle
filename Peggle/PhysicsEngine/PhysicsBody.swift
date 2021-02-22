@@ -97,6 +97,64 @@ final class PhysicsBody {
         self.forces = forces
     }
 
+    static func isColliding(rectangleA: PhysicsBody, rectangleB: PhysicsBody) -> Bool {
+        guard let verticesA = rectangleA.vertices, let verticesB = rectangleB.vertices else {
+            return true
+        }
+
+        let axes = [
+            verticesA[1] - verticesA[0],
+            verticesA[2] - verticesA[0],
+            verticesB[1] - verticesB[0],
+            verticesB[2] - verticesB[0]
+        ].map { $0.normalized() }
+
+        for axis in axes {
+            guard let minA = verticesA.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
+                  let maxA = verticesA.map({ ($0 - CGPoint.zero).dot(axis) }).max(),
+                  let minB = verticesB.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
+                  let maxB = verticesB.map({ ($0 - CGPoint.zero).dot(axis) }).max() else {
+                continue
+            }
+
+            if minA - maxB > 0 || minB - maxA > 0 {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    static func isColliding(rectangle: PhysicsBody, circle: PhysicsBody) -> Bool {
+        guard let vertices = rectangle.vertices,
+              let closestVertex = vertices.min(by: { $0.distance(to: circle.position)
+                                                      < $1.distance(to: circle.position) }) else {
+            return true
+        }
+
+        let axes = [
+            vertices[1] - vertices[0],
+            vertices[2] - vertices[0],
+            closestVertex - circle.position
+        ].map { $0.normalized() }
+
+        for axis in axes {
+            guard let minA = vertices.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
+                  let maxA = vertices.map({ ($0 - CGPoint.zero).dot(axis) }).max() else {
+                continue
+            }
+
+            let minB = (circle.position - CGPoint.zero).dot(axis) - circle.size.width / 2
+            let maxB = (circle.position - CGPoint.zero).dot(axis) + circle.size.width / 2
+
+            if minA - maxB > 0 || minB - maxA > 0 {
+                return false
+            }
+        }
+
+        return true
+    }
+
     func isColliding(with body: PhysicsBody) -> Bool {
         // Handle trivial case first
         if self === body || !boundingBox.intersects(body.boundingBox) {
@@ -106,62 +164,12 @@ final class PhysicsBody {
         let bodies = [self, body]
 
         if bodies.allSatisfy({ $0.shape == .rectangle }) {
-            guard let verticesA = vertices, let verticesB = body.vertices else {
-                return true
-            }
-
-            let axes = [
-                verticesA[1] - verticesA[0],
-                verticesA[2] - verticesA[0],
-                verticesB[1] - verticesB[0],
-                verticesB[2] - verticesB[0]
-            ].map { $0.normalized() }
-
-            for axis in axes {
-                guard let minA = verticesA.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
-                      let maxA = verticesA.map({ ($0 - CGPoint.zero).dot(axis) }).max(),
-                      let minB = verticesB.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
-                      let maxB = verticesB.map({ ($0 - CGPoint.zero).dot(axis) }).max() else {
-                    continue
-                }
-
-                if minA - maxB > 0 || minB - maxA > 0 {
-                    return false
-                }
-            }
-
-            return true
+            return PhysicsBody.isColliding(rectangleA: self, rectangleB: body)
         } else if bodies.allSatisfy({ $0.shape == .circle }) {
             return position.distance(to: body.position) < size.width / 2 + body.size.width / 2
-        } else if let rectangleBody = bodies.first(where: { $0.shape == .rectangle }),
-                  let circleBody = bodies.first(where: { $0.shape == .circle }) {
-            guard let vertices = rectangleBody.vertices,
-                  let closestVertex = vertices.min(by: { $0.distance(to: circleBody.position)
-                                                          < $1.distance(to: circleBody.position) }) else {
-                return true
-            }
-
-            let axes = [
-                vertices[1] - vertices[0],
-                vertices[2] - vertices[0],
-                closestVertex - circleBody.position
-            ].map { $0.normalized() }
-
-            for axis in axes {
-                guard let minA = vertices.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
-                      let maxA = vertices.map({ ($0 - CGPoint.zero).dot(axis) }).max() else {
-                    continue
-                }
-
-                let minB = (circleBody.position - CGPoint.zero).dot(axis) - circleBody.size.width / 2
-                let maxB = (circleBody.position - CGPoint.zero).dot(axis) + circleBody.size.width / 2
-
-                if minA - maxB > 0 || minB - maxA > 0 {
-                    return false
-                }
-            }
-
-            return true
+        } else if let rectangle = bodies.first(where: { $0.shape == .rectangle }),
+                  let circle = bodies.first(where: { $0.shape == .circle }) {
+            return PhysicsBody.isColliding(rectangle: rectangle, circle: circle)
         }
 
         return true
