@@ -120,7 +120,7 @@ final class GameEngine {
             // how far the tap is from the cannon
             ballEntity = entityFactory.createBall(position: aimComponent.position,
                                                   velocity: (actualPosition - aimComponent.position)
-                                                    .normalized() * 1.2)
+                                                    .normalized())
         }
     }
 
