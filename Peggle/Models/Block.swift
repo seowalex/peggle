@@ -11,6 +11,6 @@ final class Block: Element {
         super.init(position: position,
                    rotation: rotation,
                    size: size,
-                   physicsBody: PhysicsBody(shape: .rectangle, size: size, position: position))
+                   physicsBody: PhysicsBody(shape: .rectangle, size: size, position: position, rotation: rotation))
     }
 }

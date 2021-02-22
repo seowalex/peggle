@@ -135,7 +135,10 @@ final class LevelEditorViewModel: ObservableObject {
                 shape = .rectangle
             }
 
-            let physicsBody = PhysicsBody(shape: shape, size: element.size, position: newPosition)
+            let physicsBody = PhysicsBody(shape: shape,
+                                          size: element.size,
+                                          position: newPosition,
+                                          rotation: element.rotation)
 
             if !self.frame.contains(physicsBody.boundingBox)
                 || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
@@ -170,7 +173,10 @@ final class LevelEditorViewModel: ObservableObject {
                 shape = .rectangle
             }
 
-            let physicsBody = PhysicsBody(shape: shape, size: element.size, position: newPosition)
+            let physicsBody = PhysicsBody(shape: shape,
+                                          size: element.size,
+                                          position: newPosition,
+                                          rotation: element.rotation)
 
             if !self.frame.contains(physicsBody.boundingBox)
                 || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
@@ -187,7 +193,8 @@ final class LevelEditorViewModel: ObservableObject {
 
         let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
                                       size: CGSize(width: width, height: height),
-                                      position: element.physicsBody.position)
+                                      position: element.physicsBody.position,
+                                      rotation: element.physicsBody.rotation)
 
         if !frame.contains(physicsBody.boundingBox)
             || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
@@ -204,7 +211,8 @@ final class LevelEditorViewModel: ObservableObject {
     func onResizeEnd(width: CGFloat, height: CGFloat, element: Element) {
         let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
                                       size: CGSize(width: width, height: height),
-                                      position: element.physicsBody.position)
+                                      position: element.physicsBody.position,
+                                      rotation: element.physicsBody.rotation)
 
         if !frame.contains(physicsBody.boundingBox)
             || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {

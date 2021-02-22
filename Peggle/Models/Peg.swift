@@ -24,7 +24,7 @@ final class Peg: Element {
         super.init(position: position,
                    rotation: rotation,
                    size: size,
-                   physicsBody: PhysicsBody(shape: .circle, size: size, position: position))
+                   physicsBody: PhysicsBody(shape: .circle, size: size, position: position, rotation: rotation))
     }
 }
 
