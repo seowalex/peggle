@@ -51,10 +51,10 @@ final class PhysicsBody {
         guard case .rectangle = shape else {
             return nil
         }
-        
+
         let offset = CGAffineTransform(translationX: size.width / 2, y: size.height / 2).inverted()
         let rectangle = CGRect(origin: position.applying(offset), size: size)
-        
+
         return [
             CGPoint(x: rectangle.minX, y: rectangle.minY),
             CGPoint(x: rectangle.minX, y: rectangle.maxY),
@@ -106,25 +106,9 @@ final class PhysicsBody {
         let bodies = [self, body]
 
         if bodies.allSatisfy({ $0.shape == .rectangle }) {
-            let offsetA = CGAffineTransform(translationX: size.width / 2, y: size.height / 2).inverted()
-            let rectangleA = CGRect(origin: position.applying(offsetA), size: size)
-
-            let offsetB = CGAffineTransform(translationX: body.size.width / 2, y: body.size.height / 2).inverted()
-            let rectangleB = CGRect(origin: body.position.applying(offsetB), size: body.size)
-
-            let verticesA = [
-                CGPoint(x: rectangleA.minX, y: rectangleA.minY),
-                CGPoint(x: rectangleA.minX, y: rectangleA.maxY),
-                CGPoint(x: rectangleA.maxX, y: rectangleA.minY),
-                CGPoint(x: rectangleA.maxX, y: rectangleA.maxY)
-            ].map { $0.rotate(around: position, by: rotation) }
-
-            let verticesB = [
-                CGPoint(x: rectangleB.minX, y: rectangleB.minY),
-                CGPoint(x: rectangleB.minX, y: rectangleB.maxY),
-                CGPoint(x: rectangleB.maxX, y: rectangleB.minY),
-                CGPoint(x: rectangleB.maxX, y: rectangleB.maxY)
-            ].map { $0.rotate(around: body.position, by: body.rotation) }
+            guard let verticesA = vertices, let verticesB = body.vertices else {
+                return true
+            }
 
             let axes = [
                 verticesA[1] - verticesA[0],
@@ -134,19 +118,11 @@ final class PhysicsBody {
             ].map { $0.normalized() }
 
             for axis in axes {
-                var minA = CGFloat.infinity
-                var maxA = -CGFloat.infinity
-                var minB = CGFloat.infinity
-                var maxB = -CGFloat.infinity
-
-                for vector in verticesA.map({ $0 - CGPoint.zero }) {
-                    minA = min(minA, vector.dot(axis))
-                    maxA = max(maxA, vector.dot(axis))
-                }
-
-                for vector in verticesB.map({ $0 - CGPoint.zero }) {
-                    minB = min(minB, vector.dot(axis))
-                    maxB = max(maxB, vector.dot(axis))
+                guard let minA = verticesA.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
+                      let maxA = verticesA.map({ ($0 - CGPoint.zero).dot(axis) }).max(),
+                      let minB = verticesB.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
+                      let maxB = verticesB.map({ ($0 - CGPoint.zero).dot(axis) }).max() else {
+                    continue
                 }
 
                 if minA - maxB > 0 || minB - maxA > 0 {
@@ -159,19 +135,9 @@ final class PhysicsBody {
             return position.distance(to: body.position) < size.width / 2 + body.size.width / 2
         } else if let rectangleBody = bodies.first(where: { $0.shape == .rectangle }),
                   let circleBody = bodies.first(where: { $0.shape == .circle }) {
-            let offset = CGAffineTransform(translationX: rectangleBody.size.width / 2,
-                                           y: rectangleBody.size.height / 2).inverted()
-            let rectangle = CGRect(origin: rectangleBody.position.applying(offset), size: rectangleBody.size)
-
-            let vertices = [
-                CGPoint(x: rectangle.minX, y: rectangle.minY),
-                CGPoint(x: rectangle.minX, y: rectangle.maxY),
-                CGPoint(x: rectangle.maxX, y: rectangle.minY),
-                CGPoint(x: rectangle.maxX, y: rectangle.maxY)
-            ].map { $0.rotate(around: rectangleBody.position, by: rectangleBody.rotation) }
-
-            guard let closestVertex = vertices.min(by: { $0.distance(to: circleBody.position)
-                                                    < $1.distance(to: circleBody.position) }) else {
+            guard let vertices = rectangleBody.vertices,
+                  let closestVertex = vertices.min(by: { $0.distance(to: circleBody.position)
+                                                          < $1.distance(to: circleBody.position) }) else {
                 return true
             }
 
@@ -182,15 +148,13 @@ final class PhysicsBody {
             ].map { $0.normalized() }
 
             for axis in axes {
-                let minA = (circleBody.position - CGPoint.zero).dot(axis) - circleBody.size.width / 2
-                let maxA = (circleBody.position - CGPoint.zero).dot(axis) + circleBody.size.width / 2
-                var minB = CGFloat.infinity
-                var maxB = -CGFloat.infinity
-
-                for vector in vertices.map({ $0 - CGPoint.zero }) {
-                    minB = min(minB, vector.dot(axis))
-                    maxB = max(maxB, vector.dot(axis))
+                guard let minA = vertices.map({ ($0 - CGPoint.zero).dot(axis) }).min(),
+                      let maxA = vertices.map({ ($0 - CGPoint.zero).dot(axis) }).max() else {
+                    continue
                 }
+
+                let minB = (circleBody.position - CGPoint.zero).dot(axis) - circleBody.size.width / 2
+                let maxB = (circleBody.position - CGPoint.zero).dot(axis) + circleBody.size.width / 2
 
                 if minA - maxB > 0 || minB - maxA > 0 {
                     return false
@@ -200,7 +164,7 @@ final class PhysicsBody {
             return true
         }
 
-        return false
+        return true
     }
 
     func isColliding(with bodies: [PhysicsBody]) -> Bool {
