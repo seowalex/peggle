@@ -41,6 +41,10 @@ extension CGVector {
         self / magnitude()
     }
 
+    func angle() -> CGFloat {
+        atan2(dy, dx)
+    }
+
     func dot(_ vector: CGVector) -> CGFloat {
         dx * vector.dx + dy * vector.dy
     }

@@ -36,6 +36,11 @@ extension CGPoint {
         return sqrt(dx * dx + dy * dy)
     }
 
+    func distance(to line: (CGPoint, CGPoint)) -> CGFloat {
+        abs((line.1.x - line.0.x) * (line.0.y - y) - (line.0.x - x) * (line.1.y - line.0.y))
+            / line.0.distance(to: line.1)
+    }
+
     func angle(to point: CGPoint) -> CGFloat {
         atan2(point.y - y, point.x - x)
     }

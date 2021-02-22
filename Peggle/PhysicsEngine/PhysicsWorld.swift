@@ -43,64 +43,44 @@ final class PhysicsWorld {
     }
 
     func resolveStaticCollision(dynamicBody: PhysicsBody, staticBody: PhysicsBody) {
-        // TODO: Other shapes
+        var normalVector = CGVector.zero
+        var difference = CGFloat.zero
+
+        // Collision resolution
         if [dynamicBody, staticBody].allSatisfy({ $0.shape == .circle }) {
-            // Collision resolution
-            let translationVector = staticBody.position - dynamicBody.position
-            let difference = dynamicBody.size.width / 2 + staticBody.size.width / 2
+            normalVector = (dynamicBody.position - staticBody.position).normalized()
+            difference = dynamicBody.size.width / 2 + staticBody.size.width / 2
                 - dynamicBody.position.distance(to: staticBody.position)
-
-            dynamicBody.position -= translationVector.normalized() * difference
-
-            // Calculate elastic collision (with restitution)
-            let dx = dynamicBody.velocity.dx
-            let dy = dynamicBody.velocity.dy
-            let angle = dynamicBody.position.angle(to: staticBody.position)
-
-            dynamicBody.velocity = (1 - dynamicBody.restitution)
-                * CGVector(dx: -dx * cos(2 * angle) - dy * sin(2 * angle),
-                           dy: -dx * sin(2 * angle) + dy * cos(2 * angle))
         } else if dynamicBody.shape == .circle && staticBody.shape == .rectangle {
-            // TODO: Handle rotation
-            let topEdge = CGRect(x: staticBody.boundingBox.minX, y: staticBody.boundingBox.minY,
-                                 width: staticBody.boundingBox.width, height: 0)
-            let bottomEdge = CGRect(x: staticBody.boundingBox.minX, y: staticBody.boundingBox.maxY,
-                                    width: staticBody.boundingBox.width, height: 0)
-            let leftEdge = CGRect(x: staticBody.boundingBox.minX, y: staticBody.boundingBox.minY,
-                                  width: 0, height: staticBody.boundingBox.height)
-            let rightEdge = CGRect(x: staticBody.boundingBox.maxX, y: staticBody.boundingBox.minY,
-                                   width: 0, height: staticBody.boundingBox.height)
-
-            if [topEdge, bottomEdge].map(dynamicBody.boundingBox.intersects).contains(true) {
-                // Collision resolution
-                let translationVector = CGPoint(x: dynamicBody.position.x, y: staticBody.position.y)
-                    - dynamicBody.position
-                let difference = dynamicBody.size.height / 2 + staticBody.size.height / 2
-                    - abs(staticBody.position.y - dynamicBody.position.y)
-
-                dynamicBody.position -= translationVector.normalized() * difference
-
-                // Calculate elastic collision (with restitution)
-                dynamicBody.velocity = (1 - dynamicBody.restitution)
-                    * CGVector(dx: dynamicBody.velocity.dx,
-                               dy: -dynamicBody.velocity.dy)
+            guard let vertices = staticBody.vertices else {
+                return
             }
 
-            if [leftEdge, rightEdge].map(dynamicBody.boundingBox.intersects).contains(true) {
-                // Collision resolution
-                let translationVector = CGPoint(x: staticBody.position.x, y: dynamicBody.position.y)
-                    - dynamicBody.position
-                let difference = dynamicBody.size.width / 2 + staticBody.size.width / 2
-                    - abs(staticBody.position.x - dynamicBody.position.x)
-
-                dynamicBody.position -= translationVector.normalized() * difference
-
-                // Calculate elastic collision (with restitution)
-                dynamicBody.velocity = (1 - dynamicBody.restitution)
-                    * CGVector(dx: -dynamicBody.velocity.dx,
-                               dy: dynamicBody.velocity.dy)
+            if dynamicBody.position.distance(to: (vertices[0], vertices[1])) < dynamicBody.size.width / 2 {
+                normalVector = (vertices[0] - vertices[2]).normalized()
+                difference = dynamicBody.size.width / 2 - dynamicBody.position.distance(to: (vertices[0], vertices[1]))
+            } else if dynamicBody.position.distance(to: (vertices[0], vertices[2])) < dynamicBody.size.width / 2 {
+                normalVector = (vertices[0] - vertices[1]).normalized()
+                difference = dynamicBody.size.width / 2 - dynamicBody.position.distance(to: (vertices[0], vertices[2]))
+            } else if dynamicBody.position.distance(to: (vertices[1], vertices[3])) < dynamicBody.size.width / 2 {
+                normalVector = (vertices[1] - vertices[0]).normalized()
+                difference = dynamicBody.size.width / 2 - dynamicBody.position.distance(to: (vertices[1], vertices[3]))
+            } else if dynamicBody.position.distance(to: (vertices[2], vertices[3])) < dynamicBody.size.width / 2 {
+                normalVector = (vertices[2] - vertices[0]).normalized()
+                difference = dynamicBody.size.width / 2 - dynamicBody.position.distance(to: (vertices[2], vertices[3]))
             }
         }
+
+        dynamicBody.position += normalVector * difference
+
+        // Calculate elastic collision (with restitution)
+        let dx = dynamicBody.velocity.dx
+        let dy = dynamicBody.velocity.dy
+        let angle = normalVector.angle()
+
+        dynamicBody.velocity = (1 - dynamicBody.restitution)
+            * CGVector(dx: -dx * cos(2 * angle) - dy * sin(2 * angle),
+                       dy: -dx * sin(2 * angle) + dy * cos(2 * angle))
     }
 
     func update(deltaTime seconds: CGFloat) {
