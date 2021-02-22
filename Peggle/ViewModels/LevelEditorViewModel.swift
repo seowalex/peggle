@@ -286,6 +286,8 @@ final class LevelEditorViewModel: ObservableObject {
     }
 
     func fetchLevel(_ level: LevelRecord) throws {
+        selectedElement = nil
+
         name = level.name
         elements = try database.fetchPegs(level).map { Peg(position: $0.position,
                                                            color: $0.color,
