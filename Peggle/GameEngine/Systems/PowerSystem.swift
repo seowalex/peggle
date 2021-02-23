@@ -35,11 +35,10 @@ final class PowerSystem: System {
                     lightComponent.isLit = true
                 }
 
+                powerComponent.isActivated = false
             case .spookyBall:
-                print("spoooky")
+                break
             }
-
-            powerComponent.isActivated = false
         }
     }
 }

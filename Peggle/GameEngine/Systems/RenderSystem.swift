@@ -8,13 +8,9 @@ final class RenderSystem: System {
     }
 
     func update(deltaTime seconds: CGFloat) {
-        let entities = entityManager.getEntities(for: RenderComponent.self)
+        let renderComponents = entityManager.getComponents(RenderComponent.self)
 
-        for entity in entities {
-            guard let renderComponent = entityManager.getComponent(RenderComponent.self, for: entity) else {
-                continue
-            }
-
+        for renderComponent in renderComponents {
             renderComponent.imageName = renderComponent.imageNames[renderComponent.state] ?? ""
         }
     }

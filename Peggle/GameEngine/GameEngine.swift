@@ -114,13 +114,9 @@ final class GameEngine {
             return
         }
 
-        let entities = entityManager.getEntities(for: AimComponent.self)
+        let aimComponents = entityManager.getComponents(AimComponent.self)
 
-        for entity in entities {
-            guard let aimComponent = entityManager.getComponent(AimComponent.self, for: entity) else {
-                continue
-            }
-
+        for aimComponent in aimComponents {
             aimComponent.target = position
         }
     }
@@ -130,13 +126,9 @@ final class GameEngine {
             return
         }
 
-        let entities = entityManager.getEntities(for: AimComponent.self)
+        let aimComponents = entityManager.getComponents(AimComponent.self)
 
-        for entity in entities {
-            guard let aimComponent = entityManager.getComponent(AimComponent.self, for: entity) else {
-                continue
-            }
-
+        for aimComponent in aimComponents {
             aimComponent.target = nil
 
             // Clamp the firing angle between minAngle and maxAngle
