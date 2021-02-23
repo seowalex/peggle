@@ -110,6 +110,14 @@ final class EntityFactory {
                                                       frequency: frequency),
                                    to: entity)
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .rectangle,
+                                                                             size: CGSize(width: 0.2, height: 0.04),
+                                                                             position: position,
+                                                                             isResting: true,
+                                                                             affectedByGravity: false,
+                                                                             isDynamic: false,
+                                                                             affectedByCollisions: false)),
+                                   to: entity)
+        entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .rectangle,
                                                                              size: CGSize(width: 0.02, height: 0.06),
                                                                              position: position
                                                                                 + CGVector(dx: -0.11, dy: 0.002),

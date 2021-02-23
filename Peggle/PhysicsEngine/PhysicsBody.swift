@@ -33,6 +33,7 @@ final class PhysicsBody {
 
     var affectedByGravity: Bool
     var isDynamic: Bool
+    var affectedByCollisions: Bool
 
     var forces: [CGVector]
 
@@ -76,6 +77,7 @@ final class PhysicsBody {
         isResting: Bool = false,
         affectedByGravity: Bool = true,
         isDynamic: Bool = true,
+        affectedByCollisions: Bool = true,
         forces: [CGVector] = []
     ) {
         self.shape = shape
@@ -93,6 +95,7 @@ final class PhysicsBody {
 
         self.affectedByGravity = affectedByGravity
         self.isDynamic = isDynamic
+        self.affectedByCollisions = affectedByCollisions
 
         self.forces = forces
     }

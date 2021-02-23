@@ -34,6 +34,10 @@ final class PhysicsWorld {
 
                 subject.send((bodyA, bodyB))
 
+                guard [bodyA, bodyB].allSatisfy({ $0.affectedByCollisions == true }) else {
+                    continue
+                }
+
                 // TODO: Dynamic collision
                 if bodyB.isDynamic == false {
                     resolveStaticCollision(dynamicBody: bodyA, staticBody: bodyB)

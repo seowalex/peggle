@@ -11,6 +11,7 @@ final class GameEngine {
 
     private var ballEntity: Entity?
     private var ballTimer: Timer?
+    private var bucketEntity: Entity!
 
     private var componentsCancellable: AnyCancellable?
     private var collisionCancellable: AnyCancellable?
@@ -36,18 +37,27 @@ final class GameEngine {
         }
 
         collisionCancellable = physicsWorld.collisionPublisher.sink { [weak self] bodyA, bodyB in
-            guard let entities = self?.entityManager.getEntities(for: LightComponent.self) else {
-                return
+            // Light pegs
+            if let entities = self?.entityManager.getEntities(for: LightComponent.self) {
+                for entity in entities {
+                    guard let lightComponent = self?.entityManager.getComponent(LightComponent.self, for: entity),
+                          let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
+                          physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB else {
+                        continue
+                    }
+
+                    lightComponent.isLit = true
+                }
             }
 
-            for entity in entities {
-                guard let lightComponent = self?.entityManager.getComponent(LightComponent.self, for: entity),
-                      let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
-                      physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB else {
-                    continue
-                }
-
-                lightComponent.isLit = true
+            // Ball entered bucket
+            if let ball = self?.ballEntity,
+               let ballBody = self?.entityManager.getComponent(PhysicsComponent.self, for: ball)?.physicsBody,
+               let bucket = self?.bucketEntity,
+               let bucketBody = self?.entityManager.getComponent(PhysicsComponent.self, for: bucket)?.physicsBody,
+               [ballBody, bucketBody].allSatisfy({ $0 === bodyA || $0 === bodyB }) {
+                ballBody.position.y = 1.5
+                print("Ball entered bucket")
             }
         }
     }
@@ -58,10 +68,10 @@ final class GameEngine {
         entityFactory.createWall(position: CGPoint(x: 1.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
 
         entityFactory.createCannon(position: CGPoint(x: 0.5, y: 0.07))
-        entityFactory.createBucket(position: CGPoint(x: 0.5, y: 1.37),
-                                   startPoint: CGPoint(x: 0.1, y: 1.37),
-                                   endPoint: CGPoint(x: 0.9, y: 1.37),
-                                   frequency: 0.4)
+        bucketEntity = entityFactory.createBucket(position: CGPoint(x: 0.5, y: 1.37),
+                                                  startPoint: CGPoint(x: 0.1, y: 1.37),
+                                                  endPoint: CGPoint(x: 0.9, y: 1.37),
+                                                  frequency: 0.4)
 
         for element in elements {
             let position = element.position.applying(CGAffineTransform(translationX: 0, y: 0.3))
@@ -130,17 +140,17 @@ final class GameEngine {
 
     func removePegs() {
         guard let ball = ballEntity,
-              let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: ball) else {
+              let physicsBody = entityManager.getComponent(PhysicsComponent.self, for: ball)?.physicsBody else {
             return
         }
 
-        removePegsWhenBallStuck(ball: ball, physicsComponent: physicsComponent)
-        removePegsWhenBallExits(ball: ball, physicsComponent: physicsComponent)
+        removePegsWhenBallStuck(ball: ball, physicsBody: physicsBody)
+        removePegsWhenBallExits(ball: ball, physicsBody: physicsBody)
     }
 
-    func removePegsWhenBallStuck(ball: Entity, physicsComponent: PhysicsComponent) {
+    func removePegsWhenBallStuck(ball: Entity, physicsBody: PhysicsBody) {
         // Cancel timer if it turns out ball isn't actually resting
-        guard physicsComponent.physicsBody.isResting == true else {
+        guard physicsBody.isResting == true else {
             ballTimer?.invalidate()
             ballTimer = nil
 
@@ -157,14 +167,12 @@ final class GameEngine {
 
                 for entity in entities {
                     guard let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
-                          let lightPhysicsComponent = entityManager.getComponent(PhysicsComponent.self,
-                                                                                 for: entity),
+                          let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity),
                           lightComponent.isLit == true else {
                         continue
                     }
 
-                    let distance = physicsComponent.physicsBody.position
-                        .distance(to: lightPhysicsComponent.physicsBody.position)
+                    let distance = physicsBody.position.distance(to: physicsComponent.physicsBody.position)
 
                     if distance < minDistance {
                         minDistance = distance
@@ -179,8 +187,8 @@ final class GameEngine {
         }
     }
 
-    func removePegsWhenBallExits(ball: Entity, physicsComponent: PhysicsComponent) {
-        guard physicsComponent.physicsBody.position.y >= 1.5 else {
+    func removePegsWhenBallExits(ball: Entity, physicsBody: PhysicsBody) {
+        guard physicsBody.position.y >= 1.5 else {
             return
         }
 
