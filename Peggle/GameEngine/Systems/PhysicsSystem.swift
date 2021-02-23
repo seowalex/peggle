@@ -12,7 +12,8 @@ final class PhysicsSystem: System {
 
         for entity in entities {
             guard let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity),
-                  let renderComponent = entityManager.getComponent(RenderComponent.self, for: entity) else {
+                  let renderComponent = entityManager.getComponent(RenderComponent.self, for: entity),
+                  physicsComponent.physicsBody.isDynamic == true else {
                 continue
             }
 

@@ -109,9 +109,26 @@ final class EntityFactory {
                                                       endPoint: endPoint,
                                                       frequency: frequency),
                                    to: entity)
+        entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .rectangle,
+                                                                             size: CGSize(width: 0.02, height: 0.06),
+                                                                             position: position
+                                                                                + CGVector(dx: -0.11, dy: 0.002),
+                                                                             isResting: true,
+                                                                             affectedByGravity: false,
+                                                                             isDynamic: false)),
+                                   to: entity)
+        entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .rectangle,
+                                                                             size: CGSize(width: 0.02, height: 0.06),
+                                                                             position: position
+                                                                                + CGVector(dx: 0.11, dy: 0.002),
+                                                                             isResting: true,
+                                                                             affectedByGravity: false,
+                                                                             isDynamic: false)),
+                                   to: entity)
         entityManager.addComponent(RenderComponent(position: position,
                                                    size: CGSize(width: 0.24, height: 0.08),
-                                                   imageName: "bucket"),
+                                                   imageName: "bucket",
+                                                   zIndex: 1),
                                    to: entity)
 
         return entity

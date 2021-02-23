@@ -16,9 +16,16 @@ final class OscillateSystem: System {
                 continue
             }
 
+            let physicsComponents = entityManager.getComponents(PhysicsComponent.self, for: entity)
+            let position = renderComponent.position
+
             oscillateComponent.time += seconds
             renderComponent.position = oscillateComponent.position + oscillateComponent.amplitude
                 * cos(oscillateComponent.angularFrequency * oscillateComponent.time + oscillateComponent.phaseShift)
+
+            for physicsComponent in physicsComponents {
+                physicsComponent.physicsBody.position += renderComponent.position - position
+            }
         }
     }
 }
