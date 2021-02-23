@@ -1,7 +1,7 @@
 import Combine
 
 final class EntityManager: ObservableObject {
-    @Published private(set) var components: [String: [Entity: Component]] = [:]
+    @Published private(set) var components: [String: [Entity: [Component]]] = [:]
 
     func removeEntity(_ entity: Entity) {
         for key in components.keys {
@@ -18,16 +18,20 @@ final class EntityManager: ObservableObject {
     }
 
     func addComponent<T: Component>(_ component: T, to entity: Entity) {
-        components[String(describing: type(of: component)), default: [:]][entity] = component
+        components[String(describing: type(of: component)), default: [:]][entity, default: []].append(component)
     }
 
     func getComponent<T: Component>(_ type: T.Type, for entity: Entity) -> T? {
-        components[String(describing: type)]?[entity] as? T
+        getComponents(type, for: entity).first
+    }
+
+    func getComponents<T: Component>(_ type: T.Type, for entity: Entity) -> [T] {
+        components[String(describing: type)]?[entity] as? [T] ?? []
     }
 
     func getComponents<T: Component>(_ type: T.Type) -> [T] {
         guard let values = components[String(describing: type)]?.values,
-              let components = Array(values) as? [T] else {
+              let components = Array(values.joined()) as? [T] else {
             return []
         }
 

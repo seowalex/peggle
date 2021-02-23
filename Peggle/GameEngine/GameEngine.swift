@@ -27,13 +27,12 @@ final class GameEngine {
 
         createEntities(elements: elements)
 
-        componentsCancellable = entityManager.$components.sink { [weak self] components in
-            guard let values = components[String(describing: PhysicsComponent.self)]?.values,
-                  let physicsBodies = (Array(values) as? [PhysicsComponent])?.map({ $0.physicsBody }) else {
+        componentsCancellable = entityManager.$components.sink { [weak self] _ in
+            guard let bodies = self?.entityManager.getComponents(PhysicsComponent.self).map({ $0.physicsBody }) else {
                 return
             }
 
-            self?.physicsWorld.bodies = physicsBodies
+            self?.physicsWorld.bodies = bodies
         }
 
         collisionCancellable = physicsWorld.collisionPublisher.sink { [weak self] bodyA, bodyB in
@@ -202,7 +201,11 @@ final class GameEngine {
 
     func update(deltaTime seconds: CGFloat) {
         physicsWorld.update(deltaTime: seconds)
-        systems.forEach { $0.update(deltaTime: seconds) }
+
+        for system in systems {
+            system.update(deltaTime: seconds)
+        }
+
         removePegs()
     }
 }
