@@ -20,9 +20,10 @@ final class GameEngine {
         entityFactory = EntityFactory(entityManager: entityManager)
         systems = [
             PhysicsSystem(entityManager: entityManager),
-            LightSystem(entityManager: entityManager),
+            PowerSystem(entityManager: entityManager),
             AimSystem(entityManager: entityManager),
             OscillateSystem(entityManager: entityManager),
+            LightSystem(entityManager: entityManager),
             RenderSystem(entityManager: entityManager)
         ]
 
@@ -37,15 +38,22 @@ final class GameEngine {
         }
 
         collisionCancellable = physicsWorld.collisionPublisher.sink { [weak self] bodyA, bodyB in
-            // Light pegs
-            if let entities = self?.entityManager.getEntities(for: LightComponent.self) {
-                for entity in entities {
-                    guard let lightComponent = self?.entityManager.getComponent(LightComponent.self, for: entity),
-                          let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
-                          physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB else {
-                        continue
-                    }
+            guard let entities = self?.entityManager.getEntities(for: PhysicsComponent.self) else {
+                return
+            }
 
+            for entity in entities {
+                // Activate powers
+                if let powerComponent = self?.entityManager.getComponent(PowerComponent.self, for: entity),
+                   let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
+                   physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB {
+                    powerComponent.isActivated = true
+                }
+
+                // Light pegs
+                if let lightComponent = self?.entityManager.getComponent(LightComponent.self, for: entity),
+                   let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
+                   physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB {
                     lightComponent.isLit = true
                 }
             }
@@ -73,7 +81,9 @@ final class GameEngine {
                                                   endPoint: CGPoint(x: 0.9, y: 1.37),
                                                   frequency: 0.4)
 
-        for element in elements {
+        let greenPegs = elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.shuffled().prefix(2)
+
+        for element in elements.filter({ element in !greenPegs.contains { $0 === element } }) {
             let position = element.position.applying(CGAffineTransform(translationX: 0, y: 0.3))
             let rotation = element.rotation
             let size = element.size
@@ -83,6 +93,15 @@ final class GameEngine {
             } else if element is Block {
                 entityFactory.createBlock(position: position, rotation: rotation, size: size)
             }
+        }
+
+        for peg in greenPegs {
+            let pegEntity = entityFactory.createPeg(position: peg.position.applying(CGAffineTransform(translationX: 0,
+                                                                                                      y: 0.3)),
+                                                    imageName: "peg-green",
+                                                    rotation: peg.rotation,
+                                                    size: peg.size)
+            entityManager.addComponent(PowerComponent(power: .spaceBlast), to: pegEntity)
         }
     }
 

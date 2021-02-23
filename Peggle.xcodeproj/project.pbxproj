@@ -41,6 +41,8 @@
 		0E8531F525C5CC1C008B012D /* AppDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8531F425C5CC1C008B012D /* AppDatabaseTests.swift */; };
 		0E892B2825E51522005573EF /* OscillateComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B2725E51522005573EF /* OscillateComponent.swift */; };
 		0E892B2C25E518C7005573EF /* OscillateSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B2B25E518C7005573EF /* OscillateSystem.swift */; };
+		0E892B3225E581E3005573EF /* PowerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B3125E581E3005573EF /* PowerComponent.swift */; };
+		0E892B3825E58281005573EF /* PowerSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B3725E58281005573EF /* PowerSystem.swift */; };
 		0EA3451625BDB53000DD1BBB /* LevelEditorListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */; };
 		0EA3451B25BDBFA000DD1BBB /* LevelEditorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */; };
 		0ED13CED25E2104800B0428C /* Peg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CEC25E2104800B0428C /* Peg.swift */; };
@@ -104,6 +106,8 @@
 		0E8531F425C5CC1C008B012D /* AppDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabaseTests.swift; sourceTree = "<group>"; };
 		0E892B2725E51522005573EF /* OscillateComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OscillateComponent.swift; sourceTree = "<group>"; };
 		0E892B2B25E518C7005573EF /* OscillateSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OscillateSystem.swift; sourceTree = "<group>"; };
+		0E892B3125E581E3005573EF /* PowerComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerComponent.swift; sourceTree = "<group>"; };
+		0E892B3725E58281005573EF /* PowerSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerSystem.swift; sourceTree = "<group>"; };
 		0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListViewModel.swift; sourceTree = "<group>"; };
 		0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListView.swift; sourceTree = "<group>"; };
 		0ED13CEC25E2104800B0428C /* Peg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peg.swift; sourceTree = "<group>"; };
@@ -235,6 +239,7 @@
 				0E61D56825D6C4EE0091D9D0 /* LightComponent.swift */,
 				0E892B2725E51522005573EF /* OscillateComponent.swift */,
 				0E18E21425D6296600A2B74A /* PhysicsComponent.swift */,
+				0E892B3125E581E3005573EF /* PowerComponent.swift */,
 				0E18E21025D628F600A2B74A /* RenderComponent.swift */,
 			);
 			path = Components;
@@ -248,6 +253,7 @@
 				0E61D56C25D6C6200091D9D0 /* LightSystem.swift */,
 				0E892B2B25E518C7005573EF /* OscillateSystem.swift */,
 				0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */,
+				0E892B3725E58281005573EF /* PowerSystem.swift */,
 				0E18E22F25D63B1300A2B74A /* RenderSystem.swift */,
 			);
 			path = Systems;
@@ -428,6 +434,7 @@
 				0E61D56D25D6C6200091D9D0 /* LightSystem.swift in Sources */,
 				0EE69DD325D17A1000BD142A /* CGAffineTransform+Extensions.swift in Sources */,
 				0E18E21125D628F600A2B74A /* RenderComponent.swift in Sources */,
+				0E892B3225E581E3005573EF /* PowerComponent.swift in Sources */,
 				0ED13CED25E2104800B0428C /* Peg.swift in Sources */,
 				0EFC551B25D1A9E100C053FF /* LevelPlayerViewModel.swift in Sources */,
 				0E08495E25BD2724004CE733 /* AppDatabase.swift in Sources */,
@@ -439,6 +446,7 @@
 				0E18E23825D640F300A2B74A /* Entity.swift in Sources */,
 				0E892B2C25E518C7005573EF /* OscillateSystem.swift in Sources */,
 				0E18E22225D635EE00A2B74A /* System.swift in Sources */,
+				0E892B3825E58281005573EF /* PowerSystem.swift in Sources */,
 				0E22A94A25BD2CDC002441A5 /* LevelRecord.swift in Sources */,
 				0E2A452525BDC56800B0DCA7 /* LevelEditorView.swift in Sources */,
 				0E61D57525D6CCE70091D9D0 /* AimComponent.swift in Sources */,
