@@ -1,3 +1,5 @@
+import CoreGraphics
+
 final class PhysicsSystem: System {
     let entityManager: EntityManager
 
@@ -5,7 +7,7 @@ final class PhysicsSystem: System {
         self.entityManager = entityManager
     }
 
-    func update() {
+    func update(deltaTime seconds: CGFloat) {
         let entities = entityManager.getEntities(for: PhysicsComponent.self)
 
         for entity in entities {

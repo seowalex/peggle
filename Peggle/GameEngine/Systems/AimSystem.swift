@@ -1,3 +1,5 @@
+import CoreGraphics
+
 final class AimSystem: System {
     let entityManager: EntityManager
 
@@ -5,7 +7,7 @@ final class AimSystem: System {
         self.entityManager = entityManager
     }
 
-    func update() {
+    func update(deltaTime seconds: CGFloat) {
         let entities = entityManager.getEntities(for: AimComponent.self)
 
         for entity in entities {

@@ -100,4 +100,20 @@ final class EntityFactory {
 
         return entity
     }
+
+    @discardableResult
+    func createBucket(position: CGPoint, startPoint: CGPoint, endPoint: CGPoint, frequency: CGFloat) -> Entity {
+        let entity = Entity()
+        entityManager.addComponent(OscillateComponent(position: position,
+                                                      startPoint: startPoint,
+                                                      endPoint: endPoint,
+                                                      frequency: frequency),
+                                   to: entity)
+        entityManager.addComponent(RenderComponent(position: position,
+                                                   size: CGSize(width: 0.24, height: 0.08),
+                                                   imageName: "bucket"),
+                                   to: entity)
+
+        return entity
+    }
 }

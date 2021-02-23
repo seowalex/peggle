@@ -68,9 +68,9 @@ final class PhysicsWorld {
                 return .zero
             }
 
-            let vector = dynamicBody.position - vertices[0]
-            let x = vector.dot((vertices[2] - vertices[0]).normalized())
-            let y = vector.dot((vertices[1] - vertices[0]).normalized())
+            let positionVector = dynamicBody.position - vertices[0]
+            let x = positionVector.dot((vertices[2] - vertices[0]).normalized())
+            let y = positionVector.dot((vertices[1] - vertices[0]).normalized())
 
             var isBetweenLeftRight = x > 0 && x < staticBody.size.width
             var isBetweenTopBottom = y > 0 && y < staticBody.size.height

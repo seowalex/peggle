@@ -21,6 +21,7 @@ final class GameEngine {
             PhysicsSystem(entityManager: entityManager),
             LightSystem(entityManager: entityManager),
             AimSystem(entityManager: entityManager),
+            OscillateSystem(entityManager: entityManager),
             RenderSystem(entityManager: entityManager)
         ]
 
@@ -58,9 +59,13 @@ final class GameEngine {
         entityFactory.createWall(position: CGPoint(x: 1.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
 
         entityFactory.createCannon(position: CGPoint(x: 0.5, y: 0.07))
+        entityFactory.createBucket(position: CGPoint(x: 0.5, y: 1.37),
+                                   startPoint: CGPoint(x: 0.1, y: 1.37),
+                                   endPoint: CGPoint(x: 0.9, y: 1.37),
+                                   frequency: 0.4)
 
         for element in elements {
-            let position = element.position.applying(CGAffineTransform(translationX: 0, y: 0.4))
+            let position = element.position.applying(CGAffineTransform(translationX: 0, y: 0.3))
             let rotation = element.rotation
             let size = element.size
 
@@ -197,7 +202,7 @@ final class GameEngine {
 
     func update(deltaTime seconds: CGFloat) {
         physicsWorld.update(deltaTime: seconds)
-        systems.forEach { $0.update() }
+        systems.forEach { $0.update(deltaTime: seconds) }
         removePegs()
     }
 }
