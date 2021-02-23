@@ -29,6 +29,14 @@ extension CGVector {
     static func -= (lhs: inout CGVector, rhs: CGVector) {
         lhs = lhs - rhs
     }
+
+    static func *= (lhs: inout CGVector, rhs: CGFloat) {
+        lhs = lhs * rhs
+    }
+
+    static func /= (lhs: inout CGVector, rhs: CGFloat) {
+        lhs = lhs / rhs
+    }
     // swiftlint:enable shorthand_operator
 }
 
