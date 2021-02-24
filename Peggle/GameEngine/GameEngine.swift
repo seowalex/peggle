@@ -9,6 +9,8 @@ final class GameEngine {
     private let entityFactory: EntityFactory
     private let systems: [System]
 
+    private var bucketEntity: Entity!
+
     private var componentsCancellable: AnyCancellable?
     private var collisionCancellable: AnyCancellable?
 
@@ -53,18 +55,18 @@ final class GameEngine {
                    physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB {
                     lightComponent.isLit = true
                 }
-            }
 
-//            // Ball entered bucket
-//            if let ball = self?.ballEntity,
-//               let ballBody = self?.entityManager.getComponent(PhysicsComponent.self, for: ball)?.physicsBody,
-//               let bucket = self?.bucketEntity,
-//               let bucketBody = self?.entityManager.getComponent(PhysicsComponent.self, for: bucket)?.physicsBody,
-//               [ballBody, bucketBody].allSatisfy({ $0 === bodyA || $0 === bodyB }) {
-//                // TODO: Properly remove ball
-//                ballBody.position.y = 1.5
-//                print("Ball entered bucket")
-//            }
+                // Check for ball entering bucket
+                if let clearComponent = self?.entityManager.getComponent(ClearComponent.self, for: entity),
+                   let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
+                   let bucket = self?.bucketEntity,
+                   let bucketBody = self?.entityManager.getComponent(PhysicsComponent.self, for: bucket)?.physicsBody,
+                   clearComponent.willClear == false
+                    && [physicsComponent.physicsBody, bucketBody].allSatisfy({ $0 === bodyA || $0 === bodyB }) {
+                    clearComponent.willClear = true
+                    print("ball entered bucket")
+                }
+            }
         }
     }
 
@@ -74,10 +76,10 @@ final class GameEngine {
         entityFactory.createWall(position: CGPoint(x: 1.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
 
         entityFactory.createCannon(position: CGPoint(x: 0.5, y: 0.07))
-        entityFactory.createBucket(position: CGPoint(x: 0.5, y: 1.37),
-                                   startPoint: CGPoint(x: 0.1, y: 1.37),
-                                   endPoint: CGPoint(x: 0.9, y: 1.37),
-                                   frequency: 0.4)
+        bucketEntity = entityFactory.createBucket(position: CGPoint(x: 0.5, y: 1.37),
+                                                  startPoint: CGPoint(x: 0.1, y: 1.37),
+                                                  endPoint: CGPoint(x: 0.9, y: 1.37),
+                                                  frequency: 0.4)
 
         let greenPegs = elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.shuffled().prefix(2)
 

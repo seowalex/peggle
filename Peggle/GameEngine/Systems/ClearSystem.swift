@@ -44,8 +44,8 @@ final class ClearSystem: System {
         }
     }
 
-    func clearPegs(entity: Entity, physicsComponent: PhysicsComponent) {
-        guard physicsComponent.physicsBody.position.y > 1.5 else {
+    func clearPegs(entity: Entity, clearComponent: ClearComponent, physicsComponent: PhysicsComponent) {
+        guard clearComponent.willClear == true || physicsComponent.physicsBody.position.y > 1.5 else {
             return
         }
 
@@ -73,7 +73,7 @@ final class ClearSystem: System {
             }
 
             clearPegsWithTimer(clearComponent: clearComponent, physicsComponent: physicsComponent)
-            clearPegs(entity: entity, physicsComponent: physicsComponent)
+            clearPegs(entity: entity, clearComponent: clearComponent, physicsComponent: physicsComponent)
         }
     }
 }
