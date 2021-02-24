@@ -9,10 +9,6 @@ final class GameEngine {
     private let entityFactory: EntityFactory
     private let systems: [System]
 
-    private var ballEntity: Entity?
-    private var ballTimer: Timer?
-    private var bucketEntity: Entity!
-
     private var componentsCancellable: AnyCancellable?
     private var collisionCancellable: AnyCancellable?
 
@@ -24,6 +20,7 @@ final class GameEngine {
             AimSystem(entityManager: entityManager),
             OscillateSystem(entityManager: entityManager),
             LightSystem(entityManager: entityManager),
+            ClearSystem(entityManager: entityManager),
             RenderSystem(entityManager: entityManager)
         ]
 
@@ -58,15 +55,16 @@ final class GameEngine {
                 }
             }
 
-            // Ball entered bucket
-            if let ball = self?.ballEntity,
-               let ballBody = self?.entityManager.getComponent(PhysicsComponent.self, for: ball)?.physicsBody,
-               let bucket = self?.bucketEntity,
-               let bucketBody = self?.entityManager.getComponent(PhysicsComponent.self, for: bucket)?.physicsBody,
-               [ballBody, bucketBody].allSatisfy({ $0 === bodyA || $0 === bodyB }) {
-                ballBody.position.y = 1.5
-                print("Ball entered bucket")
-            }
+//            // Ball entered bucket
+//            if let ball = self?.ballEntity,
+//               let ballBody = self?.entityManager.getComponent(PhysicsComponent.self, for: ball)?.physicsBody,
+//               let bucket = self?.bucketEntity,
+//               let bucketBody = self?.entityManager.getComponent(PhysicsComponent.self, for: bucket)?.physicsBody,
+//               [ballBody, bucketBody].allSatisfy({ $0 === bodyA || $0 === bodyB }) {
+//                // TODO: Properly remove ball
+//                ballBody.position.y = 1.5
+//                print("Ball entered bucket")
+//            }
         }
     }
 
@@ -76,10 +74,10 @@ final class GameEngine {
         entityFactory.createWall(position: CGPoint(x: 1.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
 
         entityFactory.createCannon(position: CGPoint(x: 0.5, y: 0.07))
-        bucketEntity = entityFactory.createBucket(position: CGPoint(x: 0.5, y: 1.37),
-                                                  startPoint: CGPoint(x: 0.1, y: 1.37),
-                                                  endPoint: CGPoint(x: 0.9, y: 1.37),
-                                                  frequency: 0.4)
+        entityFactory.createBucket(position: CGPoint(x: 0.5, y: 1.37),
+                                   startPoint: CGPoint(x: 0.1, y: 1.37),
+                                   endPoint: CGPoint(x: 0.9, y: 1.37),
+                                   frequency: 0.4)
 
         let greenPegs = elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.shuffled().prefix(2)
 
@@ -101,7 +99,7 @@ final class GameEngine {
                                                     imageName: "peg-green",
                                                     rotation: peg.rotation,
                                                     size: peg.size)
-            entityManager.addComponent(PowerComponent(power: .spaceBlast), to: pegEntity)
+            entityManager.addComponent(PowerComponent(power: .spookyBall), to: pegEntity)
         }
     }
 
@@ -110,7 +108,7 @@ final class GameEngine {
     }
 
     func onDrag(position: CGPoint) {
-        guard ballEntity == nil else {
+        guard entityManager.getComponents(ClearComponent.self).isEmpty else {
             return
         }
 
@@ -122,7 +120,7 @@ final class GameEngine {
     }
 
     func onDragEnd(position: CGPoint) {
-        guard ballEntity == nil else {
+        guard entityManager.getComponents(ClearComponent.self).isEmpty else {
             return
         }
 
@@ -143,79 +141,10 @@ final class GameEngine {
 
             // Have to normalize the velocity so that the speed remains constant no matter
             // how far the tap is from the cannon
-            ballEntity = entityFactory.createBall(position: aimComponent.position,
-                                                  velocity: (actualPosition - aimComponent.position)
-                                                    .normalized())
+            entityFactory.createBall(position: aimComponent.position,
+                                     velocity: (actualPosition - aimComponent.position).normalized(),
+                                     physicsSpeed: physicsWorld.speed)
         }
-    }
-
-    func removePegs() {
-        guard let ball = ballEntity,
-              let physicsBody = entityManager.getComponent(PhysicsComponent.self, for: ball)?.physicsBody else {
-            return
-        }
-
-        removePegsWhenBallStuck(ball: ball, physicsBody: physicsBody)
-        removePegsWhenBallExits(ball: ball, physicsBody: physicsBody)
-    }
-
-    func removePegsWhenBallStuck(ball: Entity, physicsBody: PhysicsBody) {
-        // Cancel timer if it turns out ball isn't actually resting
-        guard physicsBody.isResting == true else {
-            ballTimer?.invalidate()
-            ballTimer = nil
-
-            return
-        }
-
-        // Only start new timer if previous timer invalidated or expired
-        if ballTimer == nil || !(ballTimer?.isValid ?? true) {
-            ballTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(physicsWorld.speed),
-                                             repeats: false) { [self] _ in
-                let entities = entityManager.getEntities(for: LightComponent.self)
-                var minDistance = CGFloat.infinity
-                var minEntity: Entity?
-
-                for entity in entities {
-                    guard let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
-                          let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity),
-                          lightComponent.isLit == true else {
-                        continue
-                    }
-
-                    let distance = physicsBody.position.distance(to: physicsComponent.physicsBody.position)
-
-                    if distance < minDistance {
-                        minDistance = distance
-                        minEntity = entity
-                    }
-                }
-
-                if let entity = minEntity {
-                    entityManager.removeEntity(entity)
-                }
-            }
-        }
-    }
-
-    func removePegsWhenBallExits(ball: Entity, physicsBody: PhysicsBody) {
-        guard physicsBody.position.y >= 1.5 else {
-            return
-        }
-
-        let entities = entityManager.getEntities(for: LightComponent.self)
-
-        for entity in entities {
-            guard let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
-                  lightComponent.isLit == true else {
-                continue
-            }
-
-            entityManager.removeEntity(entity)
-        }
-
-        entityManager.removeEntity(ball)
-        ballEntity = nil
     }
 
     func update(deltaTime seconds: CGFloat) {
@@ -224,7 +153,5 @@ final class GameEngine {
         for system in systems {
             system.update(deltaTime: seconds)
         }
-
-        removePegs()
     }
 }

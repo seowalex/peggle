@@ -43,6 +43,8 @@
 		0E892B2C25E518C7005573EF /* OscillateSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B2B25E518C7005573EF /* OscillateSystem.swift */; };
 		0E892B3225E581E3005573EF /* PowerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B3125E581E3005573EF /* PowerComponent.swift */; };
 		0E892B3825E58281005573EF /* PowerSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B3725E58281005573EF /* PowerSystem.swift */; };
+		0E892B4425E69EBE005573EF /* ClearComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B4325E69EBE005573EF /* ClearComponent.swift */; };
+		0E892B4825E69EDC005573EF /* ClearSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B4725E69EDC005573EF /* ClearSystem.swift */; };
 		0EA3451625BDB53000DD1BBB /* LevelEditorListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */; };
 		0EA3451B25BDBFA000DD1BBB /* LevelEditorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */; };
 		0ED13CED25E2104800B0428C /* Peg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CEC25E2104800B0428C /* Peg.swift */; };
@@ -108,6 +110,8 @@
 		0E892B2B25E518C7005573EF /* OscillateSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OscillateSystem.swift; sourceTree = "<group>"; };
 		0E892B3125E581E3005573EF /* PowerComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerComponent.swift; sourceTree = "<group>"; };
 		0E892B3725E58281005573EF /* PowerSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerSystem.swift; sourceTree = "<group>"; };
+		0E892B4325E69EBE005573EF /* ClearComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearComponent.swift; sourceTree = "<group>"; };
+		0E892B4725E69EDC005573EF /* ClearSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearSystem.swift; sourceTree = "<group>"; };
 		0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListViewModel.swift; sourceTree = "<group>"; };
 		0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListView.swift; sourceTree = "<group>"; };
 		0ED13CEC25E2104800B0428C /* Peg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peg.swift; sourceTree = "<group>"; };
@@ -236,6 +240,7 @@
 			children = (
 				0E18E20625D627C400A2B74A /* Component.swift */,
 				0E61D57425D6CCE70091D9D0 /* AimComponent.swift */,
+				0E892B4325E69EBE005573EF /* ClearComponent.swift */,
 				0E61D56825D6C4EE0091D9D0 /* LightComponent.swift */,
 				0E892B2725E51522005573EF /* OscillateComponent.swift */,
 				0E18E21425D6296600A2B74A /* PhysicsComponent.swift */,
@@ -250,6 +255,7 @@
 			children = (
 				0E18E22125D635EE00A2B74A /* System.swift */,
 				0E61D57A25D6CD2F0091D9D0 /* AimSystem.swift */,
+				0E892B4725E69EDC005573EF /* ClearSystem.swift */,
 				0E61D56C25D6C6200091D9D0 /* LightSystem.swift */,
 				0E892B2B25E518C7005573EF /* OscillateSystem.swift */,
 				0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */,
@@ -438,6 +444,7 @@
 				0ED13CED25E2104800B0428C /* Peg.swift in Sources */,
 				0EFC551B25D1A9E100C053FF /* LevelPlayerViewModel.swift in Sources */,
 				0E08495E25BD2724004CE733 /* AppDatabase.swift in Sources */,
+				0E892B4825E69EDC005573EF /* ClearSystem.swift in Sources */,
 				0E18E23025D63B1300A2B74A /* RenderSystem.swift in Sources */,
 				0E2A454025BFEABA00B0DCA7 /* LevelEditorViewModel.swift in Sources */,
 				0EA3451B25BDBFA000DD1BBB /* LevelEditorListView.swift in Sources */,
@@ -464,6 +471,7 @@
 				0EFC550D25D191EC00C053FF /* LevelPlayerView.swift in Sources */,
 				0ED13CFF25E2C32C00B0428C /* BlockRecord.swift in Sources */,
 				0E61D57B25D6CD2F0091D9D0 /* AimSystem.swift in Sources */,
+				0E892B4425E69EBE005573EF /* ClearComponent.swift in Sources */,
 				0EE69DCF25D14B6A00BD142A /* CGRect+Extensions.swift in Sources */,
 				0E18E23E25D6412200A2B74A /* EntityManager.swift in Sources */,
 				0E18E21525D6296600A2B74A /* PhysicsComponent.swift in Sources */,

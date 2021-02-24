@@ -41,7 +41,7 @@ final class EntityFactory {
 
     @discardableResult
     func createBall(position: CGPoint, size: CGSize = CGSize(width: 0.03, height: 0.03),
-                    velocity: CGVector = .zero) -> Entity {
+                    velocity: CGVector = .zero, physicsSpeed: CGFloat = 1.0) -> Entity {
         let entity = Entity()
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .circle,
                                                                              size: size,
@@ -53,6 +53,7 @@ final class EntityFactory {
                                                    size: size,
                                                    imageName: "ball"),
                                    to: entity)
+        entityManager.addComponent(ClearComponent(speed: physicsSpeed), to: entity)
 
         return entity
     }

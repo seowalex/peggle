@@ -12,17 +12,18 @@ final class PowerSystem: System {
 
         for entity in entities {
             guard let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity),
-                  let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
-                  let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity),
                   powerComponent.isActivated == true else {
                 continue
             }
 
             switch powerComponent.power {
             case .spaceBlast:
+                guard let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity) else {
+                    break
+                }
+
                 let position = physicsComponent.physicsBody.position
                 let entities = entityManager.getEntities(for: LightComponent.self)
-                lightComponent.isLit = true
 
                 for entity in entities {
                     guard let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
@@ -38,6 +39,18 @@ final class PowerSystem: System {
                 powerComponent.isActivated = false
             case .spookyBall:
                 break
+//                let entities = entityManager.getEntities(for: UniqueComponent.self)
+//
+//                for entity in entities {
+//                    guard let uniqueComponent = entityManager.getComponent(UniqueComponent.self, for: entity),
+//                          let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity),
+//                          uniqueComponent.kind == .ball && physicsComponent.physicsBody.position.y > 1.4 else {
+//                        continue
+//                    }
+//
+//                    physicsComponent.physicsBody.position.y = 0
+//                    powerComponent.isActivated = false
+//                }
             }
         }
     }
