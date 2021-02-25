@@ -12,7 +12,7 @@ final class PowerSystem: System {
 
         for entity in entities {
             guard let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity),
-                  powerComponent.isActivated == true else {
+                  powerComponent.isActivated == true && powerComponent.hasBeenActivated == false else {
                 continue
             }
 
@@ -36,7 +36,7 @@ final class PowerSystem: System {
                     lightComponent.isLit = true
                 }
 
-                powerComponent.isActivated = false
+                powerComponent.hasBeenActivated = true
             case .spookyBall:
                 let entities = entityManager.getEntities(for: ClearComponent.self)
 
@@ -47,7 +47,7 @@ final class PowerSystem: System {
                     }
 
                     physicsComponent.physicsBody.position.y = 0
-                    powerComponent.isActivated = false
+                    powerComponent.hasBeenActivated = true
                 }
             }
         }
