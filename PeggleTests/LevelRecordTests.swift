@@ -18,6 +18,7 @@ class LevelRecordTests: XCTestCase {
         let level = LevelRecord(name: name)
 
         XCTAssertEqual(level.name, name)
+        XCTAssertFalse(level.isProtected)
     }
 
     func testInsert_validName_success() throws {

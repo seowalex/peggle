@@ -57,7 +57,7 @@ class PegRecordTests: XCTestCase {
 
     func testInsert_invalidRotation_throwsError() throws {
         var level = LevelRecord(name: "Asteroid Blues")
-        var peg = PegRecord(position: .zero, rotation: 360, color: .blue)
+        var peg = PegRecord(position: .zero, rotation: -CGFloat.pi, color: .blue)
 
         try dbWriter.write { db in
             try level.insert(db)
