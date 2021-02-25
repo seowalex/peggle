@@ -49,18 +49,38 @@ final class ClearSystem: System {
             return
         }
 
-        let entities = entityManager.getEntities(for: LightComponent.self)
+        let lightEntities = entityManager.getEntities(for: LightComponent.self)
 
-        for entity in entities {
+        for entity in lightEntities {
             guard let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
                   lightComponent.isLit == true else {
                 continue
             }
 
-            entityManager.removeEntity(entity)
+            if let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity) {
+                entityManager.removeEntity(entity)
+                entityManager.addComponent(powerComponent, to: entity)
+            } else {
+                entityManager.removeEntity(entity)
+            }
         }
 
         entityManager.removeEntity(entity)
+
+        let powerEntities = entityManager.getEntities(for: PowerComponent.self)
+
+        for entity in powerEntities {
+            guard let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity),
+                  powerComponent.isActivated == true else {
+                continue
+            }
+
+            powerComponent.turnsRemaining -= 1
+
+            if powerComponent.turnsRemaining < 0 {
+                entityManager.removeEntity(entity)
+            }
+        }
     }
 
     func update(deltaTime seconds: CGFloat) {

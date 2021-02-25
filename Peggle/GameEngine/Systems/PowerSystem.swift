@@ -12,12 +12,27 @@ final class PowerSystem: System {
 
         for entity in entities {
             guard let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity),
-                  powerComponent.isActivated == true && powerComponent.hasBeenActivated == false else {
+                  powerComponent.isActivated == true else {
                 continue
             }
 
-            switch powerComponent.power {
-            case .spaceBlast:
+            switch (powerComponent.power, powerComponent.turnsRemaining) {
+            case (.superGuide, let turnsRemaining) where turnsRemaining > -1:
+                let entities = entityManager.getEntities(for: TrajectoryComponent.self)
+
+                for entity in entities {
+                    guard let trajectoryComponent = entityManager
+                            .getComponent(TrajectoryComponent.self, for: entity) else {
+                        continue
+                    }
+
+                    if turnsRemaining > 0 {
+                        trajectoryComponent.maxCollisions = 2
+                    } else {
+                        trajectoryComponent.maxCollisions = 1
+                    }
+                }
+            case (.spaceBlast, let turnsRemaining) where turnsRemaining > 0:
                 guard let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity) else {
                     break
                 }
@@ -36,8 +51,8 @@ final class PowerSystem: System {
                     lightComponent.isLit = true
                 }
 
-                powerComponent.hasBeenActivated = true
-            case .spookyBall:
+                powerComponent.turnsRemaining -= 1
+            case (.spookyBall, let turnsRemaining) where turnsRemaining > 0:
                 let entities = entityManager.getEntities(for: ClearComponent.self)
 
                 for entity in entities {
@@ -47,8 +62,10 @@ final class PowerSystem: System {
                     }
 
                     physicsComponent.physicsBody.position.y = 0
-                    powerComponent.hasBeenActivated = true
+                    powerComponent.turnsRemaining -= 1
                 }
+            default:
+                break
             }
         }
     }
