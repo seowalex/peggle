@@ -5,6 +5,7 @@ struct LevelRecord: Identifiable, Equatable {
     // See https://sqlite.org/lang_createtable.html#rowid
     var id: Int64?
     var name: String
+    var isProtected: Bool = false
 }
 
 // MARK: - Persistence
@@ -13,6 +14,7 @@ extension LevelRecord: Codable, FetchableRecord, MutablePersistableRecord {
     enum Columns {
         static let id = Column(CodingKeys.id)
         static let name = Column(CodingKeys.name)
+        static let isProtected = Column(CodingKeys.isProtected)
     }
 
     static let databaseTableName = "level"
@@ -37,6 +39,6 @@ extension LevelRecord: Codable, FetchableRecord, MutablePersistableRecord {
 
 extension DerivableRequest where RowDecoder == LevelRecord {
     func orderedByName() -> Self {
-        order(LevelRecord.Columns.name)
+        order(LevelRecord.Columns.isProtected, LevelRecord.Columns.name)
     }
 }
