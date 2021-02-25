@@ -74,26 +74,26 @@ struct AppDatabase {
                 throw DatabaseError(message: "Preloaded levels could not be created")
             }
 
-            let colors = (Array(repeating: Peg.Color.orange, count: 25) + Array(repeating: Peg.Color.blue, count: 35))
+            let colors = (Array(repeating: Peg.Color.orange, count: 25) + Array(repeating: Peg.Color.blue, count: 47))
                 .shuffled()
 
             for i in 0..<6 {
-                for j in 0..<10 {
+                for j in 0..<12 {
                     var peg = PegRecord(levelId: levelId,
                                         position: CGPoint(x: 0.27 + CGFloat(i) * 0.42 / 5
                                                             + (j.isMultiple(of: 2) ? 0.04 : 0),
-                                                          y: 0.1 + CGFloat(j) * 0.7 / 9),
+                                                          y: 0.04 + CGFloat(j) * 0.8 / 11),
                                         color: colors[i * 10 + j])
                     try peg.save(db)
                 }
             }
 
             for i in 0..<2 {
-                for j in 0..<4 {
+                for j in 0..<5 {
                     var block = BlockRecord(levelId: levelId,
-                                            position: CGPoint(x: 0.1 + CGFloat(i) * 0.8,
-                                                              y: 0.16 + CGFloat(j) * 1.4 / 9
-                                                                + (i.isMultiple(of: 2) ? 0.7 / 9 : 0)),
+                                            position: CGPoint(x: 0.102 + CGFloat(i) * 0.796,
+                                                              y: 0.1 + CGFloat(j) * 1.6 / 11
+                                                                + (i.isMultiple(of: 2) ? 0.8 / 11 : 0)),
                                             rotation: (i.isMultiple(of: 2) ? 1 : -1) * CGFloat.pi / 8,
                                             size: CGSize(width: 0.2, height: 0.04))
                     try block.save(db)
@@ -121,7 +121,7 @@ struct AppDatabase {
             for i in 1...2 {
                 for j in 0..<(i * 5) {
                     var peg = PegRecord(levelId: levelId,
-                                        position: CGPoint(x: 0.5 + CGFloat(i) * 0.08, y: 0.5)
+                                        position: CGPoint(x: 0.5 + CGFloat(i) * 0.078, y: 0.5)
                                             .rotate(around: CGPoint(x: 0.5, y: 0.5),
                                                     by: CGFloat(j) / (CGFloat(i) * 5) * 2 * CGFloat.pi),
                                         color: colors[index])
@@ -135,7 +135,7 @@ struct AppDatabase {
                 for j in -2...2 {
                     for k in 0..<(4 + max(abs(j) - 1, 0)) {
                         var peg = PegRecord(levelId: levelId,
-                                            position: CGPoint(x: 0.5 + (0.24 + CGFloat(k) * 0.08)
+                                            position: CGPoint(x: 0.5 + CGFloat(k + 3) * 0.078
                                                                 * (i.isMultiple(of: 2) ? 1 : -1),
                                                               y: 0.5)
                                                 .rotate(around: CGPoint(x: 0.5, y: 0.5),
@@ -213,6 +213,7 @@ extension AppDatabase {
         }
     }
 
+    // TODO: Should you be able to delete preloaded levels?
     func deleteLevels(ids: [Int64]) throws {
         try dbWriter.write { db in
             _ = try LevelRecord.deleteAll(db, keys: ids)
