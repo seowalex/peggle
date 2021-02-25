@@ -64,101 +64,6 @@ struct AppDatabase {
             }
         }
 
-        // Setting up preloaded levels take a non-trivial amount of code but it's not reusable
-        // swiftlint:disable closure_body_length
-        migrator.registerMigration("CreatePreloadedLevel1") { db in
-            var level = LevelRecord(name: "Peggleland", isProtected: true)
-            try level.save(db)
-
-            guard let levelId = level.id else {
-                throw DatabaseError(message: "Preloaded levels could not be created")
-            }
-
-            let colors = (Array(repeating: Peg.Color.orange, count: 25) + Array(repeating: Peg.Color.blue, count: 47))
-                .shuffled()
-
-            for i in 0..<6 {
-                for j in 0..<12 {
-                    var peg = PegRecord(levelId: levelId,
-                                        position: CGPoint(x: 0.27 + CGFloat(i) * 0.42 / 5
-                                                            + (j.isMultiple(of: 2) ? 0.04 : 0),
-                                                          y: 0.04 + CGFloat(j) * 0.8 / 11),
-                                        color: colors[i * 10 + j])
-                    try peg.save(db)
-                }
-            }
-
-            for i in 0..<2 {
-                for j in 0..<5 {
-                    var block = BlockRecord(levelId: levelId,
-                                            position: CGPoint(x: 0.102 + CGFloat(i) * 0.796,
-                                                              y: 0.1 + CGFloat(j) * 1.6 / 11
-                                                                + (i.isMultiple(of: 2) ? 0.8 / 11 : 0)),
-                                            rotation: (i.isMultiple(of: 2) ? 1 : -1) * CGFloat.pi / 8,
-                                            size: CGSize(width: 0.2, height: 0.04))
-                    try block.save(db)
-                }
-            }
-        }
-
-        migrator.registerMigration("CreatePreloadedLevel2") { db in
-            var level = LevelRecord(name: "Spiderweb", isProtected: true)
-            try level.save(db)
-
-            guard let levelId = level.id else {
-                throw DatabaseError(message: "Preloaded levels could not be created")
-            }
-
-            let colors = (Array(repeating: Peg.Color.orange, count: 25) + Array(repeating: Peg.Color.blue, count: 35))
-                .shuffled()
-            var index = 1
-
-            var peg = PegRecord(levelId: levelId,
-                                position: CGPoint(x: 0.5, y: 0.5),
-                                color: colors[0])
-            try peg.save(db)
-
-            for i in 1...2 {
-                for j in 0..<(i * 5) {
-                    var peg = PegRecord(levelId: levelId,
-                                        position: CGPoint(x: 0.5 + CGFloat(i) * 0.078, y: 0.5)
-                                            .rotate(around: CGPoint(x: 0.5, y: 0.5),
-                                                    by: CGFloat(j) / (CGFloat(i) * 5) * 2 * CGFloat.pi),
-                                        color: colors[index])
-                    try peg.save(db)
-
-                    index += 1
-                }
-            }
-
-            for i in 0..<2 {
-                for j in -2...2 {
-                    for k in 0..<(4 + max(abs(j) - 1, 0)) {
-                        var peg = PegRecord(levelId: levelId,
-                                            position: CGPoint(x: 0.5 + CGFloat(k + 3) * 0.078
-                                                                * (i.isMultiple(of: 2) ? 1 : -1),
-                                                              y: 0.5)
-                                                .rotate(around: CGPoint(x: 0.5, y: 0.5),
-                                                        by: CGFloat(j) * CGFloat.pi / 10),
-                                            color: colors[index])
-                        try peg.save(db)
-
-                        index += 1
-                    }
-                }
-            }
-        }
-
-        migrator.registerMigration("CreatePreloadedLevel3") { db in
-            var level = LevelRecord(name: "Croco-Gator Pit", isProtected: true)
-            try level.save(db)
-
-            guard let levelId = level.id else {
-                throw DatabaseError(message: "Preloaded levels could not be created")
-            }
-        }
-        // swiftlint:enable closure_body_length
-
         return migrator
     }
 
@@ -223,6 +128,112 @@ extension AppDatabase {
     func deleteAllLevels() throws {
         try dbWriter.write { db in
             _ = try LevelRecord.deleteAll(db)
+        }
+    }
+
+    func createPreloadedLevelsIfEmpty() throws {
+        try dbWriter.write { db in
+            if try LevelRecord.fetchCount(db) == 0 {
+                try createPreloadedLevels(db)
+            }
+        }
+    }
+
+    private func createPreloadedLevels(_ db: Database) throws {
+        try createPreloadedLevel1(db)
+        try createPreloadedLevel2(db)
+        try createPreloadedLevel3(db)
+    }
+
+    private func createPreloadedLevel1(_ db: Database) throws {
+        var level = LevelRecord(name: "Peggleland", isProtected: true)
+        try level.save(db)
+
+        guard let levelId = level.id else {
+            throw DatabaseError(message: "Preloaded levels could not be created")
+        }
+
+        let colors = (Array(repeating: Peg.Color.orange, count: 25) + Array(repeating: Peg.Color.blue, count: 47))
+            .shuffled()
+
+        for i in 0..<6 {
+            for j in 0..<12 {
+                var peg = PegRecord(levelId: levelId,
+                                    position: CGPoint(x: 0.27 + CGFloat(i) * 0.42 / 5
+                                                        + (j.isMultiple(of: 2) ? 0.04 : 0),
+                                                      y: 0.04 + CGFloat(j) * 0.8 / 11),
+                                    color: colors[i * 10 + j])
+                try peg.save(db)
+            }
+        }
+
+        for i in 0..<2 {
+            for j in 0..<5 {
+                var block = BlockRecord(levelId: levelId,
+                                        position: CGPoint(x: 0.102 + CGFloat(i) * 0.796,
+                                                          y: 0.1 + CGFloat(j) * 1.6 / 11
+                                                            + (i.isMultiple(of: 2) ? 0.8 / 11 : 0)),
+                                        rotation: (i.isMultiple(of: 2) ? 1 : -1) * CGFloat.pi / 8,
+                                        size: CGSize(width: 0.2, height: 0.04))
+                try block.save(db)
+            }
+        }
+    }
+
+    private func createPreloadedLevel2(_ db: Database) throws {
+        var level = LevelRecord(name: "Spiderweb", isProtected: true)
+        try level.save(db)
+
+        guard let levelId = level.id else {
+            throw DatabaseError(message: "Preloaded levels could not be created")
+        }
+
+        let colors = (Array(repeating: Peg.Color.orange, count: 25) + Array(repeating: Peg.Color.blue, count: 35))
+            .shuffled()
+        var index = 1
+
+        var peg = PegRecord(levelId: levelId,
+                            position: CGPoint(x: 0.5, y: 0.5),
+                            color: colors[0])
+        try peg.save(db)
+
+        for i in 1...2 {
+            for j in 0..<(i * 5) {
+                var peg = PegRecord(levelId: levelId,
+                                    position: CGPoint(x: 0.5 + CGFloat(i) * 0.078, y: 0.5)
+                                        .rotate(around: CGPoint(x: 0.5, y: 0.5),
+                                                by: CGFloat(j) / (CGFloat(i) * 5) * 2 * CGFloat.pi),
+                                    color: colors[index])
+                try peg.save(db)
+
+                index += 1
+            }
+        }
+
+        for i in 0..<2 {
+            for j in -2...2 {
+                for k in 0..<(4 + max(abs(j) - 1, 0)) {
+                    var peg = PegRecord(levelId: levelId,
+                                        position: CGPoint(x: 0.5 + CGFloat(k + 3) * 0.078
+                                                            * (i.isMultiple(of: 2) ? 1 : -1),
+                                                          y: 0.5)
+                                            .rotate(around: CGPoint(x: 0.5, y: 0.5),
+                                                    by: CGFloat(j) * CGFloat.pi / 10),
+                                        color: colors[index])
+                    try peg.save(db)
+
+                    index += 1
+                }
+            }
+        }
+    }
+
+    private func createPreloadedLevel3(_ db: Database) throws {
+        var level = LevelRecord(name: "Croco-Gator Pit", isProtected: true)
+        try level.save(db)
+
+        guard let levelId = level.id else {
+            throw DatabaseError(message: "Preloaded levels could not be created")
         }
     }
 }

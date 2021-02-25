@@ -12,6 +12,8 @@ extension AppDatabase {
             let dbPool = try DatabasePool(path: url.path)
             let appDatabase = try AppDatabase(dbPool)
 
+            try appDatabase.createPreloadedLevelsIfEmpty()
+
             return appDatabase
         } catch {
             // TODO: More robust error handling. Possible errors include:
