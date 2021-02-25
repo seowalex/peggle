@@ -43,27 +43,30 @@ final class GameEngine {
             }
 
             for entity in entities {
+                guard let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
+                      physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB else {
+                    continue
+                }
+
                 // Activate powers
-                if let powerComponent = self?.entityManager.getComponent(PowerComponent.self, for: entity),
-                   let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
-                   physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB {
+                if let powerComponent = self?.entityManager.getComponent(PowerComponent.self, for: entity) {
                     powerComponent.isActivated = true
                 }
 
                 // Light pegs
-                if let lightComponent = self?.entityManager.getComponent(LightComponent.self, for: entity),
-                   let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
-                   physicsComponent.physicsBody === bodyA || physicsComponent.physicsBody === bodyB {
+                if let lightComponent = self?.entityManager.getComponent(LightComponent.self, for: entity) {
                     lightComponent.isLit = true
                 }
 
                 // Check for ball entering bucket
                 if let clearComponent = self?.entityManager.getComponent(ClearComponent.self, for: entity),
-                   let physicsComponent = self?.entityManager.getComponent(PhysicsComponent.self, for: entity),
                    let bucket = self?.bucketEntity,
                    let bucketBody = self?.entityManager.getComponent(PhysicsComponent.self, for: bucket)?.physicsBody,
+                   let powerComponents = self?.entityManager.getComponents(PowerComponent.self),
                    clearComponent.willClear == false
-                    && [physicsComponent.physicsBody, bucketBody].allSatisfy({ $0 === bodyA || $0 === bodyB }) {
+                    && (bucketBody === bodyA || bucketBody === bodyB)
+                    && !powerComponents.contains(where: { $0.power == .spookyBall && $0.isActivated == true
+                                                && $0.turnsRemaining == 1 }) {
                     clearComponent.willClear = true
                     print("ball entered bucket")
                 }
