@@ -16,12 +16,14 @@ final class LevelEditorViewModel: ObservableObject {
     }
 
     private enum ValidationError: LocalizedError {
-        case missingName
+        case missingName, cannotOverride
 
         var errorDescription: String? {
             switch self {
             case .missingName:
                 return "Level name empty"
+            case .cannotOverride:
+                return "Preloaded levels cannot be overriden"
             }
         }
 
@@ -29,6 +31,8 @@ final class LevelEditorViewModel: ObservableObject {
             switch self {
             case .missingName:
                 return "Please give a name to this level"
+            case .cannotOverride:
+                return "Try saving the level as a new level"
             }
         }
     }
@@ -269,6 +273,10 @@ final class LevelEditorViewModel: ObservableObject {
 
         if name.isEmpty {
             throw ValidationError.missingName
+        }
+
+        if try database.isPreloadedLevel(name: name) == true {
+            throw ValidationError.cannotOverride
         }
 
         var level = LevelRecord(name: name)

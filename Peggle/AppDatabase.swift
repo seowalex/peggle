@@ -171,23 +171,31 @@ struct AppDatabase {
 // MARK: - Database Access: Writes
 
 extension AppDatabase {
+    func isPreloadedLevel(name: String) throws -> Bool {
+        try dbWriter.read { db in
+            try LevelRecord
+                .filter(LevelRecord.Columns.isProtected == true && LevelRecord.Columns.name == name)
+                .fetchCount(db) > 0
+        }
+    }
+
     func saveLevel(_ level: inout LevelRecord, pegs: inout [PegRecord], blocks: inout [BlockRecord]) throws {
         try dbWriter.write { db in
             level = try LevelRecord.filter(LevelRecord.Columns.name == level.name).fetchOne(db) ?? level
+
+            guard level.isProtected == false else {
+                throw DatabaseError(message: "Preloaded levels cannot be overriden")
+            }
+
             try level.save(db)
             try level.pegs.deleteAll(db)
             try level.blocks.deleteAll(db)
 
-            let bodies = pegs.map { PhysicsBody(shape: .circle,
-                                                size: $0.size,
-                                                position: $0.position,
-                                                rotation: $0.rotation)
+            let bodies = pegs.map { PhysicsBody(shape: .circle, size: $0.size,
+                                                position: $0.position, rotation: $0.rotation)
+            } + blocks.map { PhysicsBody(shape: .rectangle, size: $0.size,
+                                         position: $0.position, rotation: $0.rotation)
             }
-                + blocks.map { PhysicsBody(shape: .rectangle,
-                                           size: $0.size,
-                                           position: $0.position,
-                                           rotation: $0.rotation)
-                }
 
             guard bodies.allSatisfy({ !$0.isColliding(with: bodies) }) else {
                 throw DatabaseError(message: "Pegs/blocks are colliding with each other")
