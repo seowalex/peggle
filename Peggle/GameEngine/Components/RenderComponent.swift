@@ -8,7 +8,7 @@ final class RenderComponent: Component {
     var state: State
     var imageName: String
     let imageNames: [State: String]
-    let opacity: Double
+    var opacity: Double
     let transition: AnyTransition
     let zIndex: Double
 

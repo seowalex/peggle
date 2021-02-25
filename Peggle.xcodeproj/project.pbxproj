@@ -49,6 +49,7 @@
 		0E892B4825E69EDC005573EF /* ClearSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E892B4725E69EDC005573EF /* ClearSystem.swift */; };
 		0EA3451625BDB53000DD1BBB /* LevelEditorListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */; };
 		0EA3451B25BDBFA000DD1BBB /* LevelEditorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */; };
+		0EB94A6725E7FE1F00D3DFDA /* RemoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB94A6625E7FE1F00D3DFDA /* RemoveComponent.swift */; };
 		0ED13CED25E2104800B0428C /* Peg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CEC25E2104800B0428C /* Peg.swift */; };
 		0ED13CF125E23CEE00B0428C /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CF025E23CEE00B0428C /* Element.swift */; };
 		0ED13CF725E24D4C00B0428C /* CGSize+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED13CF625E24D4C00B0428C /* CGSize+Extensions.swift */; };
@@ -118,6 +119,7 @@
 		0E892B4725E69EDC005573EF /* ClearSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearSystem.swift; sourceTree = "<group>"; };
 		0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListViewModel.swift; sourceTree = "<group>"; };
 		0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorListView.swift; sourceTree = "<group>"; };
+		0EB94A6625E7FE1F00D3DFDA /* RemoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveComponent.swift; sourceTree = "<group>"; };
 		0ED13CEC25E2104800B0428C /* Peg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peg.swift; sourceTree = "<group>"; };
 		0ED13CF025E23CEE00B0428C /* Element.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Element.swift; sourceTree = "<group>"; };
 		0ED13CF625E24D4C00B0428C /* CGSize+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+Extensions.swift"; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 				0E892B2725E51522005573EF /* OscillateComponent.swift */,
 				0E18E21425D6296600A2B74A /* PhysicsComponent.swift */,
 				0E892B3125E581E3005573EF /* PowerComponent.swift */,
+				0EB94A6625E7FE1F00D3DFDA /* RemoveComponent.swift */,
 				0E18E21025D628F600A2B74A /* RenderComponent.swift */,
 				0E032D3125E7A2DE00AB1165 /* TrajectoryComponent.swift */,
 			);
@@ -442,6 +445,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EB94A6725E7FE1F00D3DFDA /* RemoveComponent.swift in Sources */,
 				0E2A452D25BDE62100B0DCA7 /* PegRecord.swift in Sources */,
 				0E61D56D25D6C6200091D9D0 /* LightSystem.swift in Sources */,
 				0EE69DD325D17A1000BD142A /* CGAffineTransform+Extensions.swift in Sources */,

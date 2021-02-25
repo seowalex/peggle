@@ -80,6 +80,7 @@ final class EntityFactory {
                                                     .animation(.easeInOut(duration: 0.2))),
                                    to: entity)
         entityManager.addComponent(LightComponent(), to: entity)
+        entityManager.addComponent(RemoveComponent(), to: entity)
 
         return entity
     }
@@ -100,6 +101,7 @@ final class EntityFactory {
                                                    imageName: "block",
                                                    rotation: rotation),
                                    to: entity)
+        entityManager.addComponent(RemoveComponent(), to: entity)
 
         return entity
     }
