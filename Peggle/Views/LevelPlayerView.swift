@@ -63,6 +63,7 @@ struct LevelPlayerView: View {
             .frame(width: component.size.applying(denormalize).width,
                    height: component.size.applying(denormalize).height)
             .position(component.position.applying(denormalize))
+            .opacity(component.opacity)
             .transition(component.transition)
             .zIndex(component.zIndex)
     }

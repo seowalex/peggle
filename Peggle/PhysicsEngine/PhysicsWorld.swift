@@ -152,6 +152,10 @@ final class PhysicsWorld {
             }
         }
 
+        if collisions == maxCollisions {
+            points.append(body.position)
+        }
+
         return points
     }
 

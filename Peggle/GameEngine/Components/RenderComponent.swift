@@ -8,12 +8,13 @@ final class RenderComponent: Component {
     var state: State
     var imageName: String
     let imageNames: [State: String]
+    let opacity: Double
     let transition: AnyTransition
     let zIndex: Double
 
     private init(position: CGPoint, size: CGSize, imageName: String, imageNames: [State: String],
-                 rotation: CGFloat = 0.0, state: State = .base, transition: AnyTransition = .identity,
-                 zIndex: Double = 0) {
+                 rotation: CGFloat = 0.0, state: State = .base, opacity: Double = 1.0,
+                 transition: AnyTransition = .identity, zIndex: Double = 0) {
         self.position = position
         self.rotation = rotation
         self.size = size
@@ -21,29 +22,33 @@ final class RenderComponent: Component {
         self.state = state
         self.imageName = imageName
         self.imageNames = imageNames
+        self.opacity = opacity
         self.transition = transition
         self.zIndex = zIndex
     }
 
-    convenience init(position: CGPoint, size: CGSize, imageName: String, rotation: CGFloat = 0.0,
+    convenience init(position: CGPoint, size: CGSize, imageName: String, rotation: CGFloat = 0.0, opacity: Double = 1.0,
                      transition: AnyTransition = .identity, zIndex: Double = 0) {
         self.init(position: position,
                   size: size,
                   imageName: imageName,
                   imageNames: [.base: imageName],
                   rotation: rotation,
+                  opacity: opacity,
                   transition: transition,
                   zIndex: zIndex)
     }
 
     convenience init(position: CGPoint, size: CGSize, imageNames: [State: String], rotation: CGFloat = 0.0,
-                     state: State = .base, transition: AnyTransition = .identity, zIndex: Double = 0) {
+                     state: State = .base, opacity: Double = 1.0, transition: AnyTransition = .identity,
+                     zIndex: Double = 0) {
         self.init(position: position,
                   size: size,
                   imageName: imageNames[state] ?? "",
                   imageNames: imageNames,
                   rotation: rotation,
                   state: state,
+                  opacity: opacity,
                   transition: transition,
                   zIndex: zIndex)
     }

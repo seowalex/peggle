@@ -19,11 +19,20 @@ final class TrajectorySystem: System {
 
             entityManager.removeEntity(trajectoryComponent.entity)
 
-            for point in trajectoryComponent.points {
-                entityManager.addComponent(RenderComponent(position: point,
-                                                           size: CGSize(width: 0.01, height: 0.01),
-                                                           imageName: "ball"),
-                                           to: trajectoryComponent.entity)
+            for (index, point) in trajectoryComponent.points.enumerated() {
+                if index == trajectoryComponent.points.count - 1 {
+                    entityManager.addComponent(RenderComponent(position: point,
+                                                               size: trajectoryComponent.size,
+                                                               imageName: "ball",
+                                                               opacity: 0.6),
+                                               to: trajectoryComponent.entity)
+                } else {
+                    entityManager.addComponent(RenderComponent(position: point,
+                                                               size: CGSize(width: 0.01, height: 0.01),
+                                                               imageName: "ball",
+                                                               opacity: 0.6),
+                                               to: trajectoryComponent.entity)
+                }
             }
         }
     }

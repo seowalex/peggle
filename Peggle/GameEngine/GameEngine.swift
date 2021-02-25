@@ -191,7 +191,8 @@ final class GameEngine {
                                                        size: trajectoryComponent.size,
                                                        position: aimComponent.position,
                                                        velocity: velocity),
-                                            deltaTime: seconds)
+                                     deltaTime: seconds,
+                                     maxCollisions: trajectoryComponent.maxCollisions)
         }
     }
 
