@@ -33,34 +33,36 @@ final class ClearSystem: System {
                     }
 
                     if let entity = minEntity {
-                        let ballBody = physicsComponent.physicsBody
-
-                        if let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
-                           lightComponent.isLit == true {
-                            entityManager.removeEntity(entity)
-                        } else if let physicsComponent = entityManager
-                                    .getComponent(PhysicsComponent.self, for: entity),
-                                  let renderComponent = entityManager.getComponent(RenderComponent.self, for: entity) {
-                            physicsComponent.physicsBody.affectedByCollisions = false
-                            renderComponent.opacity = 0.6
-
-                            DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 0.5) {
-                                while true {
-                                    if !ballBody.isColliding(with: physicsComponent.physicsBody) {
-                                        break
-                                    }
-                                }
-
-                                physicsComponent.physicsBody.affectedByCollisions = true
-                                renderComponent.opacity = 1
-                            }
-                        }
+                        clearNearestPeg(entity: entity, body: physicsComponent.physicsBody)
                     }
                 }
             }
         } else {
             clearComponent.timer?.invalidate()
             clearComponent.timer = nil
+        }
+    }
+
+    func clearNearestPeg(entity: Entity, body: PhysicsBody) {
+        if let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
+           lightComponent.isLit == true {
+            entityManager.removeEntity(entity)
+        } else if let physicsComponent = entityManager
+                    .getComponent(PhysicsComponent.self, for: entity),
+                  let renderComponent = entityManager.getComponent(RenderComponent.self, for: entity) {
+            physicsComponent.physicsBody.affectedByCollisions = false
+            renderComponent.opacity = 0.6
+
+            DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 0.5) {
+                while true {
+                    if !body.isColliding(with: physicsComponent.physicsBody) {
+                        break
+                    }
+                }
+
+                physicsComponent.physicsBody.affectedByCollisions = true
+                renderComponent.opacity = 1
+            }
         }
     }
 
