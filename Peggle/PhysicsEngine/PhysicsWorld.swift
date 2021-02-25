@@ -121,6 +121,40 @@ final class PhysicsWorld {
         return normalVector
     }
 
+    func getTrajectoryPoints(body: PhysicsBody, deltaTime seconds: CGFloat, maxCollisions: Int = 1) -> [CGPoint] {
+        var collisions = 0
+        var points: [CGPoint] = []
+
+        while collisions < maxCollisions {
+            body.applyForce(body.mass * gravity)
+            body.update(deltaTime: seconds, speed: speed)
+
+            for otherBody in bodies {
+                guard body.isColliding(with: otherBody)
+                    && [body, otherBody].allSatisfy({ $0.affectedByCollisions == true }) else {
+                    continue
+                }
+
+                // TODO: Dynamic collision
+                if otherBody.isDynamic == false {
+                    resolveStaticCollision(dynamicBody: body, staticBody: otherBody)
+                }
+
+                collisions += 1
+            }
+
+            guard body.position.y < 1.5 else {
+                break
+            }
+
+            if points.isEmpty || (points.last ?? .zero).distance(to: body.position) > 0.02 {
+                points.append(body.position)
+            }
+        }
+
+        return points
+    }
+
     func update(deltaTime seconds: CGFloat) {
         applyGravity()
         updateBodies(deltaTime: seconds)

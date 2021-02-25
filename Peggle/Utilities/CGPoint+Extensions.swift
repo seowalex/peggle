@@ -45,3 +45,13 @@ extension CGPoint {
         atan2(point.y - y, point.x - x)
     }
 }
+
+extension CGPoint: Comparable {
+    public static func < (lhs: CGPoint, rhs: CGPoint) -> Bool {
+        if lhs.x != rhs.x {
+            return lhs.x < rhs.x
+        } else {
+            return lhs.y < rhs.y
+        }
+    }
+}

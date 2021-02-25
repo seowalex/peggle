@@ -20,6 +20,7 @@ final class GameEngine {
             PhysicsSystem(entityManager: entityManager),
             PowerSystem(entityManager: entityManager),
             AimSystem(entityManager: entityManager),
+            TrajectorySystem(entityManager: entityManager),
             OscillateSystem(entityManager: entityManager),
             LightSystem(entityManager: entityManager),
             ClearSystem(entityManager: entityManager),
@@ -114,10 +115,29 @@ final class GameEngine {
             return
         }
 
-        let aimComponents = entityManager.getComponents(AimComponent.self)
+        let entities = entityManager.getEntities(for: AimComponent.self)
 
-        for aimComponent in aimComponents {
+        for entity in entities {
+            guard let aimComponent = entityManager.getComponent(AimComponent.self, for: entity),
+                  let trajectoryComponent = entityManager.getComponent(TrajectoryComponent.self, for: entity) else {
+                continue
+            }
+
             aimComponent.target = position
+
+            // Clamp the firing angle between minAngle and maxAngle
+            let normalizedTarget = position.rotate(around: aimComponent.position,
+                                                   by: -aimComponent.initialAngle)
+            let angle = aimComponent.position.angle(to: normalizedTarget)
+            let clampedAngle = min(max(aimComponent.position.angle(to: normalizedTarget),
+                                       aimComponent.minAngle),
+                                   aimComponent.maxAngle)
+            let difference = clampedAngle - angle
+            let actualPosition = position.rotate(around: aimComponent.position, by: difference)
+
+            // Have to normalize the velocity so that the speed remains constant no matter
+            // how far the tap is from the cannon
+            trajectoryComponent.velocity = (actualPosition - aimComponent.position).normalized()
         }
     }
 
@@ -126,10 +146,17 @@ final class GameEngine {
             return
         }
 
-        let aimComponents = entityManager.getComponents(AimComponent.self)
+        let entities = entityManager.getEntities(for: AimComponent.self)
 
-        for aimComponent in aimComponents {
+        for entity in entities {
+            guard let aimComponent = entityManager.getComponent(AimComponent.self, for: entity),
+                  let trajectoryComponent = entityManager.getComponent(TrajectoryComponent.self, for: entity) else {
+                continue
+            }
+
             aimComponent.target = nil
+            trajectoryComponent.velocity = nil
+            trajectoryComponent.points = []
 
             // Clamp the firing angle between minAngle and maxAngle
             let normalizedTarget = position.rotate(around: aimComponent.position,
@@ -149,8 +176,28 @@ final class GameEngine {
         }
     }
 
+    func updateTrajectories(deltaTime seconds: CGFloat) {
+        let entities = entityManager.getEntities(for: TrajectoryComponent.self)
+
+        for entity in entities {
+            guard let trajectoryComponent = entityManager.getComponent(TrajectoryComponent.self, for: entity),
+                  let aimComponent = entityManager.getComponent(AimComponent.self, for: entity),
+                  let velocity = trajectoryComponent.velocity else {
+                continue
+            }
+
+            trajectoryComponent.points = physicsWorld
+                .getTrajectoryPoints(body: PhysicsBody(shape: trajectoryComponent.shape,
+                                                       size: trajectoryComponent.size,
+                                                       position: aimComponent.position,
+                                                       velocity: velocity),
+                                            deltaTime: seconds)
+        }
+    }
+
     func update(deltaTime seconds: CGFloat) {
         physicsWorld.update(deltaTime: seconds)
+        updateTrajectories(deltaTime: seconds)
 
         for system in systems {
             system.update(deltaTime: seconds)

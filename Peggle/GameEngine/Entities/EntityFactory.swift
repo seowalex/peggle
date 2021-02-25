@@ -35,6 +35,9 @@ final class EntityFactory {
                                                 minAngle: -.pi / 3,
                                                 maxAngle: .pi / 3),
                                    to: entity)
+        entityManager.addComponent(TrajectoryComponent(shape: .circle,
+                                                       size: CGSize(width: 0.03, height: 0.03)),
+                                   to: entity)
 
         return entity
     }
@@ -46,7 +49,6 @@ final class EntityFactory {
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .circle,
                                                                              size: size,
                                                                              position: position,
-                                                                             restitution: 0.2,
                                                                              velocity: velocity)),
                                    to: entity)
         entityManager.addComponent(RenderComponent(position: position,
