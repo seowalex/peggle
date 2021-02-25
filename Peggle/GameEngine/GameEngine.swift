@@ -102,7 +102,7 @@ final class GameEngine {
                                                     imageName: "peg-green",
                                                     rotation: peg.rotation,
                                                     size: peg.size)
-            entityManager.addComponent(PowerComponent(power: .superGuide), to: pegEntity)
+            entityManager.addComponent(PowerComponent(power: .spaceBlast), to: pegEntity)
         }
     }
 
