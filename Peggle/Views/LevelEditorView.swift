@@ -55,7 +55,7 @@ struct LevelEditorView: View {
                 }
 
                 if let element = viewModel.selectedElement {
-                    ElementTransformView(element: element, frame: frame)
+                    ElementSelectView(element: element, frame: frame)
                 }
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
@@ -94,7 +94,7 @@ struct LevelEditorView: View {
             )
     }
 
-    private func ElementTransformView(element: Element, frame: CGRect) -> some View {
+    private func ElementSelectView(element: Element, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
 
         let position = dragState?.position ?? element.position
@@ -109,10 +109,11 @@ struct LevelEditorView: View {
                 .frame(width: size.applying(denormalize).width,
                        height: size.applying(denormalize).height)
                 .position(position.applying(denormalize))
+                .allowsHitTesting(false)
 
             if element.isOscillating == true {
-                OscillateHandleView(element: element, frame: frame, direction: .left)
-                OscillateHandleView(element: element, frame: frame, direction: .right)
+                OscillatePathView(element: element, frame: frame, direction: .left)
+                OscillatePathView(element: element, frame: frame, direction: .right)
             }
 
             Image(element.imageName)
@@ -129,6 +130,11 @@ struct LevelEditorView: View {
             ResizeHandleView(element: element, frame: frame, direction: .left)
             ResizeHandleView(element: element, frame: frame, direction: .right)
             RotateHandleView(element: element, frame: frame)
+
+            if element.isOscillating == true {
+                OscillateHandleView(element: element, frame: frame, direction: .left)
+                OscillateHandleView(element: element, frame: frame, direction: .right)
+            }
         }
     }
 
@@ -208,6 +214,7 @@ struct LevelEditorView: View {
                         .rotationEffect(.radians(Double(elementRotation)))
                         .frame(width: 1, height: Element.minimumSize.applying(denormalize).height)
                         .foregroundColor(.white)
+                        .allowsHitTesting(false)
                     Circle()
                         .foregroundColor(.white)
                         .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
@@ -262,17 +269,10 @@ struct LevelEditorView: View {
             .foregroundColor(Color.clear)
             .contentShape(Rectangle())
             .background(
-                ZStack {
-                    Rectangle()
-                        .position(x: 0, y: 2)
-                        .rotationEffect(.radians(Double(elementRotation + (coefficient < 0 ? CGFloat.pi : 0))))
-                        .frame(width: abs(coefficient) * elementSize.applying(denormalize).width, height: 4)
-                        .foregroundColor(color)
-                    Rectangle()
-                        .rotation(.radians(Double(elementRotation + CGFloat.pi / 4)))
-                        .foregroundColor(color)
-                        .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
-                }
+                Rectangle()
+                    .rotation(.radians(Double(elementRotation + CGFloat.pi / 4)))
+                    .foregroundColor(color)
+                    .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
             )
             .frame(width: touchSize.applying(denormalize).width, height: touchSize.applying(denormalize).height)
             .position(position.applying(denormalize))
@@ -289,6 +289,39 @@ struct LevelEditorView: View {
                         }
                     }
             )
+    }
+
+    private func OscillatePathView(element: Element, frame: CGRect,
+                                   direction: LevelEditorViewModel.Direction) -> some View {
+        let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
+
+        let elementPosition = dragState?.position ?? element.position
+        let elementSize = dragState?.size ?? element.size
+        let elementRotation = dragState?.rotation ?? element.rotation
+
+        var coefficient = CGFloat.zero
+        var color = Color.clear
+
+        switch direction {
+        case .left:
+            coefficient = element.minCoefficient
+            color = .green
+        case .right:
+            coefficient = element.maxCoefficient
+            color = .red
+        default:
+            break
+        }
+
+        let position = (elementPosition + CGVector(dx: coefficient * elementSize.width / 2, dy: 0))
+            .rotate(around: elementPosition, by: elementRotation)
+
+        return Rectangle()
+            .rotation(.radians(Double(elementRotation)))
+            .frame(width: abs(coefficient) * elementSize.applying(denormalize).width, height: 4)
+            .position(position.applying(denormalize))
+            .foregroundColor(color)
+            .allowsHitTesting(false)
     }
 
     private func ToolbarView() -> some View {
