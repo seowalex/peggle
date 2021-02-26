@@ -271,6 +271,14 @@ final class LevelEditorViewModel: ObservableObject {
 
         objectWillChange.send()
     }
+
+    func onFrequency(position: CGPoint, element: Element) {
+        let coefficient = (element.position - position.rotate(around: element.position, by: -element.rotation)).dy
+            / element.size.height
+        element.frequency = 0.5 + min(max(coefficient, -0.5), 0.5)
+
+        objectWillChange.send()
+    }
 }
 
 // MARK: - Level Management

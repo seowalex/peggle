@@ -134,6 +134,7 @@ struct LevelEditorView: View {
             if element.isOscillating == true {
                 OscillateHandleView(element: element, frame: frame, direction: .left)
                 OscillateHandleView(element: element, frame: frame, direction: .right)
+                FrequencyHandleView(element: element, frame: frame)
             }
         }
     }
@@ -322,6 +323,42 @@ struct LevelEditorView: View {
             .position(position.applying(denormalize))
             .foregroundColor(color)
             .allowsHitTesting(false)
+    }
+
+    private func FrequencyHandleView(element: Element, frame: CGRect) -> some View {
+        let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
+        let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
+
+        let elementPosition = dragState?.position ?? element.position
+        let elementSize = dragState?.size ?? element.size
+        let elementRotation = dragState?.rotation ?? element.rotation
+
+        let coefficient = 0.5 - element.frequency
+        let position = (elementPosition + CGVector(dx: 0, dy: coefficient * elementSize.height))
+            .rotate(around: elementPosition, by: elementRotation)
+        let size = CGSize(width: min(elementSize.width, Element.minimumSize.width) / 2,
+                          height: min(elementSize.height, Element.minimumSize.height) / 2)
+        let touchSize = CGSize(width: min(elementSize.width / 2, Element.minimumSize.width),
+                               height: min(elementSize.height / 2, Element.minimumSize.height))
+
+        return Rectangle()
+            .rotation(.radians(Double(elementRotation)))
+            .foregroundColor(Color.clear)
+            .contentShape(Rectangle())
+            .background(
+                Rectangle()
+                    .rotation(.radians(Double(elementRotation + CGFloat.pi / 4)))
+                    .foregroundColor(.orange)
+                    .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
+            )
+            .frame(width: touchSize.applying(denormalize).width, height: touchSize.applying(denormalize).height)
+            .position(position.applying(denormalize))
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        viewModel.onFrequency(position: value.location.applying(normalize), element: element)
+                    }
+            )
     }
 
     private func ToolbarView() -> some View {
