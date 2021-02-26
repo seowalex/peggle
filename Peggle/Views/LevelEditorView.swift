@@ -262,10 +262,6 @@ struct LevelEditorView: View {
 
     private func PaletteButtonView(selection: LevelEditorViewModel.PaletteSelection, imageName: String) -> some View {
         Button(action: {
-            if case .delete = selection {
-                viewModel.selectedElement = nil
-            }
-
             viewModel.paletteSelection = selection
         }) {
             Image(imageName)

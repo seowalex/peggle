@@ -131,15 +131,7 @@ final class LevelEditorViewModel: ObservableObject {
             newPosition.x += translation.width
             newPosition.y += translation.height
 
-            var shape = PhysicsBody.Shape.rectangle
-
-            if element is Peg {
-                shape = .circle
-            } else if element is Block {
-                shape = .rectangle
-            }
-
-            let physicsBody = PhysicsBody(shape: shape,
+            let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
                                           size: element.size,
                                           position: newPosition,
                                           rotation: element.rotation)
@@ -166,18 +158,11 @@ final class LevelEditorViewModel: ObservableObject {
             let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
             let translation = dragValue.translation.applying(normalize)
             var newPosition = element.position
+
             newPosition.x += translation.width
             newPosition.y += translation.height
 
-            var shape = PhysicsBody.Shape.rectangle
-
-            if element is Peg {
-                shape = .circle
-            } else if element is Block {
-                shape = .rectangle
-            }
-
-            let physicsBody = PhysicsBody(shape: shape,
+            let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
                                           size: element.size,
                                           position: newPosition,
                                           rotation: element.rotation)
