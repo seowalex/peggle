@@ -116,15 +116,6 @@ struct LevelEditorView: View {
         let size = dragState?.size ?? element.size
         let rotation = dragState?.rotation ?? element.rotation
 
-        let topHandle = CGPoint(x: position.x, y: position.y - size.height / 2)
-            .rotate(around: position, by: rotation)
-        let bottomHandle = CGPoint(x: position.x, y: position.y + size.height / 2)
-            .rotate(around: position, by: rotation)
-        let leftHandle = CGPoint(x: position.x - size.width / 2, y: position.y)
-            .rotate(around: position, by: rotation)
-        let rightHandle = CGPoint(x: position.x + size.width / 2, y: position.y)
-            .rotate(around: position, by: rotation)
-
         let rotateHandle = (CGPoint(x: position.x, y: position.y - size.height / 2)
                         - CGVector(dx: 0, dy: min(size.height, 0.1)))
             .rotate(around: position, by: rotation)
@@ -134,16 +125,16 @@ struct LevelEditorView: View {
 
         return ZStack {
             Rectangle()
-                .stroke()
                 .rotation(.radians(Double(rotation)))
+                .stroke(Color.white)
                 .frame(width: size.applying(denormalize).width,
                        height: size.applying(denormalize).height)
                 .position(position.applying(denormalize))
                 .allowsHitTesting(false)
-            ResizeHandleView(element: element, frame: frame, position: topHandle, isHeight: true)
-            ResizeHandleView(element: element, frame: frame, position: bottomHandle, isHeight: true)
-            ResizeHandleView(element: element, frame: frame, position: leftHandle, isHeight: false)
-            ResizeHandleView(element: element, frame: frame, position: rightHandle, isHeight: false)
+            ResizeHandleView(element: element, frame: frame, direction: .top)
+            ResizeHandleView(element: element, frame: frame, direction: .bottom)
+            ResizeHandleView(element: element, frame: frame, direction: .left)
+            ResizeHandleView(element: element, frame: frame, direction: .right)
             RotateHandleView(element: element, frame: frame, position: rotateHandle)
             Rectangle()
                 .rotation(.radians(Double(rotation)))
@@ -155,40 +146,55 @@ struct LevelEditorView: View {
         }
     }
 
-    private func ResizeHandleView(element: Element, frame: CGRect, position: CGPoint, isHeight: Bool) -> some View {
+    private func ResizeHandleView(element: Element, frame: CGRect,
+                                  direction: LevelEditorViewModel.Direction) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
         let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
 
-        var size = dragState?.size ?? element.size
-        size.width = min(size.width, 0.1)
-        size.height = min(size.height, 0.1)
+        let elementPosition = dragState?.position ?? element.position
+        let elementSize = dragState?.size ?? element.size
+        let elementRotation = dragState?.rotation ?? element.rotation
 
-        return Circle()
-            .foregroundColor(.white)
-            .frame(width: size.applying(denormalize).width / 2,
-                   height: size.applying(denormalize).height / 2)
+        var difference = CGVector.zero
+        let size = CGSize(width: min(elementSize.width, Element.minimumSize.width) / 2,
+                          height: min(elementSize.height, Element.minimumSize.height) / 2)
+        let touchSize = CGSize(width: min(elementSize.width / 2, Element.minimumSize.width),
+                               height: min(elementSize.height / 2, Element.minimumSize.height))
+
+        switch direction {
+        case .top:
+            difference = CGVector(dx: 0, dy: -elementSize.height / 2)
+        case .bottom:
+            difference = CGVector(dx: 0, dy: elementSize.height / 2)
+        case .left:
+            difference = CGVector(dx: -elementSize.width / 2, dy: 0)
+        case .right:
+            difference = CGVector(dx: elementSize.width / 2, dy: 0)
+        }
+
+        let position = (elementPosition + difference).rotate(around: elementPosition, by: elementRotation)
+
+        return Rectangle()
+            .rotation(.radians(Double(elementRotation)))
+            .stroke(Color.clear)
+            .contentShape(Rectangle())
+            .background(
+                Rectangle()
+                    .rotation(.radians(Double(elementRotation)))
+                    .foregroundColor(.white)
+                    .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
+            )
+            .frame(width: touchSize.applying(denormalize).width, height: touchSize.applying(denormalize).height)
             .position(position.applying(denormalize))
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .updating($dragState) { value, state, _ in
-                        let width = element is Block && isHeight == true
-                            ? element.size.width
-                            : value.location.applying(normalize).distance(to: element.position) * 2
-                        let height = element is Block && isHeight == false
-                            ? element.size.height
-                            : value.location.applying(normalize).distance(to: element.position) * 2
-
-                        state = viewModel.onResize(width: width, height: height, element: element)
+                        state = viewModel.onResize(position: value.location.applying(normalize),
+                                                   element: element, direction: direction)
                     }
                     .onEnded { value in
-                        let width = element is Block && isHeight == true
-                            ? element.size.width
-                            : value.location.applying(normalize).distance(to: element.position) * 2
-                        let height = element is Block && isHeight == false
-                            ? element.size.height
-                            : value.location.applying(normalize).distance(to: element.position) * 2
-
-                        viewModel.onResizeEnd(width: width, height: height, element: element)
+                        viewModel.onResizeEnd(position: value.location.applying(normalize),
+                                              element: element, direction: direction)
                     }
             )
     }

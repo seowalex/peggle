@@ -1,42 +1,6 @@
 import SwiftUI
 
 final class LevelEditorViewModel: ObservableObject {
-    struct DragState {
-        let element: Element
-        let position: CGPoint
-        let rotation: CGFloat
-        let size: CGSize
-        let isValid: Bool
-    }
-
-    enum PaletteSelection: Equatable {
-        case addPeg(Peg.Color)
-        case addBlock
-        case delete
-    }
-
-    private enum ValidationError: LocalizedError {
-        case missingName, cannotOverride
-
-        var errorDescription: String? {
-            switch self {
-            case .missingName:
-                return "Level name empty"
-            case .cannotOverride:
-                return "Preloaded levels cannot be overriden"
-            }
-        }
-
-        var recoverySuggestion: String? {
-            switch self {
-            case .missingName:
-                return "Please give a name to this level"
-            case .cannotOverride:
-                return "Try saving the level as a new level"
-            }
-        }
-    }
-
     @Published var name = ""
     @Published private(set) var elements: [Element] = []
     @Published var paletteSelection = PaletteSelection.addPeg(.blue)
@@ -177,13 +141,22 @@ final class LevelEditorViewModel: ObservableObject {
         }
     }
 
-    func onResize(width: CGFloat, height: CGFloat, element: Element) -> DragState? {
+    func onResize(position: CGPoint, element: Element, direction: Direction) -> DragState? {
+        let distance = position.distance(to: element.position) * 2
+        var size = CGSize.zero
         var isValid = true
 
+        switch direction {
+        case .top, .bottom:
+            size = CGSize(width: element is Peg ? distance : element.size.width, height: distance)
+        case .left, .right:
+            size = CGSize(width: distance, height: element is Peg ? distance : element.size.height)
+        }
+
         let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
-                                      size: CGSize(width: width, height: height),
-                                      position: element.physicsBody.position,
-                                      rotation: element.physicsBody.rotation)
+                                      size: size,
+                                      position: element.position,
+                                      rotation: element.rotation)
 
         if !frame.contains(physicsBody.boundingBox)
             || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
@@ -193,22 +166,32 @@ final class LevelEditorViewModel: ObservableObject {
         return LevelEditorViewModel.DragState(element: element,
                                               position: element.position,
                                               rotation: element.rotation,
-                                              size: CGSize(width: width, height: height),
+                                              size: size,
                                               isValid: isValid)
     }
 
-    func onResizeEnd(width: CGFloat, height: CGFloat, element: Element) {
+    func onResizeEnd(position: CGPoint, element: Element, direction: Direction) {
+        let distance = position.distance(to: element.position) * 2
+        var size = CGSize.zero
+
+        switch direction {
+        case .top, .bottom:
+            size = CGSize(width: element is Peg ? distance : element.size.width, height: distance)
+        case .left, .right:
+            size = CGSize(width: distance, height: element is Peg ? distance : element.size.height)
+        }
+
         let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
-                                      size: CGSize(width: width, height: height),
-                                      position: element.physicsBody.position,
-                                      rotation: element.physicsBody.rotation)
+                                      size: size,
+                                      position: element.position,
+                                      rotation: element.rotation)
 
         if !frame.contains(physicsBody.boundingBox)
             || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
             return
         }
 
-        element.size = CGSize(width: width, height: height)
+        element.size = size
     }
 
     func onRotate(position: CGPoint, element: Element) -> DragState? {
@@ -297,5 +280,47 @@ final class LevelEditorViewModel: ObservableObject {
         name = ""
         elements.removeAll()
         selectedElement = nil
+    }
+}
+
+extension LevelEditorViewModel {
+    struct DragState {
+        let element: Element
+        let position: CGPoint
+        let rotation: CGFloat
+        let size: CGSize
+        let isValid: Bool
+    }
+
+    enum PaletteSelection: Equatable {
+        case addPeg(Peg.Color)
+        case addBlock
+        case delete
+    }
+
+    enum Direction {
+        case top, bottom, left, right
+    }
+
+    private enum ValidationError: LocalizedError {
+        case missingName, cannotOverride
+
+        var errorDescription: String? {
+            switch self {
+            case .missingName:
+                return "Level name empty"
+            case .cannotOverride:
+                return "Preloaded levels cannot be overriden"
+            }
+        }
+
+        var recoverySuggestion: String? {
+            switch self {
+            case .missingName:
+                return "Please give a name to this level"
+            case .cannotOverride:
+                return "Try saving the level as a new level"
+            }
+        }
     }
 }
