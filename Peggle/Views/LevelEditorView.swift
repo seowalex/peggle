@@ -124,11 +124,17 @@ struct LevelEditorView: View {
                 .frame(width: size.applying(denormalize).width,
                        height: size.applying(denormalize).height)
                 .position(position.applying(denormalize))
+
             ResizeHandleView(element: element, frame: frame, direction: .top)
             ResizeHandleView(element: element, frame: frame, direction: .bottom)
             ResizeHandleView(element: element, frame: frame, direction: .left)
             ResizeHandleView(element: element, frame: frame, direction: .right)
             RotateHandleView(element: element, frame: frame)
+
+            if element.isOscillating == true {
+                OscillateHandleView(element: element, frame: frame, direction: .left)
+                OscillateHandleView(element: element, frame: frame, direction: .right)
+            }
         }
     }
 
@@ -162,7 +168,7 @@ struct LevelEditorView: View {
 
         return Rectangle()
             .rotation(.radians(Double(elementRotation)))
-            .stroke(Color.clear)
+            .foregroundColor(Color.clear)
             .contentShape(Rectangle())
             .background(
                 Rectangle()
@@ -199,12 +205,12 @@ struct LevelEditorView: View {
             .rotate(around: elementPosition, by: elementRotation)
 
         return Circle()
-            .stroke(Color.clear)
+            .foregroundColor(Color.clear)
             .contentShape(Circle())
             .background(
                 ZStack {
                     Rectangle()
-                        .position(x: 0, y: Element.minimumSize.applying(denormalize).height)
+                        .position(x: 0.5, y: Element.minimumSize.applying(denormalize).height)
                         .rotationEffect(.radians(Double(elementRotation)))
                         .frame(width: 1, height: Element.minimumSize.applying(denormalize).height)
                         .foregroundColor(.white)
@@ -223,6 +229,70 @@ struct LevelEditorView: View {
                     }
                     .onEnded { value in
                         viewModel.onRotateEnd(position: value.location.applying(normalize), element: element)
+                    }
+            )
+    }
+
+    private func OscillateHandleView(element: Element, frame: CGRect,
+                                     direction: LevelEditorViewModel.Direction) -> some View {
+        let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
+        let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
+
+        let elementPosition = dragState?.position ?? element.position
+        let elementSize = dragState?.size ?? element.size
+        let elementRotation = dragState?.rotation ?? element.rotation
+
+        var coefficient = CGFloat.zero
+        var color = Color.clear
+
+        switch direction {
+        case .left:
+            coefficient = element.minCoefficient
+            color = .green
+        case .right:
+            coefficient = element.maxCoefficient
+            color = .red
+        default:
+            break
+        }
+
+        let position = (elementPosition + CGVector(dx: coefficient * elementSize.width, dy: 0))
+            .rotate(around: elementPosition, by: elementRotation)
+        let size = CGSize(width: min(elementSize.width, Element.minimumSize.width) / 2,
+                          height: min(elementSize.height, Element.minimumSize.height) / 2)
+        let touchSize = CGSize(width: min(elementSize.width / 2, Element.minimumSize.width),
+                               height: min(elementSize.height / 2, Element.minimumSize.height))
+
+        return Rectangle()
+            .rotation(.radians(Double(elementRotation)))
+            .foregroundColor(Color.clear)
+            .contentShape(Rectangle())
+            .background(
+                ZStack {
+                    Rectangle()
+                        .position(x: 0, y: 2)
+                        .rotationEffect(.radians(Double(elementRotation + (coefficient < 0 ? CGFloat.pi : 0))))
+                        .frame(width: abs(coefficient) * elementSize.applying(denormalize).width, height: 4)
+                        .foregroundColor(color)
+                    Rectangle()
+                        .rotation(.radians(Double(elementRotation + CGFloat.pi / 4)))
+                        .foregroundColor(color)
+                        .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
+                }
+            )
+            .frame(width: touchSize.applying(denormalize).width, height: touchSize.applying(denormalize).height)
+            .position(position.applying(denormalize))
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        switch direction {
+                        case .left:
+                            viewModel.onOscillateMin(position: value.location.applying(normalize), element: element)
+                        case .right:
+                            viewModel.onOscillateMax(position: value.location.applying(normalize), element: element)
+                        default:
+                            return
+                        }
                     }
             )
     }

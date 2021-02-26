@@ -18,12 +18,18 @@ final class Peg: Element {
         }
     }
 
-    init(position: CGPoint, color: Color, rotation: CGFloat = 0.0, size: CGSize = defaultSize) {
+    init(position: CGPoint, color: Color, rotation: CGFloat = 0.0, size: CGSize = defaultSize,
+         isOscillating: Bool = false, minCoefficient: CGFloat = -1.0, maxCoefficient: CGFloat = 1.0,
+         frequency: CGFloat = 0.4) {
         self.color = color
 
         super.init(position: position,
                    rotation: rotation,
                    size: size,
+                   isOscillating: isOscillating,
+                   minCoefficient: minCoefficient,
+                   maxCoefficient: maxCoefficient,
+                   frequency: frequency,
                    physicsBody: PhysicsBody(shape: .circle, size: size, position: position, rotation: rotation))
     }
 }

@@ -20,16 +20,29 @@ class Element {
             physicsBody.size = size
         }
     }
+
+    var isOscillating: Bool
+    var minCoefficient: CGFloat
+    var maxCoefficient: CGFloat
+    var frequency: CGFloat
+
     let physicsBody: PhysicsBody
 
     var imageName: String {
         ""
     }
 
-    init(position: CGPoint, rotation: CGFloat, size: CGSize, physicsBody: PhysicsBody) {
+    init(position: CGPoint, rotation: CGFloat, size: CGSize, isOscillating: Bool, minCoefficient: CGFloat,
+         maxCoefficient: CGFloat, frequency: CGFloat, physicsBody: PhysicsBody) {
         self.position = position
         self.rotation = rotation
         self.size = size
+
+        self.isOscillating = isOscillating
+        self.minCoefficient = minCoefficient
+        self.maxCoefficient = maxCoefficient
+        self.frequency = frequency
+
         self.physicsBody = physicsBody
     }
 }
