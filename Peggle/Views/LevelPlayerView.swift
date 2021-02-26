@@ -23,7 +23,8 @@ struct LevelPlayerView: View {
         GeometryReader { geometry in
             ZStack {
                 Board()
-                    .frame(width: geometry.size.height / 1.4, height: geometry.size.height)
+                    .frame(width: geometry.size.height * 0.8 / 1.4, height: geometry.size.height * 0.8)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height * 0.6)
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         }
