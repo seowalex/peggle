@@ -77,6 +77,7 @@ struct LevelEditorView: View {
         }
     }
 
+    // TODO: Fix contentShape problem
     private func ElementView(element: Element, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
 
@@ -115,13 +116,6 @@ struct LevelEditorView: View {
         let position = dragState?.position ?? element.position
         let size = dragState?.size ?? element.size
         let rotation = dragState?.rotation ?? element.rotation
-
-        let rotateHandle = (CGPoint(x: position.x, y: position.y - size.height / 2)
-                        - CGVector(dx: 0, dy: min(size.height, 0.1)))
-            .rotate(around: position, by: rotation)
-        let rotateLine = (CGPoint(x: position.x, y: position.y - size.height / 2)
-                        - CGVector(dx: 0, dy: min(size.height / 2, 0.05)))
-            .rotate(around: position, by: rotation)
 
         return ZStack {
             Rectangle()
