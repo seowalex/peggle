@@ -118,29 +118,10 @@ final class GameEngine {
             return
         }
 
-        let entities = entityManager.getEntities(for: AimComponent.self)
+        let aimComponents = entityManager.getComponents(AimComponent.self)
 
-        for entity in entities {
-            guard let aimComponent = entityManager.getComponent(AimComponent.self, for: entity),
-                  let trajectoryComponent = entityManager.getComponent(TrajectoryComponent.self, for: entity) else {
-                continue
-            }
-
+        for aimComponent in aimComponents {
             aimComponent.target = position
-
-            // Clamp the firing angle between minAngle and maxAngle
-            let normalizedTarget = position.rotate(around: aimComponent.position,
-                                                   by: -aimComponent.initialAngle)
-            let angle = aimComponent.position.angle(to: normalizedTarget)
-            let clampedAngle = min(max(aimComponent.position.angle(to: normalizedTarget),
-                                       aimComponent.minAngle),
-                                   aimComponent.maxAngle)
-            let difference = clampedAngle - angle
-            let actualPosition = position.rotate(around: aimComponent.position, by: difference)
-
-            // Have to normalize the velocity so that the speed remains constant no matter
-            // how far the tap is from the cannon
-            trajectoryComponent.velocity = (actualPosition - aimComponent.position).normalized()
         }
     }
 
@@ -153,29 +134,17 @@ final class GameEngine {
 
         for entity in entities {
             guard let aimComponent = entityManager.getComponent(AimComponent.self, for: entity),
-                  let trajectoryComponent = entityManager.getComponent(TrajectoryComponent.self, for: entity) else {
+                  let trajectoryComponent = entityManager.getComponent(TrajectoryComponent.self, for: entity),
+                  let velocity = aimComponent.velocity else {
                 continue
             }
 
-            aimComponent.target = nil
-            trajectoryComponent.velocity = nil
-            trajectoryComponent.points = []
-
-            // Clamp the firing angle between minAngle and maxAngle
-            let normalizedTarget = position.rotate(around: aimComponent.position,
-                                                   by: -aimComponent.initialAngle)
-            let angle = aimComponent.position.angle(to: normalizedTarget)
-            let clampedAngle = min(max(aimComponent.position.angle(to: normalizedTarget),
-                                       aimComponent.minAngle),
-                                   aimComponent.maxAngle)
-            let difference = clampedAngle - angle
-            let actualPosition = position.rotate(around: aimComponent.position, by: difference)
-
-            // Have to normalize the velocity so that the speed remains constant no matter
-            // how far the tap is from the cannon
             entityFactory.createBall(position: aimComponent.position,
-                                     velocity: (actualPosition - aimComponent.position).normalized(),
+                                     velocity: velocity,
                                      physicsSpeed: physicsWorld.speed)
+
+            aimComponent.target = nil
+            trajectoryComponent.points = []
         }
     }
 
@@ -185,7 +154,7 @@ final class GameEngine {
         for entity in entities {
             guard let trajectoryComponent = entityManager.getComponent(TrajectoryComponent.self, for: entity),
                   let aimComponent = entityManager.getComponent(AimComponent.self, for: entity),
-                  let velocity = trajectoryComponent.velocity else {
+                  let velocity = aimComponent.velocity else {
                 continue
             }
 

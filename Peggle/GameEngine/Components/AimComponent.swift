@@ -7,6 +7,7 @@ final class AimComponent: Component {
     let maxAngle: CGFloat
 
     var target: CGPoint?
+    var velocity: CGVector?
 
     init(position: CGPoint, initialAngle: CGFloat, minAngle: CGFloat = -.pi, maxAngle: CGFloat = .pi) {
         self.position = position

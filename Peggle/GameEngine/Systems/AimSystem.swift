@@ -18,14 +18,20 @@ final class AimSystem: System {
 
             if let target = aimComponent.target {
                 // Clamp the rotation between minAngle and maxAngle
-                let normalizedTarget = target.rotate(around: aimComponent.position,
-                                                     by: -aimComponent.initialAngle)
+                let normalizedTarget = target.rotate(around: aimComponent.position, by: -aimComponent.initialAngle)
+                let angle = aimComponent.position.angle(to: normalizedTarget)
+                let clampedAngle = min(max(angle, aimComponent.minAngle), aimComponent.maxAngle)
+                let difference = clampedAngle - angle
+                let actualTarget = target.rotate(around: aimComponent.position, by: difference)
 
-                renderComponent.rotation = min(max(aimComponent.position.angle(to: normalizedTarget),
-                                                   aimComponent.minAngle),
-                                               aimComponent.maxAngle)
+                // Have to normalize the velocity so that the speed remains constant no matter
+                // how far the tap is from the cannon
+                aimComponent.velocity = (actualTarget - aimComponent.position).normalized()
+
+                renderComponent.rotation = clampedAngle
                 renderComponent.state.formUnion(.loaded)
             } else {
+                aimComponent.velocity = nil
                 renderComponent.state.subtract(.loaded)
             }
         }

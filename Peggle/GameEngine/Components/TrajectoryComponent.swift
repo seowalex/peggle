@@ -6,7 +6,6 @@ final class TrajectoryComponent: Component {
     var maxCollisions: Int
 
     let entity = Entity()
-    var velocity: CGVector?
     var points: [CGPoint] = []
 
     init(shape: PhysicsBody.Shape, size: CGSize, maxCollisions: Int = 1) {
