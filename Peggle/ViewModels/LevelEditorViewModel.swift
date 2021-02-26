@@ -201,8 +201,8 @@ final class LevelEditorViewModel: ObservableObject {
         var isValid = true
 
         let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
-                                      size: element.physicsBody.size,
-                                      position: element.physicsBody.position,
+                                      size: element.size,
+                                      position: element.position,
                                       rotation: rotation)
 
         if !frame.contains(physicsBody.boundingBox)
@@ -222,8 +222,8 @@ final class LevelEditorViewModel: ObservableObject {
                                                  by: CGFloat.pi / 2)
         let rotation = element.position.angle(to: normalizedPosition)
         let physicsBody = PhysicsBody(shape: element.physicsBody.shape,
-                                      size: element.physicsBody.size,
-                                      position: element.physicsBody.position,
+                                      size: element.size,
+                                      position: element.position,
                                       rotation: rotation)
 
         if !frame.contains(physicsBody.boundingBox)

@@ -130,19 +130,11 @@ struct LevelEditorView: View {
                 .frame(width: size.applying(denormalize).width,
                        height: size.applying(denormalize).height)
                 .position(position.applying(denormalize))
-                .allowsHitTesting(false)
             ResizeHandleView(element: element, frame: frame, direction: .top)
             ResizeHandleView(element: element, frame: frame, direction: .bottom)
             ResizeHandleView(element: element, frame: frame, direction: .left)
             ResizeHandleView(element: element, frame: frame, direction: .right)
-            RotateHandleView(element: element, frame: frame, position: rotateHandle)
-            Rectangle()
-                .rotation(.radians(Double(rotation)))
-                .frame(width: 1,
-                       height: CGSize(width: size.width, height: min(size.height, 0.1)).applying(denormalize).height)
-                .position(rotateLine.applying(denormalize))
-                .foregroundColor(.white)
-                .allowsHitTesting(false)
+            RotateHandleView(element: element, frame: frame)
         }
     }
 
@@ -199,18 +191,36 @@ struct LevelEditorView: View {
             )
     }
 
-    private func RotateHandleView(element: Element, frame: CGRect, position: CGPoint) -> some View {
+    private func RotateHandleView(element: Element, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
         let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
 
-        var size = dragState?.size ?? element.size
-        size.width = min(size.width, 0.1)
-        size.height = min(size.height, 0.1)
+        let elementPosition = dragState?.position ?? element.position
+        let elementSize = dragState?.size ?? element.size
+        let elementRotation = dragState?.rotation ?? element.rotation
+
+        let size = CGSize(width: min(elementSize.width, Element.minimumSize.width) / 2,
+                          height: min(elementSize.height, Element.minimumSize.height) / 2)
+        let position = (elementPosition - CGVector(dx: 0, dy: elementSize.height / 2 + Element.minimumSize.height))
+            .rotate(around: elementPosition, by: elementRotation)
 
         return Circle()
-            .foregroundColor(.white)
-            .frame(width: size.applying(denormalize).width / 2,
-                   height: size.applying(denormalize).height / 2)
+            .stroke(Color.clear)
+            .contentShape(Circle())
+            .background(
+                ZStack {
+                    Rectangle()
+                        .position(x: 0, y: Element.minimumSize.applying(denormalize).height)
+                        .rotationEffect(.radians(Double(elementRotation)))
+                        .frame(width: 1, height: Element.minimumSize.applying(denormalize).height)
+                        .foregroundColor(.white)
+                    Circle()
+                        .foregroundColor(.white)
+                        .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
+                }
+            )
+            .frame(width: Element.minimumSize.applying(denormalize).width,
+                   height: Element.minimumSize.applying(denormalize).height)
             .position(position.applying(denormalize))
             .gesture(
                 DragGesture(minimumDistance: 0)
@@ -268,6 +278,10 @@ struct LevelEditorView: View {
 
     private func PaletteButtonView(selection: LevelEditorViewModel.PaletteSelection, imageName: String) -> some View {
         Button(action: {
+            if case .delete = selection {
+                viewModel.selectedElement = nil
+            }
+
             viewModel.paletteSelection = selection
         }) {
             Image(imageName)
