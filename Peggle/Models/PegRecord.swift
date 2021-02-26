@@ -10,6 +10,10 @@ struct PegRecord: Equatable {
     var position: CGPoint
     var rotation: CGFloat = 0.0
     var size: CGSize = Peg.defaultSize
+    var isOscillating: Bool = false
+    var minCoefficient: CGFloat = -1.0
+    var maxCoefficient: CGFloat = 1.0
+    var frequency: CGFloat = 0.4
     var color: Peg.Color
 }
 
@@ -22,6 +26,10 @@ extension PegRecord: Codable, FetchableRecord, MutablePersistableRecord {
         static let position = Column(CodingKeys.position)
         static let rotation = Column(CodingKeys.rotation)
         static let size = Column(CodingKeys.size)
+        static let isOscillating = Column(CodingKeys.isOscillating)
+        static let minCoefficient = Column(CodingKeys.minCoefficient)
+        static let maxCoefficient = Column(CodingKeys.maxCoefficient)
+        static let frequency = Column(CodingKeys.frequency)
         static let color = Column(CodingKeys.color)
     }
 

@@ -61,8 +61,9 @@ final class EntityFactory {
     }
 
     @discardableResult
-    func createPeg(position: CGPoint, imageName: String, rotation: CGFloat = 0.0,
-                   size: CGSize = Peg.defaultSize) -> Entity {
+    func createPeg(position: CGPoint, imageName: String, rotation: CGFloat = 0.0, size: CGSize = Peg.defaultSize,
+                   isOscillating: Bool = false, minCoefficient: CGFloat = -1.0, maxCoefficient: CGFloat = 1.0,
+                   frequency: CGFloat = 0.4) -> Entity {
         let entity = Entity()
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .circle,
                                                                              size: size,
@@ -82,11 +83,26 @@ final class EntityFactory {
         entityManager.addComponent(LightComponent(), to: entity)
         entityManager.addComponent(RemoveComponent(), to: entity)
 
+        if isOscillating == true {
+            let startPoint = (position + CGVector(dx: minCoefficient * size.width, dy: 0))
+                .rotate(around: position, by: rotation)
+            let endPoint = (position + CGVector(dx: maxCoefficient * size.width, dy: 0))
+                .rotate(around: position, by: rotation)
+
+            entityManager.addComponent(OscillateComponent(position: position,
+                                                          startPoint: startPoint,
+                                                          endPoint: endPoint,
+                                                          frequency: frequency),
+                                       to: entity)
+        }
+
         return entity
     }
 
     @discardableResult
-    func createBlock(position: CGPoint, rotation: CGFloat = 0.0, size: CGSize = Block.defaultSize) -> Entity {
+    func createBlock(position: CGPoint, rotation: CGFloat = 0.0, size: CGSize = Block.defaultSize,
+                     isOscillating: Bool = false, minCoefficient: CGFloat = -1.0, maxCoefficient: CGFloat = 1.0,
+                     frequency: CGFloat = 0.4) -> Entity {
         let entity = Entity()
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .rectangle,
                                                                              size: size,
@@ -102,6 +118,19 @@ final class EntityFactory {
                                                    rotation: rotation),
                                    to: entity)
         entityManager.addComponent(RemoveComponent(), to: entity)
+
+        if isOscillating == true {
+            let startPoint = (position + CGVector(dx: minCoefficient * size.width, dy: 0))
+                .rotate(around: position, by: rotation)
+            let endPoint = (position + CGVector(dx: maxCoefficient * size.width, dy: 0))
+                .rotate(around: position, by: rotation)
+
+            entityManager.addComponent(OscillateComponent(position: position,
+                                                          startPoint: startPoint,
+                                                          endPoint: endPoint,
+                                                          frequency: frequency),
+                                       to: entity)
+        }
 
         return entity
     }

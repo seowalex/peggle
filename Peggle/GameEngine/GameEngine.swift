@@ -89,13 +89,24 @@ final class GameEngine {
 
         for element in elements.filter({ element in !greenPegs.contains { $0 === element } }) {
             let position = element.position.applying(CGAffineTransform(translationX: 0, y: 0.3))
-            let rotation = element.rotation
-            let size = element.size
 
             if let peg = element as? Peg {
-                entityFactory.createPeg(position: position, imageName: peg.imageName, rotation: rotation, size: size)
+                entityFactory.createPeg(position: position,
+                                        imageName: peg.imageName,
+                                        rotation: element.rotation,
+                                        size: element.size,
+                                        isOscillating: element.isOscillating,
+                                        minCoefficient: element.minCoefficient,
+                                        maxCoefficient: element.maxCoefficient,
+                                        frequency: element.frequency)
             } else if element is Block {
-                entityFactory.createBlock(position: position, rotation: rotation, size: size)
+                entityFactory.createBlock(position: position,
+                                          rotation: element.rotation,
+                                          size: element.size,
+                                          isOscillating: element.isOscillating,
+                                          minCoefficient: element.minCoefficient,
+                                          maxCoefficient: element.maxCoefficient,
+                                          frequency: element.frequency)
             }
         }
 
@@ -104,7 +115,11 @@ final class GameEngine {
                                                                                                       y: 0.3)),
                                                     imageName: "peg-green",
                                                     rotation: peg.rotation,
-                                                    size: peg.size)
+                                                    size: peg.size,
+                                                    isOscillating: peg.isOscillating,
+                                                    minCoefficient: peg.minCoefficient,
+                                                    maxCoefficient: peg.maxCoefficient,
+                                                    frequency: peg.frequency)
             entityManager.addComponent(PowerComponent(power: .spaceBlast), to: pegEntity)
         }
     }

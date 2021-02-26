@@ -27,6 +27,7 @@ struct AppDatabase {
         }
         // swiftlint:enable empty_string
 
+        // swiftlint:disable closure_body_length
         migrator.registerMigration("CreatePeg") { db in
             try db.create(table: "peg") { t in
                 t.autoIncrementedPrimaryKey("id")
@@ -40,6 +41,14 @@ struct AppDatabase {
                     .notNull()
                     .check { -Double.pi < $0 && $0 <= Double.pi }
                 t.column("size", .text)
+                    .notNull()
+                t.column("isOscillating", .boolean)
+                    .notNull()
+                t.column("minCoefficient", .double)
+                    .notNull()
+                t.column("maxCoefficient", .double)
+                    .notNull()
+                t.column("frequency", .double)
                     .notNull()
                 t.column("color", .text)
                     .notNull()
@@ -61,8 +70,17 @@ struct AppDatabase {
                     .check { -Double.pi < $0 && $0 <= Double.pi }
                 t.column("size", .text)
                     .notNull()
+                t.column("isOscillating", .boolean)
+                    .notNull()
+                t.column("minCoefficient", .double)
+                    .notNull()
+                t.column("maxCoefficient", .double)
+                    .notNull()
+                t.column("frequency", .double)
+                    .notNull()
             }
         }
+        // swiftlint:enable closure_body_length
 
         return migrator
     }
