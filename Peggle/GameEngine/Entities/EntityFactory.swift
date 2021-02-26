@@ -107,11 +107,11 @@ final class EntityFactory {
     }
 
     @discardableResult
-    func createBucket(position: CGPoint, startPoint: CGPoint, endPoint: CGPoint, frequency: CGFloat) -> Entity {
+    func createBucket(position: CGPoint, startVector: CGVector, endVector: CGVector, frequency: CGFloat) -> Entity {
         let entity = Entity()
         entityManager.addComponent(OscillateComponent(position: position,
-                                                      startPoint: startPoint,
-                                                      endPoint: endPoint,
+                                                      startVector: startVector,
+                                                      endVector: endVector,
                                                       frequency: frequency),
                                    to: entity)
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .rectangle,

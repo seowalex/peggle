@@ -81,8 +81,8 @@ final class GameEngine {
 
         entityFactory.createCannon(position: CGPoint(x: 0.5, y: 0.07))
         bucketEntity = entityFactory.createBucket(position: CGPoint(x: 0.5, y: 1.37),
-                                                  startPoint: CGPoint(x: 0.12, y: 1.37),
-                                                  endPoint: CGPoint(x: 0.88, y: 1.37),
+                                                  startVector: CGVector(dx: -0.38, dy: 0),
+                                                  endVector: CGVector(dx: 0.38, dy: 0),
                                                   frequency: 0.4)
 
         let greenPegs = elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.shuffled().prefix(2)
