@@ -15,8 +15,11 @@ final class ClearSystem: System {
                                                             repeats: false) { [self] _ in
                     let entities = entityManager.getEntities(for: RemoveComponent.self)
                     let position = physicsComponent.physicsBody.position
+
                     var minDistance = CGFloat.infinity
                     var minEntity: Entity?
+                    var minDistanceBelow = CGFloat.infinity
+                    var minEntityBelow: Entity?
 
                     for entity in entities {
                         guard let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity)
@@ -26,14 +29,21 @@ final class ClearSystem: System {
 
                         let distance = position.distance(to: physicsComponent.physicsBody.position)
 
-                        if distance < minDistance && physicsComponent.physicsBody.position.y > position.y {
+                        if distance < minDistance {
                             minDistance = distance
                             minEntity = entity
                         }
+
+                        if distance < minDistanceBelow && physicsComponent.physicsBody.position.y > position.y {
+                            minDistanceBelow = distance
+                            minEntityBelow = entity
+                        }
                     }
 
+                    // If there are entities below the ball, pick the nearest one
+                    // Otherwise, just pick the nearest entity
                     if let entity = minEntity {
-                        clearNearestPeg(entity: entity, body: physicsComponent.physicsBody)
+                        clearNearestPeg(entity: minEntityBelow ?? entity, body: physicsComponent.physicsBody)
                     }
                 }
             }
