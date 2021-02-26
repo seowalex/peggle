@@ -45,15 +45,22 @@ class PhysicsBodyTests: XCTestCase {
                                rotation: CGFloat.pi / 4)
         let boundingBox = CGRect(x: 1 - sqrt(2), y: 1 - sqrt(2), width: 2 * sqrt(2), height: 2 * sqrt(2))
 
-        XCTAssertEqual(Float(body.boundingBox.minX), Float(boundingBox.minX))
-        XCTAssertEqual(Float(body.boundingBox.maxX), Float(boundingBox.maxX))
-        XCTAssertEqual(Float(body.boundingBox.minY), Float(boundingBox.minY))
-        XCTAssertEqual(Float(body.boundingBox.maxY), Float(boundingBox.maxY))
+        XCTAssertEqual(body.boundingBox.minX, boundingBox.minX, accuracy: 0.000_000_000_000_001)
+        XCTAssertEqual(body.boundingBox.maxX, boundingBox.maxX, accuracy: 0.000_000_000_000_001)
+        XCTAssertEqual(body.boundingBox.minY, boundingBox.minY, accuracy: 0.000_000_000_000_001)
+        XCTAssertEqual(body.boundingBox.maxY, boundingBox.maxY, accuracy: 0.000_000_000_000_001)
     }
 
     func testBoundingBox_circle() {
         let size = CGSize(width: 2, height: 2)
         let body = PhysicsBody(shape: .circle, size: size, position: CGPoint(x: 1, y: 1))
+
+        XCTAssertEqual(body.boundingBox, CGRect(origin: .zero, size: size))
+    }
+
+    func testBoundingBox_rotatedCircle() {
+        let size = CGSize(width: 2, height: 2)
+        let body = PhysicsBody(shape: .circle, size: size, position: CGPoint(x: 1, y: 1), rotation: CGFloat.pi / 4)
 
         XCTAssertEqual(body.boundingBox, CGRect(origin: .zero, size: size))
     }
@@ -76,8 +83,14 @@ class PhysicsBodyTests: XCTestCase {
                                 size: size,
                                 position: CGPoint(x: sqrt(2), y: sqrt(2)),
                                 rotation: CGFloat.pi / 4)
+        let body3 = PhysicsBody(shape: .rectangle,
+                                size: size,
+                                position: CGPoint(x: -sqrt(2), y: sqrt(2)),
+                                rotation: CGFloat.pi / 4)
 
         XCTAssertFalse(body1.isColliding(with: body2))
+        XCTAssertFalse(body1.isColliding(with: body3))
+        XCTAssertFalse(body2.isColliding(with: body3))
     }
 
     func testIsColliding_collidingRectangle() {
@@ -94,9 +107,18 @@ class PhysicsBodyTests: XCTestCase {
     func testIsColliding_collidingRotatedRectangle() {
         let size = CGSize(width: 2, height: 2)
         let body1 = PhysicsBody(shape: .rectangle, size: size, position: .zero, rotation: CGFloat.pi / 4)
-        let body2 = PhysicsBody(shape: .rectangle, size: size, position: CGPoint(x: 2, y: 0), rotation: CGFloat.pi / 4)
+        let body2 = PhysicsBody(shape: .rectangle,
+                                size: size,
+                                position: CGPoint(x: sqrt(2), y: 0),
+                                rotation: CGFloat.pi / 4)
+        let body3 = PhysicsBody(shape: .rectangle,
+                                size: size,
+                                position: CGPoint(x: 0, y: sqrt(2)),
+                                rotation: CGFloat.pi / 4)
 
         XCTAssertTrue(body1.isColliding(with: body2))
+        XCTAssertTrue(body1.isColliding(with: body3))
+        XCTAssertTrue(body2.isColliding(with: body3))
     }
 
     func testIsColliding_notCollidingCircle() {
@@ -111,6 +133,22 @@ class PhysicsBodyTests: XCTestCase {
         let size = CGSize(width: 2, height: 2)
         let body1 = PhysicsBody(shape: .circle, size: size, position: .zero)
         let body2 = PhysicsBody(shape: .circle, size: size, position: CGPoint(x: 1, y: 1))
+
+        XCTAssertTrue(body1.isColliding(with: body2))
+    }
+
+    func testIsColliding_notCollidingCircleRectangle() {
+        let size = CGSize(width: 2, height: 2)
+        let body1 = PhysicsBody(shape: .rectangle, size: size, position: .zero, rotation: CGFloat.pi / 4)
+        let body2 = PhysicsBody(shape: .circle, size: size, position: CGPoint(x: sqrt(2), y: sqrt(2)))
+
+        XCTAssertFalse(body1.isColliding(with: body2))
+    }
+
+    func testIsColliding_collidingCircleRectangle() {
+        let size = CGSize(width: 2, height: 2)
+        let body1 = PhysicsBody(shape: .rectangle, size: size, position: .zero)
+        let body2 = PhysicsBody(shape: .circle, size: size, position: CGPoint(x: sqrt(2), y: sqrt(2)))
 
         XCTAssertTrue(body1.isColliding(with: body2))
     }

@@ -1,6 +1,8 @@
 import CoreGraphics
 
 class Element {
+    static let minimumSize = CGSize(width: 0.04, height: 0.04)
+
     var position: CGPoint {
         didSet {
             physicsBody.position = position
@@ -13,7 +15,8 @@ class Element {
     }
     var size: CGSize {
         didSet {
-            size = CGSize(width: max(size.width, 0.04), height: max(size.height, 0.04))
+            size = CGSize(width: max(size.width, Element.minimumSize.width),
+                          height: max(size.height, Element.minimumSize.height))
             physicsBody.size = size
         }
     }
