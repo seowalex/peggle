@@ -54,10 +54,6 @@ struct LevelEditorView: View {
                     ElementView(element: element, frame: frame)
                 }
 
-                if let state = dragState {
-                    PlaceholderView(state: state, frame: frame)
-                }
-
                 if let element = viewModel.selectedElement {
                     ElementTransformView(element: element, frame: frame)
                 }
@@ -98,24 +94,13 @@ struct LevelEditorView: View {
             )
     }
 
-    private func PlaceholderView(state: LevelEditorViewModel.DragState, frame: CGRect) -> some View {
-        let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
-
-        return Image(state.element.imageName)
-            .resizable()
-            .rotationEffect(.radians(Double(state.rotation)))
-            .frame(width: state.size.applying(denormalize).width,
-                   height: state.size.applying(denormalize).height)
-            .position(state.position.applying(denormalize))
-            .colorMultiply(state.isValid ? .white : .gray)
-    }
-
     private func ElementTransformView(element: Element, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
 
         let position = dragState?.position ?? element.position
         let size = dragState?.size ?? element.size
         let rotation = dragState?.rotation ?? element.rotation
+        let isValid = dragState?.isValid ?? true
 
         return ZStack {
             Rectangle()
@@ -125,16 +110,25 @@ struct LevelEditorView: View {
                        height: size.applying(denormalize).height)
                 .position(position.applying(denormalize))
 
+            if element.isOscillating == true {
+                OscillateHandleView(element: element, frame: frame, direction: .left)
+                OscillateHandleView(element: element, frame: frame, direction: .right)
+            }
+
+            Image(element.imageName)
+                .resizable()
+                .rotationEffect(.radians(Double(rotation)))
+                .frame(width: size.applying(denormalize).width,
+                       height: size.applying(denormalize).height)
+                .position(position.applying(denormalize))
+                .colorMultiply(isValid ? .white : .gray)
+                .allowsHitTesting(false)
+
             ResizeHandleView(element: element, frame: frame, direction: .top)
             ResizeHandleView(element: element, frame: frame, direction: .bottom)
             ResizeHandleView(element: element, frame: frame, direction: .left)
             ResizeHandleView(element: element, frame: frame, direction: .right)
             RotateHandleView(element: element, frame: frame)
-
-            if element.isOscillating == true {
-                OscillateHandleView(element: element, frame: frame, direction: .left)
-                OscillateHandleView(element: element, frame: frame, direction: .right)
-            }
         }
     }
 
