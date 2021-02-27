@@ -405,17 +405,37 @@ struct LevelEditorView: View {
     }
 
     private func PaletteButtonView(selection: LevelEditorViewModel.PaletteSelection, imageName: String) -> some View {
-        Button(action: {
+        var count = ""
+
+        switch selection {
+        case .addPeg(.blue):
+            count = String(viewModel.elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.count)
+        case .addPeg(.orange):
+            count = String(viewModel.elements.compactMap { $0 as? Peg }.filter { $0.color == .orange }.count)
+        case .addBlock:
+            count = String(viewModel.elements.compactMap { $0 as? Block }.count)
+        case .delete:
+            break
+        }
+
+        return Button(action: {
             if case .delete = selection {
                 viewModel.selectedElement = nil
             }
 
             viewModel.paletteSelection = selection
         }) {
-            Image(imageName)
-                .resizable()
-                .frame(width: 100, height: 100)
-                .opacity(viewModel.paletteSelection == selection ? 1 : 0.4)
+            ZStack {
+                Image(imageName)
+                    .resizable()
+                    .frame(width: 100, height: 100)
+
+                Text(count)
+                    .font(.system(size: 36, weight: .black))
+                    .foregroundColor(.white)
+                    .shadow(color: .black, radius: 1)
+            }
+            .opacity(viewModel.paletteSelection == selection ? 1 : 0.4)
         }
     }
 

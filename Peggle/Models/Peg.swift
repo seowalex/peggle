@@ -11,10 +11,6 @@ final class Peg: Element {
             return "peg-blue"
         case .orange:
             return "peg-orange"
-        case .green:
-            return "peg-green"
-        case .purple:
-            return "peg-purple"
         }
     }
 
@@ -36,6 +32,6 @@ final class Peg: Element {
 
 extension Peg {
     enum Color: String, Codable, CaseIterable {
-        case blue, orange, green, purple
+        case blue, orange
     }
 }

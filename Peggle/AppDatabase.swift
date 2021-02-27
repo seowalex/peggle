@@ -255,11 +255,11 @@ extension AppDatabase {
         }
 
         var bodies: [PhysicsBody] = []
-        let numOrange = 25
-        let numBlue = 45
-        var numPegs = numOrange + numBlue
-        let colors = (Array(repeating: Peg.Color.orange, count: numOrange)
-                        + Array(repeating: Peg.Color.blue, count: numBlue)).shuffled()
+        let orangePegCount = 25
+        let bluePegCount = 45
+        var pegCount = orangePegCount + bluePegCount
+        let colors = (Array(repeating: Peg.Color.orange, count: orangePegCount)
+                        + Array(repeating: Peg.Color.blue, count: bluePegCount)).shuffled()
 
         for i in 0..<2 {
             for j in 0..<2 {
@@ -269,7 +269,7 @@ extension AppDatabase {
             }
         }
 
-        while numPegs > 0 {
+        while pegCount > 0 {
             let body = PhysicsBody(shape: .circle,
                                    size: CGSize(width: 0.08, height: 0.08),
                                    position: CGPoint(x: .random(in: 0.06...0.94), y: .random(in: 0.06...0.94)))
@@ -279,7 +279,7 @@ extension AppDatabase {
             }
 
             bodies.append(body)
-            numPegs -= 1
+            pegCount -= 1
         }
 
         for i in 0..<2 {
