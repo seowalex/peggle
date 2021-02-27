@@ -1,5 +1,6 @@
 import SwiftUI
 
+// swiftlint:disable type_body_length
 struct LevelEditorView: View {
     @ObservedObject var viewModel: LevelEditorViewModel
 
@@ -76,12 +77,12 @@ struct LevelEditorView: View {
         }
     }
 
-    // TODO: Fix contentShape problem
     private func ElementView(element: Element, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
 
         return Image(element.imageName)
             .resizable()
+            .contentShape(element is Peg ? AnyShape(Circle()) : AnyShape(Rectangle()))
             .opacity(dragState?.element === element ? 0.4 : 1)
             .rotationEffect(.radians(Double(element.rotation)))
             .frame(width: element.size.applying(denormalize).width, height: element.size.applying(denormalize).height)

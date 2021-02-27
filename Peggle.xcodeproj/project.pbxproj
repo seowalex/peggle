@@ -19,6 +19,7 @@
 		0E152C2125EA4F300098E288 /* LevelSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C2025EA4F300098E288 /* LevelSelectView.swift */; };
 		0E152C2525EA4F560098E288 /* LevelSelectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C2425EA4F560098E288 /* LevelSelectViewModel.swift */; };
 		0E152C2D25EA62EB0098E288 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C2C25EA62EB0098E288 /* Level.swift */; };
+		0E152C3325EA956E0098E288 /* AnyShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C3225EA956E0098E288 /* AnyShape.swift */; };
 		0E18E20725D627C400A2B74A /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E20625D627C400A2B74A /* Component.swift */; };
 		0E18E21125D628F600A2B74A /* RenderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E21025D628F600A2B74A /* RenderComponent.swift */; };
 		0E18E21525D6296600A2B74A /* PhysicsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E21425D6296600A2B74A /* PhysicsComponent.swift */; };
@@ -96,6 +97,7 @@
 		0E152C2025EA4F300098E288 /* LevelSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectView.swift; sourceTree = "<group>"; };
 		0E152C2425EA4F560098E288 /* LevelSelectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectViewModel.swift; sourceTree = "<group>"; };
 		0E152C2C25EA62EB0098E288 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		0E152C3225EA956E0098E288 /* AnyShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShape.swift; sourceTree = "<group>"; };
 		0E18E20625D627C400A2B74A /* Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		0E18E21025D628F600A2B74A /* RenderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderComponent.swift; sourceTree = "<group>"; };
 		0E18E21425D6296600A2B74A /* PhysicsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsComponent.swift; sourceTree = "<group>"; };
@@ -318,6 +320,7 @@
 		0E85318225C3C2B2008B012D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				0E152C3225EA956E0098E288 /* AnyShape.swift */,
 				0EE69DD225D17A1000BD142A /* CGAffineTransform+Extensions.swift */,
 				0E85317725C30034008B012D /* CGPoint+Extensions.swift */,
 				0EE69DCE25D14B6A00BD142A /* CGRect+Extensions.swift */,
@@ -511,6 +514,7 @@
 				0E18E23E25D6412200A2B74A /* EntityManager.swift in Sources */,
 				0E18E21525D6296600A2B74A /* PhysicsComponent.swift in Sources */,
 				0E85317825C30034008B012D /* CGPoint+Extensions.swift in Sources */,
+				0E152C3325EA956E0098E288 /* AnyShape.swift in Sources */,
 				0E892B2825E51522005573EF /* OscillateComponent.swift in Sources */,
 				0E3BB28325E0DEBE0021A9F6 /* PhysicsSystem.swift in Sources */,
 				0E152C2125EA4F300098E288 /* LevelSelectView.swift in Sources */,
