@@ -28,8 +28,6 @@ final class OscillateSystem: System {
                 physicsComponent.physicsBody.velocity = -oscillateComponent.amplitude
                     * oscillateComponent.angularFrequency
                     * sin(oscillateComponent.angularFrequency * oscillateComponent.time + oscillateComponent.phaseShift)
-
-                print(physicsComponent.physicsBody.velocity)
             }
         }
     }
