@@ -15,7 +15,8 @@ struct LevelEditorView: View {
             MainView()
             ToolbarView()
         }
-        .navigationBarHidden(true)
+        .navigationTitle("Level Editor")
+        .navigationBarTitleDisplayMode(.inline)
         .background(
             Image("background")
                 .resizable()
@@ -28,6 +29,7 @@ struct LevelEditorView: View {
                 viewModel: viewModel.levelEditorListViewModel,
                 fetchLevel: viewModel.fetchLevel
             )
+            .accentColor(.init(red: 1, green: 0.75, blue: 0))
         }
         .alert(isPresented: $alertIsPresented) {
             Alert(title: Text(alertTitle), message: Text(alertMessage))
@@ -38,7 +40,8 @@ struct LevelEditorView: View {
         GeometryReader { geometry in
             ZStack {
                 BoardView()
-                    .frame(width: geometry.size.width, height: geometry.size.width)
+                    .frame(width: min(geometry.size.width, geometry.size.height),
+                           height: min(geometry.size.width, geometry.size.height))
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         }

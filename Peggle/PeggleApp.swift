@@ -7,9 +7,17 @@ struct PeggleApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                LevelEditorView(viewModel: LevelEditorViewModel(database: appDatabase))
+                MainMenuView(viewModel: MainMenuViewModel(database: appDatabase))
             }
             .navigationViewStyle(StackNavigationViewStyle())
+            .accentColor(.init(red: 1, green: 0.75, blue: 0))
         }
+    }
+
+    init() {
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .init(red: 1,
+                                                                                                  green: 0.75,
+                                                                                                  blue: 0,
+                                                                                                  alpha: 1)
     }
 }

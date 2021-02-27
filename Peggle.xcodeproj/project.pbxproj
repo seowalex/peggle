@@ -14,6 +14,8 @@
 		0E08492625BD19FC004CE733 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E08492525BD19FC004CE733 /* Preview Assets.xcassets */; };
 		0E08495525BD2680004CE733 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 0E08495425BD2680004CE733 /* GRDB */; };
 		0E08495E25BD2724004CE733 /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E08495D25BD2724004CE733 /* AppDatabase.swift */; };
+		0E152C1525EA32180098E288 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C1425EA32180098E288 /* MainMenuView.swift */; };
+		0E152C1925EA322B0098E288 /* MainMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C1825EA322B0098E288 /* MainMenuViewModel.swift */; };
 		0E18E20725D627C400A2B74A /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E20625D627C400A2B74A /* Component.swift */; };
 		0E18E21125D628F600A2B74A /* RenderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E21025D628F600A2B74A /* RenderComponent.swift */; };
 		0E18E21525D6296600A2B74A /* PhysicsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E21425D6296600A2B74A /* PhysicsComponent.swift */; };
@@ -86,6 +88,8 @@
 		0E08492C25BD19FD004CE733 /* PeggleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeggleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E08493225BD19FD004CE733 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0E08495D25BD2724004CE733 /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
+		0E152C1425EA32180098E288 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
+		0E152C1825EA322B0098E288 /* MainMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewModel.swift; sourceTree = "<group>"; };
 		0E18E20625D627C400A2B74A /* Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		0E18E21025D628F600A2B74A /* RenderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderComponent.swift; sourceTree = "<group>"; };
 		0E18E21425D6296600A2B74A /* PhysicsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsComponent.swift; sourceTree = "<group>"; };
@@ -218,6 +222,7 @@
 		0E08495925BD2707004CE733 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0E152C1425EA32180098E288 /* MainMenuView.swift */,
 				0E2A452425BDC56800B0DCA7 /* LevelEditorView.swift */,
 				0EA3451A25BDBFA000DD1BBB /* LevelEditorListView.swift */,
 				0EFC550C25D191EC00C053FF /* LevelPlayerView.swift */,
@@ -318,6 +323,7 @@
 		0EA3450C25BD530700DD1BBB /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				0E152C1825EA322B0098E288 /* MainMenuViewModel.swift */,
 				0E2A453F25BFEABA00B0DCA7 /* LevelEditorViewModel.swift */,
 				0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */,
 				0EFC551A25D1A9E100C053FF /* LevelPlayerViewModel.swift */,
@@ -469,6 +475,7 @@
 				0E18E23825D640F300A2B74A /* Entity.swift in Sources */,
 				0E032D3625E7A31700AB1165 /* TrajectorySystem.swift in Sources */,
 				0E892B2C25E518C7005573EF /* OscillateSystem.swift in Sources */,
+				0E152C1525EA32180098E288 /* MainMenuView.swift in Sources */,
 				0E18E22225D635EE00A2B74A /* System.swift in Sources */,
 				0E892B3825E58281005573EF /* PowerSystem.swift in Sources */,
 				0E22A94A25BD2CDC002441A5 /* LevelRecord.swift in Sources */,
@@ -497,6 +504,7 @@
 				0E3BB28325E0DEBE0021A9F6 /* PhysicsSystem.swift in Sources */,
 				0E08491F25BD19F9004CE733 /* PeggleApp.swift in Sources */,
 				0E6F771725D6B7E900E4C8B8 /* EntityFactory.swift in Sources */,
+				0E152C1925EA322B0098E288 /* MainMenuViewModel.swift in Sources */,
 				0E032D3225E7A2DE00AB1165 /* TrajectoryComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

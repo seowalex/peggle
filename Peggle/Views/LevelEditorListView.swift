@@ -78,6 +78,7 @@ struct LevelEditorListView_Previews: PreviewProvider {
                     viewModel: LevelEditorListViewModel(database: .empty()),
                     fetchLevel: { _ in }
                 )
+                .accentColor(.init(red: 1, green: 0.75, blue: 0))
             }
     }
 }

@@ -7,9 +7,9 @@ struct LevelPlayerView: View {
     var body: some View {
         VStack(spacing: 0) {
             Main()
-            ActionBar()
+//            ActionBar()
         }
-        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .background(
             Image("background")
                 .resizable()
@@ -23,8 +23,8 @@ struct LevelPlayerView: View {
         GeometryReader { geometry in
             ZStack {
                 Board()
-                    .frame(width: geometry.size.height * 0.8 / 1.4, height: geometry.size.height * 0.8)
-                    .position(x: geometry.size.width / 2, y: geometry.size.height * 0.6)
+                    .frame(width: geometry.size.height / 1.4, height: geometry.size.height)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         }
