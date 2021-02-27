@@ -262,11 +262,9 @@ extension AppDatabase {
                         + Array(repeating: Peg.Color.blue, count: bluePegCount)).shuffled()
 
         for i in 0..<2 {
-            for j in 0..<2 {
-                bodies.append(PhysicsBody(shape: .rectangle,
-                                          size: CGSize(width: 0.44, height: 0.08),
-                                          position: CGPoint(x: 0.2 + CGFloat(j) * 0.6, y: 0.3 + CGFloat(i) * 0.4)))
-            }
+            bodies.append(PhysicsBody(shape: .rectangle,
+                                      size: CGSize(width: 1, height: 0.08),
+                                      position: CGPoint(x: 0.5, y: 0.3 + CGFloat(i) * 0.4)))
         }
 
         while pegCount > 0 {
@@ -283,17 +281,15 @@ extension AppDatabase {
         }
 
         for i in 0..<2 {
-            for j in 0..<2 {
-                var block = BlockRecord(levelId: levelId,
-                                        position: CGPoint(x: CGFloat(j), y: 0.3 + CGFloat(i) * 0.4),
-                                        size: CGSize(width: 0.4, height: 0.04),
-                                        isOscillating: true,
-                                        minCoefficient: pow(-1, CGFloat(1 - i)) * 0.5,
-                                        maxCoefficient: pow(-1, CGFloat(i)) * 0.5,
-                                        frequency: 0.2)
+            var block = BlockRecord(levelId: levelId,
+                                    position: CGPoint(x: 0.5, y: 0.3 + CGFloat(i) * 0.4),
+                                    size: CGSize(width: 0.6, height: 0.04),
+                                    isOscillating: true,
+                                    minCoefficient: pow(-1, CGFloat(1 - i)) / 3,
+                                    maxCoefficient: pow(-1, CGFloat(i)) / 3,
+                                    frequency: 0.2)
 
-                try block.save(db)
-            }
+            try block.save(db)
         }
 
         for (index, body) in bodies.filter({ $0.shape == .circle }).enumerated() {
