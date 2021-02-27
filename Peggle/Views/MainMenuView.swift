@@ -5,9 +5,9 @@ struct MainMenuView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            VStack(spacing: 20) {
-                Button(action: {
-
+            VStack(spacing: 32) {
+                NavigationLink(destination: LazyView {
+                    LevelSelectView(viewModel: viewModel.levelSelectViewModel)
                 }) {
                     Text("Play")
                         .font(.title)
@@ -17,7 +17,7 @@ struct MainMenuView: View {
                         .cornerRadius(6)
                 }
                 NavigationLink(destination: LazyView {
-                    LevelEditorView(viewModel: viewModel.createLevelEditorViewModel())
+                    LevelEditorView(viewModel: viewModel.levelEditorViewModel)
                 }) {
                     Text("Level Editor")
                         .font(.title)

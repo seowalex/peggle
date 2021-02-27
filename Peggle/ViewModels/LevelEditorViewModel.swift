@@ -1,8 +1,7 @@
 import SwiftUI
 
 final class LevelEditorViewModel: ObservableObject {
-    @Published var name = ""
-    @Published private(set) var elements: [Element] = []
+    @Published var level = Level()
     @Published var paletteSelection = PaletteSelection.addPeg(.blue)
     @Published var selectedElement: Element?
 
@@ -23,7 +22,7 @@ final class LevelEditorViewModel: ObservableObject {
             var isValid = true
 
             if !frame.contains(placeholderPeg.physicsBody.boundingBox)
-                || placeholderPeg.physicsBody.isColliding(with: elements.map { $0.physicsBody }) {
+                || placeholderPeg.physicsBody.isColliding(with: level.elements.map { $0.physicsBody }) {
                 isValid = false
             }
 
@@ -36,7 +35,7 @@ final class LevelEditorViewModel: ObservableObject {
             var isValid = true
 
             if !frame.contains(placeholderBlock.physicsBody.boundingBox)
-                || placeholderBlock.physicsBody.isColliding(with: elements.map { $0.physicsBody }) {
+                || placeholderBlock.physicsBody.isColliding(with: level.elements.map { $0.physicsBody }) {
                 isValid = false
             }
 
@@ -56,24 +55,24 @@ final class LevelEditorViewModel: ObservableObject {
             let placeholderPeg = Peg(position: position, color: color)
 
             if !frame.contains(placeholderPeg.physicsBody.boundingBox)
-                || placeholderPeg.physicsBody.isColliding(with: elements.map { $0.physicsBody }) {
+                || placeholderPeg.physicsBody.isColliding(with: level.elements.map { $0.physicsBody }) {
                 selectedElement = nil
                 return
             }
 
             selectedElement = placeholderPeg
-            elements.append(placeholderPeg)
+            level.elements.append(placeholderPeg)
         case .addBlock:
             let placeholderBlock = Block(position: position)
 
             if !frame.contains(placeholderBlock.physicsBody.boundingBox)
-                || placeholderBlock.physicsBody.isColliding(with: elements.map { $0.physicsBody }) {
+                || placeholderBlock.physicsBody.isColliding(with: level.elements.map { $0.physicsBody }) {
                 selectedElement = nil
                 return
             }
 
             selectedElement = placeholderBlock
-            elements.append(placeholderBlock)
+            level.elements.append(placeholderBlock)
         case .delete:
             selectedElement = nil
             return
@@ -103,7 +102,7 @@ final class LevelEditorViewModel: ObservableObject {
                                           rotation: element.rotation)
 
             if !self.frame.contains(physicsBody.boundingBox)
-                || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
+                || physicsBody.isColliding(with: level.elements.filter({ $0 !== element }).map { $0.physicsBody }) {
                 isValid = false
             }
 
@@ -119,7 +118,7 @@ final class LevelEditorViewModel: ObservableObject {
         switch (paletteSelection, value) {
         case (.delete, _):
             selectedElement = nil
-            elements.removeAll(where: { $0 === element })
+            level.elements.removeAll(where: { $0 === element })
         case (_, .first):
             selectedElement = element
             element.isOscillating.toggle()
@@ -138,7 +137,7 @@ final class LevelEditorViewModel: ObservableObject {
                                           rotation: element.rotation)
 
             if !self.frame.contains(physicsBody.boundingBox)
-                || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
+                || physicsBody.isColliding(with: level.elements.filter({ $0 !== element }).map { $0.physicsBody }) {
                 return
             }
 
@@ -168,7 +167,7 @@ final class LevelEditorViewModel: ObservableObject {
                                       rotation: element.rotation)
 
         if !frame.contains(physicsBody.boundingBox)
-            || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
+            || physicsBody.isColliding(with: level.elements.filter({ $0 !== element }).map { $0.physicsBody }) {
             isValid = false
         }
 
@@ -199,7 +198,7 @@ final class LevelEditorViewModel: ObservableObject {
                                       rotation: element.rotation)
 
         if !frame.contains(physicsBody.boundingBox)
-            || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
+            || physicsBody.isColliding(with: level.elements.filter({ $0 !== element }).map { $0.physicsBody }) {
             return
         }
 
@@ -218,7 +217,7 @@ final class LevelEditorViewModel: ObservableObject {
                                       rotation: rotation)
 
         if !frame.contains(physicsBody.boundingBox)
-            || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
+            || physicsBody.isColliding(with: level.elements.filter({ $0 !== element }).map { $0.physicsBody }) {
             isValid = false
         }
 
@@ -239,7 +238,7 @@ final class LevelEditorViewModel: ObservableObject {
                                       rotation: rotation)
 
         if !frame.contains(physicsBody.boundingBox)
-            || physicsBody.isColliding(with: elements.filter({ $0 !== element }).map { $0.physicsBody }) {
+            || physicsBody.isColliding(with: level.elements.filter({ $0 !== element }).map { $0.physicsBody }) {
             return
         }
 
@@ -285,50 +284,54 @@ final class LevelEditorViewModel: ObservableObject {
 
 extension LevelEditorViewModel {
     func saveLevel() throws {
-        name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        level.name = level.name.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        if name.isEmpty {
+        if level.name.isEmpty {
             throw ValidationError.missingName
         }
 
-        if try database.isPreloadedLevel(name: name) == true {
+        if try database.isPreloadedLevel(name: level.name) == true {
             throw ValidationError.cannotOverride
         }
 
-        var level = LevelRecord(name: name)
-        var pegs = self.elements.compactMap { $0 as? Peg }.map { PegRecord(position: $0.position,
-                                                                           rotation: $0.rotation,
-                                                                           size: $0.size,
-                                                                           isOscillating: $0.isOscillating,
-                                                                           minCoefficient: $0.minCoefficient,
-                                                                           maxCoefficient: $0.maxCoefficient,
-                                                                           frequency: $0.frequency,
-                                                                           color: $0.color)
-        }
-        var blocks = self.elements.compactMap { $0 as? Block }.map { BlockRecord(position: $0.position,
-                                                                                 rotation: $0.rotation,
-                                                                                 size: $0.size,
-                                                                                 isOscillating: $0.isOscillating,
-                                                                                 minCoefficient: $0.minCoefficient,
-                                                                                 maxCoefficient: $0.maxCoefficient,
-                                                                                 frequency: $0.frequency)
-        }
+        var levelRecord = LevelRecord(name: level.name)
+        var pegRecords = level.elements
+            .compactMap { $0 as? Peg }
+            .map { PegRecord(position: $0.position,
+                             rotation: $0.rotation,
+                             size: $0.size,
+                             isOscillating: $0.isOscillating,
+                             minCoefficient: $0.minCoefficient,
+                             maxCoefficient: $0.maxCoefficient,
+                             frequency: $0.frequency,
+                             color: $0.color)
+            }
+        var blockRecords = level.elements
+            .compactMap { $0 as? Block }
+            .map { BlockRecord(position: $0.position,
+                               rotation: $0.rotation,
+                               size: $0.size,
+                               isOscillating: $0.isOscillating,
+                               minCoefficient: $0.minCoefficient,
+                               maxCoefficient: $0.maxCoefficient,
+                               frequency: $0.frequency)
+            }
 
-        try database.saveLevel(&level, pegs: &pegs, blocks: &blocks)
+        try database.saveLevel(&levelRecord, pegs: &pegRecords, blocks: &blockRecords)
     }
 
     func fetchLevel(_ level: LevelRecord) throws {
         selectedElement = nil
 
-        name = level.name
-        elements = try database.fetchPegs(level).map { Peg(position: $0.position,
-                                                           color: $0.color,
-                                                           rotation: $0.rotation,
-                                                           size: $0.size,
-                                                           isOscillating: $0.isOscillating,
-                                                           minCoefficient: $0.minCoefficient,
-                                                           maxCoefficient: $0.maxCoefficient,
-                                                           frequency: $0.frequency)
+        self.level.name = level.name
+        self.level.elements = try database.fetchPegs(level).map { Peg(position: $0.position,
+                                                                      color: $0.color,
+                                                                      rotation: $0.rotation,
+                                                                      size: $0.size,
+                                                                      isOscillating: $0.isOscillating,
+                                                                      minCoefficient: $0.minCoefficient,
+                                                                      maxCoefficient: $0.maxCoefficient,
+                                                                      frequency: $0.frequency)
         }
             + database.fetchBlocks(level).map { Block(position: $0.position,
                                                       rotation: $0.rotation,
@@ -341,8 +344,7 @@ extension LevelEditorViewModel {
     }
 
     func reset() {
-        name = ""
-        elements.removeAll()
+        level = Level()
         selectedElement = nil
     }
 }

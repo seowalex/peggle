@@ -1,14 +1,11 @@
-import Combine
-import CoreGraphics
+import SwiftUI
 
 final class MainMenuViewModel: ObservableObject {
-    private let database: AppDatabase
+    let levelSelectViewModel: LevelSelectViewModel
+    let levelEditorViewModel: LevelEditorViewModel
 
     init(database: AppDatabase) {
-        self.database = database
-    }
-
-    func createLevelEditorViewModel() -> LevelEditorViewModel {
-        LevelEditorViewModel(database: database)
+        levelSelectViewModel = LevelSelectViewModel(database: database)
+        levelEditorViewModel = LevelEditorViewModel(database: database)
     }
 }

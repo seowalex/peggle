@@ -9,6 +9,7 @@ struct LevelPlayerView: View {
             Main()
 //            ActionBar()
         }
+        .navigationTitle(viewModel.name)
         .navigationBarTitleDisplayMode(.inline)
         .background(
             Image("background")
@@ -85,6 +86,6 @@ struct LevelPlayerView: View {
 
 struct LevelPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        LevelPlayerView(viewModel: LevelPlayerViewModel(elements: []))
+        LevelPlayerView(viewModel: LevelPlayerViewModel(level: Level()))
     }
 }

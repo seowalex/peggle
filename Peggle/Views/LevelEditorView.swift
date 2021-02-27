@@ -53,7 +53,7 @@ struct LevelEditorView: View {
             let normalize = CGAffineTransform(scaleX: 1 / frame.maxX, y: 1 / frame.maxY)
 
             ZStack {
-                ForEach(viewModel.elements, id: \.self) { element in
+                ForEach(viewModel.level.elements, id: \.self) { element in
                     ElementView(element: element, frame: frame)
                 }
 
@@ -397,10 +397,10 @@ struct LevelEditorView: View {
             Button(action: viewModel.reset) {
                 Text("Reset")
             }
-            TextField("Level Name", text: $viewModel.name)
+            TextField("Level Name", text: $viewModel.level.name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             NavigationLink(destination: LazyView {
-                LevelPlayerView(viewModel: LevelPlayerViewModel(elements: viewModel.elements))
+                LevelPlayerView(viewModel: LevelPlayerViewModel(level: viewModel.level))
             }) {
                 Text("Start")
             }
@@ -412,11 +412,11 @@ struct LevelEditorView: View {
 
         switch selection {
         case .addPeg(.blue):
-            count = String(viewModel.elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.count)
+            count = String(viewModel.level.elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.count)
         case .addPeg(.orange):
-            count = String(viewModel.elements.compactMap { $0 as? Peg }.filter { $0.color == .orange }.count)
+            count = String(viewModel.level.elements.compactMap { $0 as? Peg }.filter { $0.color == .orange }.count)
         case .addBlock:
-            count = String(viewModel.elements.compactMap { $0 as? Block }.count)
+            count = String(viewModel.level.elements.compactMap { $0 as? Block }.count)
         case .delete:
             break
         }

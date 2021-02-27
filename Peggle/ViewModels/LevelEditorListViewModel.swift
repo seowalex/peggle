@@ -1,5 +1,5 @@
 import Combine
-import Foundation
+import SwiftUI
 
 final class LevelEditorListViewModel: ObservableObject {
     @Published private(set) var levels: [LevelRecord] = []

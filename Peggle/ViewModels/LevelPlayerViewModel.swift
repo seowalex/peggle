@@ -1,15 +1,17 @@
 import Combine
-import CoreGraphics
+import SwiftUI
 
 final class LevelPlayerViewModel: ObservableObject {
+    @Published private(set) var name = ""
     @Published private(set) var components: [RenderComponent] = []
 
     private let gameEngine: GameEngine
     private let gameRenderer: GameRenderer
     private var cancellable: AnyCancellable?
 
-    init(elements: [Element]) {
-        gameEngine = GameEngine(elements: elements)
+    init(level: Level) {
+        name = level.name
+        gameEngine = GameEngine(elements: level.elements)
         gameRenderer = GameRenderer(gameEngine: gameEngine)
 
         cancellable = gameRenderer.publisher.sink { [weak self] components in
