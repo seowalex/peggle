@@ -68,6 +68,7 @@ struct LevelPlayerView: View {
             .opacity(component.opacity)
             .transition(component.transition)
             .zIndex(component.zIndex)
+            .clipped()
     }
 
     private func ActionBar() -> some View {

@@ -21,6 +21,8 @@ struct LevelSelectView: View {
                 }
             }
         }
+        .navigationTitle("Level Select")
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     private func LevelTileView(level: Level, frame: CGRect) -> some View {

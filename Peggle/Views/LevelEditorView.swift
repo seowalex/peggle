@@ -86,6 +86,7 @@ struct LevelEditorView: View {
             .rotationEffect(.radians(Double(element.rotation)))
             .frame(width: element.size.applying(denormalize).width, height: element.size.applying(denormalize).height)
             .position(element.position.applying(denormalize))
+            .clipped()
             .gesture(
                 ExclusiveGesture(LongPressGesture(), DragGesture(minimumDistance: 0))
                     .updating($dragState) { value, state, _ in
@@ -140,6 +141,7 @@ struct LevelEditorView: View {
                 FrequencyHandleView(element: element, frame: frame)
             }
         }
+        .clipped()
     }
 
     private func ResizeHandleView(element: Element, frame: CGRect,
