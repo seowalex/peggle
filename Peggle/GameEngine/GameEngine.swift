@@ -17,13 +17,13 @@ final class GameEngine {
     init(elements: [Element]) {
         entityFactory = EntityFactory(entityManager: entityManager)
         systems = [
-            PhysicsSystem(entityManager: entityManager),
+            OscillateSystem(entityManager: entityManager),
             PowerSystem(entityManager: entityManager),
             AimSystem(entityManager: entityManager),
             TrajectorySystem(entityManager: entityManager),
-            OscillateSystem(entityManager: entityManager),
             LightSystem(entityManager: entityManager),
             ClearSystem(entityManager: entityManager),
+            PhysicsSystem(entityManager: entityManager),
             RenderSystem(entityManager: entityManager)
         ]
 

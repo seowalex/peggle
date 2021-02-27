@@ -21,6 +21,10 @@ extension CGVector {
         CGVector(dx: lhs.dx / rhs, dy: lhs.dy / rhs)
     }
 
+    static prefix func - (vector: CGVector) -> CGVector {
+        CGVector(dx: -vector.dx, dy: -vector.dy)
+    }
+
     // swiftlint:disable shorthand_operator
     static func += (lhs: inout CGVector, rhs: CGVector) {
         lhs = lhs + rhs

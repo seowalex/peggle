@@ -53,10 +53,12 @@ final class PhysicsWorld {
         let dx = dynamicBody.velocity.dx
         let dy = dynamicBody.velocity.dy
         let angle = normalVector.angle()
+        let escapeVelocity = staticBody.velocity.dot(normalVector) * normalVector
 
         dynamicBody.velocity = (1 - dynamicBody.restitution)
             * CGVector(dx: -dx * cos(2 * angle) - dy * sin(2 * angle),
                        dy: -dx * sin(2 * angle) + dy * cos(2 * angle))
+            + escapeVelocity
     }
 
     func resolveStaticCollisionResolution(dynamicBody: PhysicsBody, staticBody: PhysicsBody) -> CGVector {

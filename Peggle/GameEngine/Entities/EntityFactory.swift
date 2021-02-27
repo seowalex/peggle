@@ -69,7 +69,7 @@ final class EntityFactory {
                                                                              size: size,
                                                                              position: position,
                                                                              rotation: rotation,
-                                                                             isResting: true,
+                                                                             isResting: !isOscillating,
                                                                              affectedByGravity: false,
                                                                              isDynamic: false)),
                                    to: entity)
@@ -108,7 +108,7 @@ final class EntityFactory {
                                                                              size: size,
                                                                              position: position,
                                                                              rotation: rotation,
-                                                                             isResting: true,
+                                                                             isResting: !isOscillating,
                                                                              affectedByGravity: false,
                                                                              isDynamic: false)),
                                    to: entity)
@@ -146,7 +146,6 @@ final class EntityFactory {
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .rectangle,
                                                                              size: CGSize(width: 0.2, height: 0.04),
                                                                              position: position,
-                                                                             isResting: true,
                                                                              affectedByGravity: false,
                                                                              isDynamic: false,
                                                                              affectedByCollisions: false)),
@@ -155,7 +154,6 @@ final class EntityFactory {
                                                                              size: CGSize(width: 0.02, height: 0.06),
                                                                              position: position
                                                                                 + CGVector(dx: -0.11, dy: 0.002),
-                                                                             isResting: true,
                                                                              affectedByGravity: false,
                                                                              isDynamic: false)),
                                    to: entity)
@@ -163,7 +161,6 @@ final class EntityFactory {
                                                                              size: CGSize(width: 0.02, height: 0.06),
                                                                              position: position
                                                                                 + CGVector(dx: 0.11, dy: 0.002),
-                                                                             isResting: true,
                                                                              affectedByGravity: false,
                                                                              isDynamic: false)),
                                    to: entity)
