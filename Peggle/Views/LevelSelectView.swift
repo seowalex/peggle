@@ -13,16 +13,34 @@ struct LevelSelectView: View {
         GeometryReader { geometry in
             let frame = geometry.frame(in: .local)
 
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 32) {
-                    ForEach(viewModel.levels, id: \.name) { level in
-                        LevelTileView(level: level, frame: frame)
-                    }
-                }
+            if viewModel.levels.isEmpty {
+                EmptyLevelsList()
+            } else {
+                LevelsList(frame: frame)
             }
         }
         .navigationTitle("Level Select")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func EmptyLevelsList() -> some View {
+        VStack(spacing: 10) {
+            Image(systemName: "xmark.bin")
+                .font(.system(size: 60))
+            Text("No levels found")
+        }
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+        .foregroundColor(.secondary)
+    }
+
+    private func LevelsList(frame: CGRect) -> some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 32) {
+                ForEach(viewModel.levels, id: \.name) { level in
+                    LevelTileView(level: level, frame: frame)
+                }
+            }
+        }
     }
 
     private func LevelTileView(level: Level, frame: CGRect) -> some View {
