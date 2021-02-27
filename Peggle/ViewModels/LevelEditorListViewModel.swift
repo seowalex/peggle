@@ -19,6 +19,11 @@ final class LevelEditorListViewModel: ObservableObject {
 
     func deleteLevels(at offsets: IndexSet) throws {
         let levelIDs = offsets.compactMap { levels[$0].id }
+
+        if try database.arePreloadedLevels(ids: levelIDs) == true {
+            throw ValidationError.cannotOverride
+        }
+
         try database.deleteLevels(ids: levelIDs)
     }
 
@@ -34,5 +39,25 @@ final class LevelEditorListViewModel: ObservableObject {
                 Just<[LevelRecord]>([])
             }
             .eraseToAnyPublisher()
+    }
+}
+
+extension LevelEditorListViewModel {
+    private enum ValidationError: LocalizedError {
+        case cannotOverride
+
+        var errorDescription: String? {
+            switch self {
+            case .cannotOverride:
+                return "Preloaded levels cannot be deleted"
+            }
+        }
+
+        var recoverySuggestion: String? {
+            switch self {
+            case .cannotOverride:
+                return ""
+            }
+        }
     }
 }

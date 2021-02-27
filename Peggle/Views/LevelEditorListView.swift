@@ -61,8 +61,15 @@ struct LevelEditorListView: View {
                 do {
                     try viewModel.deleteLevels(at: offsets)
                 } catch {
-                    alertTitle = "Database error"
-                    alertMessage = "\(error)"
+                    if let title = (error as? LocalizedError)?.errorDescription,
+                       let message = (error as? LocalizedError)?.recoverySuggestion {
+                        alertTitle = title
+                        alertMessage = message
+                    } else {
+                        alertTitle = "Database error"
+                        alertMessage = "\(error)"
+                    }
+
                     alertIsPresented = true
                 }
             }
