@@ -3,7 +3,7 @@ import CoreGraphics
 final class Peg: Element {
     static let defaultSize = CGSize(width: 0.04, height: 0.04)
 
-    let color: Color
+    var color: Color
 
     override var imageName: String {
         switch color {

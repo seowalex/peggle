@@ -32,7 +32,8 @@ final class GameEngine {
             TrajectorySystem(entityManager: entityManager),
             ScoreSystem(entityManager: entityManager),
             ClearSystem(entityManager: entityManager),
-            PhysicsSystem(entityManager: entityManager)
+            PhysicsSystem(entityManager: entityManager),
+            RenderSystem(entityManager: entityManager)
         ]
 
         gameEntity = Entity()
@@ -99,13 +100,21 @@ final class GameEngine {
                                                   frequency: 0.2)
 
         let greenPegs = elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.shuffled().prefix(2)
+        let remainingElements = elements.filter { element in !greenPegs.contains { $0 === element } }
+        let purplePeg = remainingElements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.randomElement()
 
-        for element in elements.filter({ element in !greenPegs.contains { $0 === element } }) {
+        for element in remainingElements {
             let position = element.position.applying(CGAffineTransform(translationX: 0, y: 0.3))
 
             if let peg = element as? Peg {
+                var color = peg.color
+
+                if let purplePeg = purplePeg, element === purplePeg {
+                    color = .purple
+                }
+
                 entityFactory.createPeg(position: position,
-                                        color: peg.color,
+                                        color: color,
                                         imageName: peg.imageName,
                                         rotation: element.rotation,
                                         size: element.size,

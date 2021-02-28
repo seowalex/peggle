@@ -138,6 +138,14 @@ final class ClearSystem: System {
         for powerComponent in powerComponents.filter({ $0.isActivated == true }) {
             powerComponent.turnsRemaining -= 1
         }
+
+        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
+
+        for scoreComponent in scoreComponents.filter({ $0.color == .purple }) {
+            scoreComponent.color = .blue
+        }
+
+        scoreComponents.filter { $0.color == .blue }.randomElement()?.color = .purple
     }
 
     func update(deltaTime seconds: CGFloat) {
