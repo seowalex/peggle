@@ -111,6 +111,21 @@ final class ClearSystem: System {
 
         entityManager.removeEntity(entity)
 
+        let powerComponents = entityManager.getComponents(PowerComponent.self)
+
+        for powerComponent in powerComponents.filter({ $0.isActivated == true }) {
+            powerComponent.turnsRemaining -= 1
+        }
+
+        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
+        let orangePegsCount = scoreComponents.filter { $0.color == .orange && $0.isScored == false }.count
+
+        for scoreComponent in scoreComponents.filter({ $0.color == .purple }) {
+            scoreComponent.color = .blue
+        }
+
+        scoreComponents.filter { $0.color == .blue }.randomElement()?.color = .purple
+
         let stateComponents = entityManager.getComponents(StateComponent.self)
         let score = baseScore * pegsCount
 
@@ -130,22 +145,10 @@ final class ClearSystem: System {
                 stateComponent.ballsCount += 1
             }
 
-            stateComponent.ballsCount -= 1
+            if stateComponent.ballsCount <= 0 || scoreComponents.isEmpty {
+                stateComponent.status = .ended(orangePegsCount == 0 ? .won : .lost)
+            }
         }
-
-        let powerComponents = entityManager.getComponents(PowerComponent.self)
-
-        for powerComponent in powerComponents.filter({ $0.isActivated == true }) {
-            powerComponent.turnsRemaining -= 1
-        }
-
-        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
-
-        for scoreComponent in scoreComponents.filter({ $0.color == .purple }) {
-            scoreComponent.color = .blue
-        }
-
-        scoreComponents.filter { $0.color == .blue }.randomElement()?.color = .purple
     }
 
     func update(deltaTime seconds: CGFloat) {
