@@ -35,6 +35,15 @@ struct LevelSelectView: View {
                 }
             }
         }
+        .background(
+            Image("background")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.2)
+                .blur(radius: 10)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .clipped()
+        )
     }
 
     private func EmptyLevelsList() -> some View {
