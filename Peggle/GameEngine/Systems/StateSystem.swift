@@ -8,14 +8,14 @@ final class StateSystem: System {
     }
 
     func update(deltaTime seconds: CGFloat) {
-        let orangePegCount = entityManager.getComponents(ScoreComponent.self)
-            .filter { $0.color == .orange && $0.isScored == false }.count
+        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
+        let orangePegCount = scoreComponents.filter { $0.color == .orange && $0.isScored == false }.count
         let stateComponents = entityManager.getComponents(StateComponent.self)
 
         for stateComponent in stateComponents {
             stateComponent.orangePegsRemainingCount = orangePegCount
 
-            if stateComponent.ballsCount <= 0 {
+            if stateComponent.ballsCount <= 0 || scoreComponents.isEmpty {
                 stateComponent.status = .ended(orangePegCount == 0 ? .won : .lost)
             }
         }
