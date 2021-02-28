@@ -80,7 +80,12 @@ struct LevelPlayerView: View {
 
     private func GameBar() -> some View {
         HStack(spacing: 16) {
-            Text("Score: \(viewModel.gameState.score)")
+            VStack(alignment: .leading) {
+                Text("Score")
+                Text("\(viewModel.gameState.score)")
+                    .font(.system(size: 60))
+                    .fontWeight(.thin)
+            }
             Spacer()
             VStack {
                 HStack {
