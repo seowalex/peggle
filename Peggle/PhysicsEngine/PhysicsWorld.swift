@@ -135,12 +135,13 @@ final class PhysicsWorld {
 
             for otherBody in bodies {
                 guard body.isColliding(with: otherBody)
-                        && [body, otherBody].allSatisfy({ $0.affectedByCollisions == true })
-                        && otherBody.isDynamic == false else {
+                        && [body, otherBody].allSatisfy({ $0.affectedByCollisions == true }) else {
                     continue
                 }
 
-                resolveStaticCollision(dynamicBody: body, staticBody: otherBody)
+                if otherBody.isDynamic == false {
+                    resolveStaticCollision(dynamicBody: body, staticBody: otherBody)
+                }
 
                 collisions += 1
             }
