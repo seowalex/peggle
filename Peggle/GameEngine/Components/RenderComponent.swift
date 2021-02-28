@@ -6,21 +6,21 @@ final class RenderComponent: Component {
     var size: CGSize
 
     var state: State
-    var imageName: String
-    let imageNames: [State: String]
+    var imageName: String {
+        imageNames[state] ?? ""
+    }
+    var imageNames: [State: String]
     var opacity: Double
     let transition: AnyTransition
     let zIndex: Double
 
-    private init(position: CGPoint, size: CGSize, imageName: String, imageNames: [State: String],
-                 rotation: CGFloat = 0.0, state: State = .base, opacity: Double = 1.0,
-                 transition: AnyTransition = .identity, zIndex: Double = 0) {
+    init(position: CGPoint, size: CGSize, imageNames: [State: String], rotation: CGFloat = 0.0, state: State = .base,
+         opacity: Double = 1.0, transition: AnyTransition = .identity, zIndex: Double = 0) {
         self.position = position
         self.rotation = rotation
         self.size = size
 
         self.state = state
-        self.imageName = imageName
         self.imageNames = imageNames
         self.opacity = opacity
         self.transition = transition
@@ -31,23 +31,8 @@ final class RenderComponent: Component {
                      transition: AnyTransition = .identity, zIndex: Double = 0) {
         self.init(position: position,
                   size: size,
-                  imageName: imageName,
                   imageNames: [.base: imageName],
                   rotation: rotation,
-                  opacity: opacity,
-                  transition: transition,
-                  zIndex: zIndex)
-    }
-
-    convenience init(position: CGPoint, size: CGSize, imageNames: [State: String], rotation: CGFloat = 0.0,
-                     state: State = .base, opacity: Double = 1.0, transition: AnyTransition = .identity,
-                     zIndex: Double = 0) {
-        self.init(position: position,
-                  size: size,
-                  imageName: imageNames[state] ?? "",
-                  imageNames: imageNames,
-                  rotation: rotation,
-                  state: state,
                   opacity: opacity,
                   transition: transition,
                   zIndex: zIndex)

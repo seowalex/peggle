@@ -8,9 +8,15 @@ final class ScoreSystem: System {
     }
 
     func update(deltaTime seconds: CGFloat) {
-        let orangePegCount = entityManager.getComponents(ScoreComponent.self)
-            .filter { $0.color == .orange && $0.isScored == false }.count
+        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
+        let orangePegsCount = scoreComponents.filter { $0.color == .orange && $0.isScored == false }.count
+        let purplePegsCount = scoreComponents.filter { $0.color == .purple }.count
         let entities = entityManager.getEntities(for: ScoreComponent.self)
+
+        // Change random blue peg to purple
+        if purplePegsCount == 0 {
+            scoreComponents.filter { $0.color == .blue }.randomElement()?.color = .purple
+        }
 
         for entity in entities {
             guard let scoreComponent = entityManager.getComponent(ScoreComponent.self, for: entity),
@@ -18,10 +24,20 @@ final class ScoreSystem: System {
                 continue
             }
 
+            // Update peg color
+            switch scoreComponent.color {
+            case .blue:
+                renderComponent.imageNames = [.base: "peg-blue", .lit: "peg-blue-glow"]
+            case .purple:
+                renderComponent.imageNames = [.base: "peg-purple", .lit: "peg-purple-glow"]
+            default:
+                break
+            }
+
             if scoreComponent.isScored == true {
                 renderComponent.state.formUnion(.lit)
             } else {
-                switch orangePegCount {
+                switch orangePegsCount {
                 case 0:
                     scoreComponent.multiplier = 100
                 case 1...3:

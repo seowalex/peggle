@@ -32,8 +32,7 @@ final class GameEngine {
             TrajectorySystem(entityManager: entityManager),
             ScoreSystem(entityManager: entityManager),
             ClearSystem(entityManager: entityManager),
-            PhysicsSystem(entityManager: entityManager),
-            RenderSystem(entityManager: entityManager)
+            PhysicsSystem(entityManager: entityManager)
         ]
 
         gameEntity = Entity()

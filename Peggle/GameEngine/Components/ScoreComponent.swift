@@ -1,7 +1,7 @@
 import CoreGraphics
 
 final class ScoreComponent: Component {
-    let color: Peg.Color
+    var color: Peg.Color
     var score: Int {
         baseScore * multiplier
     }
