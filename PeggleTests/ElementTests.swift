@@ -7,7 +7,14 @@ class ElementTests: XCTestCase {
         let position = CGPoint.zero
         let physicsBody = PhysicsBody(shape: .rectangle, size: size, position: position)
 
-        let element = Element(position: position, rotation: 0.0, size: size, physicsBody: physicsBody)
+        let element = Element(position: position,
+                              rotation: 0.0,
+                              size: size,
+                              isOscillating: false,
+                              minCoefficient: -1,
+                              maxCoefficient: 1,
+                              frequency: 0.2,
+                              physicsBody: physicsBody)
 
         XCTAssertEqual(element.position, .zero)
         XCTAssertEqual(element.rotation, 0)
@@ -20,7 +27,14 @@ class ElementTests: XCTestCase {
         let position = CGPoint.zero
         let physicsBody = PhysicsBody(shape: .rectangle, size: size, position: position)
 
-        let element = Element(position: position, rotation: 0.0, size: size, physicsBody: physicsBody)
+        let element = Element(position: position,
+                              rotation: 0.0,
+                              size: size,
+                              isOscillating: false,
+                              minCoefficient: -1,
+                              maxCoefficient: 1,
+                              frequency: 0.2,
+                              physicsBody: physicsBody)
 
         element.position = CGPoint(x: 1, y: 1)
 
@@ -32,7 +46,14 @@ class ElementTests: XCTestCase {
         let position = CGPoint.zero
         let physicsBody = PhysicsBody(shape: .rectangle, size: size, position: position)
 
-        let element = Element(position: position, rotation: 0.0, size: size, physicsBody: physicsBody)
+        let element = Element(position: position,
+                              rotation: 0.0,
+                              size: size,
+                              isOscillating: false,
+                              minCoefficient: -1,
+                              maxCoefficient: 1,
+                              frequency: 0.2,
+                              physicsBody: physicsBody)
 
         element.rotation = CGFloat.pi
 
@@ -44,7 +65,14 @@ class ElementTests: XCTestCase {
         let position = CGPoint.zero
         let physicsBody = PhysicsBody(shape: .rectangle, size: size, position: position)
 
-        let element = Element(position: position, rotation: 0.0, size: size, physicsBody: physicsBody)
+        let element = Element(position: position,
+                              rotation: 0.0,
+                              size: size,
+                              isOscillating: false,
+                              minCoefficient: -1,
+                              maxCoefficient: 1,
+                              frequency: 0.2,
+                              physicsBody: physicsBody)
 
         element.size = .zero
 
@@ -56,7 +84,14 @@ class ElementTests: XCTestCase {
         let position = CGPoint.zero
         let physicsBody = PhysicsBody(shape: .rectangle, size: size, position: position)
 
-        let element = Element(position: position, rotation: 0.0, size: size, physicsBody: physicsBody)
+        let element = Element(position: position,
+                              rotation: 0.0,
+                              size: size,
+                              isOscillating: false,
+                              minCoefficient: -1,
+                              maxCoefficient: 1,
+                              frequency: 0.2,
+                              physicsBody: physicsBody)
 
         element.size = .zero
 

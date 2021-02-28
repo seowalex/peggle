@@ -31,7 +31,8 @@ class AppDatabaseTests: XCTestCase {
             let columns = try db.columns(in: "peg")
             let columnNames = Set(columns.map { $0.name })
 
-            XCTAssertEqual(columnNames, ["id", "levelId", "position", "rotation", "size", "color"])
+            XCTAssertEqual(columnNames, ["id", "levelId", "position", "rotation", "size", "isOscillating",
+                                         "minCoefficient", "maxCoefficient", "frequency", "color"])
         }
     }
 
@@ -41,7 +42,8 @@ class AppDatabaseTests: XCTestCase {
             let columns = try db.columns(in: "block")
             let columnNames = Set(columns.map { $0.name })
 
-            XCTAssertEqual(columnNames, ["id", "levelId", "position", "rotation", "size"])
+            XCTAssertEqual(columnNames, ["id", "levelId", "position", "rotation", "size", "isOscillating",
+                                         "minCoefficient", "maxCoefficient", "frequency"])
         }
     }
 
