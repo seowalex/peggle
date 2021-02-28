@@ -117,14 +117,25 @@ A scoring system that attempts to closely mimic Peggle's has been implemented, c
 The current score, as well as the balls and orange pegs remaining, can be seen below the playing area.
 
 ## Tests
-### Add peg (not overlapping/out of bounds)
+### Main Menu
+#### Select a level
+1. Tap the "Play" button
+2. Scroll through the grid of levels
+3. Tap on the desired level
+
+#### Change the selected powerup
+1. Tap the "Play" or the "Level Editor" button
+2. Use the picker in the top right hand corner to change the selected powerup
+
+### Level Editor
+#### Add peg/block (not overlapping/out of bounds)
 
 1. Select the blue peg button
 2. Tap on an empty space on the board
 3. A blue peg should be added
-4. Repeat steps 1 to 3 with the orange peg button
+4. Repeat steps 1 to 3 with the orange peg/block button
 
-### Add peg (overlapping/out of bounds)
+#### Add peg/block (overlapping/out of bounds)
 
 1. Select the blue peg button
 2. Tap on an empty space on the board
@@ -133,47 +144,75 @@ The current score, as well as the balls and orange pegs remaining, can be seen b
 5. A peg will not be added as it will overlap with an existing peg
 6. Tap on the toolbar
 7. A peg will not be added as it is out of bounds
-8. Repeat steps 1 to 7 with the orange peg button
+8. Repeat steps 1 to 7 with the orange peg/block button
 
-### Delete peg (long press)
-
-1. Add a blue peg
-2. Long press the blue peg
-3. The blue peg should be deleted
-4. Repeat steps 1 to 3 with the orange peg button
-
-### Delete peg (tap)
+#### Delete peg/block (tap)
 
 1. Add a blue peg
 2. Select the delete button
 3. Tap the blue peg
 4. The blue peg should be deleted
-5. Repeat steps 1 to 4 with the orange peg button
+5. Repeat steps 1 to 4 with the orange peg/block button
 
-### Drag peg (not overlapping/out of bounds)
+#### Move peg/block (not overlapping/out of bounds)
 
 1. Add a blue peg
 2. Tap and drag the blue peg to a new position
 3. The blue peg should be moved
-4. Repeat steps 1 to 3 with the orange peg button
+4. Repeat steps 1 to 3 with the orange peg/block button
 
-### Drag peg (overlapping/out of bounds)
+#### Move peg/block (overlapping/out of bounds)
 
 1. Add two blue pegs
 2. Tap and drag one blue peg to the other blue peg
 3. The blue peg should not be moved as it will overlap with an existing peg
 4. Tap and drag one blue peg offscreen or into the toolbar
 5. The blue peg should not be moved as it is out of bounds
-6. Repeat steps 1 to 5 with the orange peg button
+6. Repeat steps 1 to 5 with the orange peg/block button
 
-### Saving a level
+#### Resize peg/block
+1. Add a blue peg
+2. Tap and drag one of the square resize handles
+3. The peg should be resized
+4. Repeat steps 1 to 3 with the orange peg/block button
+5. For blocks, the width and height should be able to be resize independently
 
+#### Rotate peg/block
+1. Add a blue peg
+2. Tap and drag the circular rotate handle
+3. The peg should be rotated
+4. Repeat steps 1 to 3 with the orange peg/block button
+
+#### Toggle peg/block oscillation
+1. Add a blue peg
+2. Tap and hold the peg
+3. Red, green and orange handles should appear to show that the peg is now oscillating
+4. Repeat steps 1 to 3 with the orange peg/block button
+
+#### Change peg/block oscillation path
+1. Add a blue peg and toggle its oscillation
+2. Drag the red and green handle to change the length of the path
+3. Dragging either the red and green handle to the opposite side should flip the other handle
+4. Repeat steps 1 to 3 with the orange peg/block button
+
+#### Change peg/block oscillation frequency
+1. Add a blue peg and toggle its oscillation
+2. Drag the orange handle along the y-axis of the peg/block to increase/decrease the oscillation frequency
+3. Repeat steps 1 to 3 with the orange peg/block button
+
+#### Saving a level
 1. Add some pegs
 2. Type a name for the level in the text box
 3. Tap the save button
 4. A popup should show, and the level should be saved
 
-### Loading a level
+#### Saving a preloaded level
+
+1. Load a preloaded level
+2. Tap the save button
+3. An alert should show, disallowing the saving of preloaded levels
+
+#### Loading a level
 
 1. Save a level
 2. Tap the load button
@@ -181,61 +220,68 @@ The current score, as well as the balls and orange pegs remaining, can be seen b
 4. Tap any level
 5. The corresponding level should be loaded
 
-### Resetting a level
+#### Resetting a level
 
 1. Add some pegs
 2. Tap the reset button
-3. The level should be resetted
+3. The level should be reset
 
-### Start Level
+#### Start Level
 1. Use the level editor to place pegs as desired
 2. Tap the start button
 3. The designed level should be ready to be played
 
-### Ball Launch
+###Level Player
+#### Ball Launch
 1. Start a level
 2. Tap and drag anywhere in the playing field: the cannon should rotate to face the direction of the tap
 3. Release the tap
 4. The ball should be launched in the corresponding direction
 
-### Ball Launch (direction restriction)
+#### Ball Launch (direction restriction)
 1. Start a level
 2. Try to rotate the cannon such that it launches the ball upwards
 3. The cannon should not be able to rotate or launch a ball more than 60 degrees away from the center
 
-### Ball Launch (number of balls restriction)
+#### Ball Launch (number of balls restriction)
 1. Start a level
 2. Launch a ball
 3. Should be unable to launch another ball (or rotate the cannon) while the previous ball has not exited the stage
 
-### Ball Movement
+#### Ball Movement
 1. Start a level
 2. Launch a ball
 3. The ball should travel in a parabolic trajectory affected by both gravity and the launch force
 
-### Ball Collision
+#### Ball Collision
 1. Start a level
 2. Launch a ball at a peg
 3. The ball should collide with the peg and bounce away in a realistic manner
 4. The ball should also collide with the wall and bounce away in a realistic manner
 
-### Peg Lighting
+#### Peg Lighting
 1. Start a level
 2. Launch a ball at a peg
 3. The peg should be lit, and remain lit while the ball is still on the stage
 
-### Peg Removal
+#### Peg Removal
 1. Start a level
 2. Launch a ball at a peg
 3. Any hit pegs should be lit
 4. When the ball exits the stage, any lit pegs should be removed
 
-### Peg Removal (stuck)
+#### Peg Removal (stuck)
 1. Start a level
 2. Launch a ball such that it is stuck between pegs and cannot exit the stage
 3. Any hit pegs should be lit
 4. After a short delay, the lit peg closest to the ball should be removed
 5. The ball should continue hitting pegs or exiting the stage
+
+#### Block Phasing (stuck)
+1. Start a level
+2. Launch a ball such that it is stuck on a block and cannot exit the stage
+3. After a short delay, the block should turn transparent and allow the ball to phase through
+4. After the ball has phased through, the block should once again turn solid
 
 ## Written Answers
 
