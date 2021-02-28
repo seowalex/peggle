@@ -3,7 +3,7 @@ import SwiftUI
 // swiftlint:disable type_body_length
 struct LevelEditorView: View {
     @EnvironmentObject var settings: GameSettings
-    @ObservedObject var viewModel: LevelEditorViewModel
+    @StateObject var viewModel: LevelEditorViewModel
 
     @GestureState private var dragState: LevelEditorViewModel.DragState?
 
