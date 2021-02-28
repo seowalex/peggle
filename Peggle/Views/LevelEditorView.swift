@@ -1,6 +1,7 @@
+// swiftlint:disable file_length
+
 import SwiftUI
 
-// swiftlint:disable type_body_length
 struct LevelEditorView: View {
     @EnvironmentObject var settings: GameSettings
     @StateObject var viewModel: LevelEditorViewModel
@@ -113,6 +114,107 @@ struct LevelEditorView: View {
             )
     }
 
+    private func ToolbarView() -> some View {
+        VStack(spacing: 20) {
+            PaletteView()
+            ActionBarView()
+        }
+        .padding()
+        .background(Color(UIColor.systemBackground).shadow(radius: 10))
+        .disabled(dragState != nil)
+    }
+
+    private func PaletteView() -> some View {
+        HStack(spacing: 16) {
+            PaletteButtonView(selection: .addPeg(.blue), imageName: "peg-blue")
+            PaletteButtonView(selection: .addPeg(.orange), imageName: "peg-orange")
+            PaletteButtonView(selection: .addBlock, imageName: "block")
+            Spacer()
+            PaletteButtonView(selection: .delete, imageName: "delete")
+        }
+    }
+
+    private func ActionBarView() -> some View {
+        HStack(spacing: 16) {
+            Button(action: {
+                levelEditorListIsPresented = true
+            }) {
+                Text("Load")
+            }
+            Button(action: save) {
+                Text("Save")
+            }
+            Button(action: viewModel.reset) {
+                Text("Reset")
+            }
+            TextField("Level Name", text: $viewModel.level.name)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            NavigationLink(destination: LazyView {
+                LevelPlayerView(viewModel: LevelPlayerViewModel(level: viewModel.level, power: settings.power))
+            }) {
+                Text("Start")
+            }
+        }
+    }
+
+    private func PaletteButtonView(selection: LevelEditorViewModel.PaletteSelection, imageName: String) -> some View {
+        var count = ""
+
+        switch selection {
+        case .addPeg(.blue):
+            count = String(viewModel.level.elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.count)
+        case .addPeg(.orange):
+            count = String(viewModel.level.elements.compactMap { $0 as? Peg }.filter { $0.color == .orange }.count)
+        case .addBlock:
+            count = String(viewModel.level.elements.compactMap { $0 as? Block }.count)
+        default:
+            break
+        }
+
+        return Button(action: {
+            if case .delete = selection {
+                viewModel.selectedElement = nil
+            }
+
+            viewModel.paletteSelection = selection
+        }) {
+            ZStack {
+                Image(imageName)
+                    .resizable()
+                    .frame(width: 100, height: 100)
+
+                Text(count)
+                    .font(.system(size: 36, weight: .black))
+                    .foregroundColor(.white)
+                    .shadow(color: .black, radius: 1)
+            }
+            .opacity(viewModel.paletteSelection == selection ? 1 : 0.4)
+        }
+    }
+
+    private func save() {
+        do {
+            try viewModel.saveLevel()
+
+            alertTitle = "Level saved"
+            alertMessage = ""
+            alertIsPresented = true
+        } catch {
+            if let title = (error as? LocalizedError)?.errorDescription,
+               let message = (error as? LocalizedError)?.recoverySuggestion {
+                alertTitle = title
+                alertMessage = message
+            } else {
+                alertTitle = "Database error"
+                alertMessage = "\(error)"
+            }
+
+            alertIsPresented = true
+        }
+    }
+}
+
+extension LevelEditorView {
     private func ElementSelectView(element: Element, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
 
@@ -125,38 +227,40 @@ struct LevelEditorView: View {
             Rectangle()
                 .rotation(.radians(Double(rotation)))
                 .stroke(Color.white)
-                .frame(width: size.applying(denormalize).width,
-                       height: size.applying(denormalize).height)
+                .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
                 .position(position.applying(denormalize))
                 .allowsHitTesting(false)
 
             if element.isOscillating == true {
-                OscillatePathView(element: element, frame: frame, direction: .left)
-                OscillatePathView(element: element, frame: frame, direction: .right)
+                OscillatePathView(element: element, frame: frame)
             }
 
             Image(element.imageName)
                 .resizable()
                 .rotationEffect(.radians(Double(rotation)))
-                .frame(width: size.applying(denormalize).width,
-                       height: size.applying(denormalize).height)
+                .frame(width: size.applying(denormalize).width, height: size.applying(denormalize).height)
                 .position(position.applying(denormalize))
                 .colorMultiply(isValid ? .white : .gray)
                 .allowsHitTesting(false)
 
-            ResizeHandleView(element: element, frame: frame, direction: .top)
-            ResizeHandleView(element: element, frame: frame, direction: .bottom)
-            ResizeHandleView(element: element, frame: frame, direction: .left)
-            ResizeHandleView(element: element, frame: frame, direction: .right)
+            ResizeHandleView(element: element, frame: frame)
             RotateHandleView(element: element, frame: frame)
 
             if element.isOscillating == true {
-                OscillateHandleView(element: element, frame: frame, direction: .left)
-                OscillateHandleView(element: element, frame: frame, direction: .right)
+                OscillateHandleView(element: element, frame: frame)
                 FrequencyHandleView(element: element, frame: frame)
             }
         }
         .clipped()
+    }
+
+    private func ResizeHandleView(element: Element, frame: CGRect) -> some View {
+        ZStack {
+            ResizeHandleView(element: element, frame: frame, direction: .top)
+            ResizeHandleView(element: element, frame: frame, direction: .bottom)
+            ResizeHandleView(element: element, frame: frame, direction: .left)
+            ResizeHandleView(element: element, frame: frame, direction: .right)
+        }
     }
 
     private func ResizeHandleView(element: Element, frame: CGRect,
@@ -255,6 +359,13 @@ struct LevelEditorView: View {
             )
     }
 
+    private func OscillateHandleView(element: Element, frame: CGRect) -> some View {
+        ZStack {
+            OscillateHandleView(element: element, frame: frame, direction: .left)
+            OscillateHandleView(element: element, frame: frame, direction: .right)
+        }
+    }
+
     private func OscillateHandleView(element: Element, frame: CGRect,
                                      direction: LevelEditorViewModel.Direction) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX, y: frame.maxY)
@@ -267,15 +378,12 @@ struct LevelEditorView: View {
         var coefficient = CGFloat.zero
         var color = Color.clear
 
-        switch direction {
-        case .left:
+        if case .left = direction {
             coefficient = element.minCoefficient
             color = .green
-        case .right:
+        } else if case .right = direction {
             coefficient = element.maxCoefficient
             color = .red
-        default:
-            break
         }
 
         let position = (elementPosition + CGVector(dx: coefficient * elementSize.width, dy: 0))
@@ -300,16 +408,20 @@ struct LevelEditorView: View {
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
-                        switch direction {
-                        case .left:
+                        if case .left = direction {
                             viewModel.onOscillateMin(position: value.location.applying(normalize), element: element)
-                        case .right:
+                        } else if case .right = direction {
                             viewModel.onOscillateMax(position: value.location.applying(normalize), element: element)
-                        default:
-                            return
                         }
                     }
             )
+    }
+
+    private func OscillatePathView(element: Element, frame: CGRect) -> some View {
+        ZStack {
+            OscillatePathView(element: element, frame: frame, direction: .left)
+            OscillatePathView(element: element, frame: frame, direction: .right)
+        }
     }
 
     private func OscillatePathView(element: Element, frame: CGRect,
@@ -323,15 +435,12 @@ struct LevelEditorView: View {
         var coefficient = CGFloat.zero
         var color = Color.clear
 
-        switch direction {
-        case .left:
+        if case .left = direction {
             coefficient = element.minCoefficient
             color = .green
-        case .right:
+        } else if case .right = direction {
             coefficient = element.maxCoefficient
             color = .red
-        default:
-            break
         }
 
         let position = (elementPosition + CGVector(dx: coefficient * elementSize.width / 2, dy: 0))
@@ -379,105 +488,6 @@ struct LevelEditorView: View {
                         viewModel.onFrequency(position: value.location.applying(normalize), element: element)
                     }
             )
-    }
-
-    private func ToolbarView() -> some View {
-        VStack(spacing: 20) {
-            PaletteView()
-            ActionBarView()
-        }
-        .padding()
-        .background(Color(UIColor.systemBackground).shadow(radius: 10))
-        .disabled(dragState != nil)
-    }
-
-    private func PaletteView() -> some View {
-        HStack(spacing: 16) {
-            PaletteButtonView(selection: .addPeg(.blue), imageName: "peg-blue")
-            PaletteButtonView(selection: .addPeg(.orange), imageName: "peg-orange")
-            PaletteButtonView(selection: .addBlock, imageName: "block")
-            Spacer()
-            PaletteButtonView(selection: .delete, imageName: "delete")
-        }
-    }
-
-    private func ActionBarView() -> some View {
-        HStack(spacing: 16) {
-            Button(action: {
-                levelEditorListIsPresented = true
-            }) {
-                Text("Load")
-            }
-            Button(action: save) {
-                Text("Save")
-            }
-            Button(action: viewModel.reset) {
-                Text("Reset")
-            }
-            TextField("Level Name", text: $viewModel.level.name)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            NavigationLink(destination: LazyView {
-                LevelPlayerView(viewModel: LevelPlayerViewModel(level: viewModel.level, power: settings.power))
-            }) {
-                Text("Start")
-            }
-        }
-    }
-
-    private func PaletteButtonView(selection: LevelEditorViewModel.PaletteSelection, imageName: String) -> some View {
-        var count = ""
-
-        switch selection {
-        case .addPeg(.blue):
-            count = String(viewModel.level.elements.compactMap { $0 as? Peg }.filter { $0.color == .blue }.count)
-        case .addPeg(.orange):
-            count = String(viewModel.level.elements.compactMap { $0 as? Peg }.filter { $0.color == .orange }.count)
-        case .addBlock:
-            count = String(viewModel.level.elements.compactMap { $0 as? Block }.count)
-        default:
-            break
-        }
-
-        return Button(action: {
-            if case .delete = selection {
-                viewModel.selectedElement = nil
-            }
-
-            viewModel.paletteSelection = selection
-        }) {
-            ZStack {
-                Image(imageName)
-                    .resizable()
-                    .frame(width: 100, height: 100)
-
-                Text(count)
-                    .font(.system(size: 36, weight: .black))
-                    .foregroundColor(.white)
-                    .shadow(color: .black, radius: 1)
-            }
-            .opacity(viewModel.paletteSelection == selection ? 1 : 0.4)
-        }
-    }
-
-    private func save() {
-        do {
-            try viewModel.saveLevel()
-
-            alertTitle = "Level saved"
-            alertMessage = ""
-            alertIsPresented = true
-        } catch {
-            if let title = (error as? LocalizedError)?.errorDescription,
-               let message = (error as? LocalizedError)?.recoverySuggestion {
-                alertTitle = title
-                alertMessage = message
-            } else {
-                alertTitle = "Database error"
-                alertMessage = "\(error)"
-            }
-
-            alertIsPresented = true
-        }
     }
 }
 
