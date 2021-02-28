@@ -21,11 +21,8 @@ struct LevelPlayerView: View {
         .alert(isPresented: $viewModel.alertIsPresented) {
             Alert(title: Text(viewModel.alertTitle),
                   message: Text(viewModel.alertMessage),
-                  primaryButton: .default(Text("Return to Level Select")) {
+                  dismissButton: .default(Text("Return to Level Select")) {
                     presentationMode.wrappedValue.dismiss()
-                  },
-                  secondaryButton: .default(Text("Restart Level")) {
-                    print("lol")
                   })
         }
     }
