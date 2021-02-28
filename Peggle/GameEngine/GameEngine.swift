@@ -76,12 +76,13 @@ final class GameEngine {
                    let bucket = self?.bucketEntity,
                    let bucketBody = self?.entityManager.getComponent(PhysicsComponent.self, for: bucket)?.physicsBody,
                    let powerComponents = self?.entityManager.getComponents(PowerComponent.self),
+                   let gameEntity = self?.gameEntity,
                    clearComponent.willClear == false
                     && (bucketBody === bodyA || bucketBody === bodyB)
                     && !powerComponents.contains(where: { $0.power == .spookyBall && $0.isActivated == true
                                                 && $0.turnsRemaining == 1 }) {
                     clearComponent.willClear = true
-                    print("ball entered bucket")
+                    self?.entityManager.getComponent(StateComponent.self, for: gameEntity)?.ballsCount += 1
                 }
             }
         }
@@ -168,6 +169,7 @@ final class GameEngine {
             entityFactory.createBall(position: aimComponent.position,
                                      velocity: velocity,
                                      physicsSpeed: physicsWorld.speed)
+            entityManager.getComponent(StateComponent.self, for: gameEntity)?.ballsCount -= 1
 
             aimComponent.target = nil
             trajectoryComponent.points = []
@@ -194,10 +196,6 @@ final class GameEngine {
         }
     }
 
-    func updateScore() {
-        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
-    }
-
     func update(deltaTime seconds: CGFloat) {
         physicsWorld.update(deltaTime: seconds)
         updateTrajectories(deltaTime: seconds)
@@ -205,7 +203,5 @@ final class GameEngine {
         for system in systems {
             system.update(deltaTime: seconds)
         }
-
-        updateScore()
     }
 }

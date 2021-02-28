@@ -14,6 +14,10 @@ final class StateSystem: System {
 
         for stateComponent in stateComponents {
             stateComponent.orangePegsRemainingCount = orangePegCount
+
+            if stateComponent.ballsCount <= 0 {
+                stateComponent.status = .ended(orangePegCount == 0 ? .won : .lost)
+            }
         }
     }
 }

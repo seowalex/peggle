@@ -112,9 +112,23 @@ final class ClearSystem: System {
         entityManager.removeEntity(entity)
 
         let stateComponents = entityManager.getComponents(StateComponent.self)
+        let score = baseScore * pegsCount
 
         for stateComponent in stateComponents {
-            stateComponent.score += baseScore * pegsCount
+            stateComponent.score += score
+
+            // Free balls
+            if score >= 25_000 {
+                stateComponent.ballsCount += 1
+            }
+
+            if score >= 75_000 {
+                stateComponent.ballsCount += 1
+            }
+
+            if score >= 125_000 {
+                stateComponent.ballsCount += 1
+            }
         }
 
         let powerComponents = entityManager.getComponents(PowerComponent.self)

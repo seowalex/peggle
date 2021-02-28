@@ -18,6 +18,15 @@ final class LevelPlayerViewModel: ObservableObject {
 
         gameStateCancellable = gameRenderer.gameStatePublisher.sink { [weak self] gameState in
             self?.gameState = gameState
+
+            if case .ended(let state) = gameState.status {
+                switch state {
+                case .won:
+                    print("Won with score: \(gameState.score)")
+                case .lost:
+                    print("Lost with score: \(gameState.score)")
+                }
+            }
         }
 
         renderCancellable = gameRenderer.renderPublisher.sink { [weak self] components in

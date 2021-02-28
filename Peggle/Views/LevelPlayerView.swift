@@ -75,11 +75,19 @@ struct LevelPlayerView: View {
         HStack(spacing: 16) {
             Text("Score: \(viewModel.gameState.score)")
             Spacer()
-            HStack {
-                Image("peg-orange")
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                Text("\(viewModel.gameState.orangePegsRemainingCount) / \(viewModel.gameState.orangePegsCount)")
+            VStack {
+                HStack {
+                    Image("ball")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                    Text("\(viewModel.gameState.ballsCount) / 10")
+                }
+                HStack {
+                    Image("peg-orange")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                    Text("\(viewModel.gameState.orangePegsRemainingCount) / \(viewModel.gameState.orangePegsCount)")
+                }
             }
         }
         .padding()
