@@ -19,11 +19,6 @@ final class LevelEditorListViewModel: ObservableObject {
 
     func deleteLevels(at offsets: IndexSet) throws {
         let levelIDs = offsets.compactMap { levels[$0].id }
-
-        if try database.arePreloadedLevels(ids: levelIDs) == true {
-            throw ValidationError.cannotOverride
-        }
-
         try database.deleteLevels(ids: levelIDs)
     }
 

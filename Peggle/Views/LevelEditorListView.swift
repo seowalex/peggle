@@ -20,9 +20,9 @@ struct LevelEditorListView: View {
             .padding()
 
             if viewModel.levels.isEmpty {
-                EmptyLevelsList()
+                NoLevelsView()
             } else {
-                LevelsList()
+                LevelsView()
             }
         }
         .alert(isPresented: $alertIsPresented) {
@@ -30,7 +30,7 @@ struct LevelEditorListView: View {
         }
     }
 
-    private func EmptyLevelsList() -> some View {
+    private func NoLevelsView() -> some View {
         VStack(spacing: 10) {
             Image(systemName: "xmark.bin")
                 .font(.system(size: 60))
@@ -40,22 +40,10 @@ struct LevelEditorListView: View {
         .foregroundColor(.secondary)
     }
 
-    private func LevelsList() -> some View {
+    private func LevelsView() -> some View {
         List {
             ForEach(viewModel.levels) { level in
-                Button(action: {
-                    do {
-                        try fetchLevel(level)
-                        presentationMode.wrappedValue.dismiss()
-                    } catch {
-                        alertTitle = "Database error"
-                        alertMessage = "\(error)"
-                        alertIsPresented = true
-                    }
-                }) {
-                    Text(level.name)
-                        .lineLimit(1)
-                }
+                LevelView(level: level)
             }
             .onDelete { offsets in
                 do {
@@ -74,6 +62,30 @@ struct LevelEditorListView: View {
                 }
             }
         }
+    }
+
+    private func LevelView(level: LevelRecord) -> some View {
+        Button(action: {
+            do {
+                try fetchLevel(level)
+                presentationMode.wrappedValue.dismiss()
+            } catch {
+                alertTitle = "Database error"
+                alertMessage = "\(error)"
+                alertIsPresented = true
+            }
+        }) {
+            HStack {
+                Text(level.name)
+                    .lineLimit(1)
+
+                if level.isProtected == true {
+                    Spacer()
+                    Image(systemName: "lock.fill")
+                }
+            }
+        }
+        .deleteDisabled(level.isProtected == true)
     }
 }
 

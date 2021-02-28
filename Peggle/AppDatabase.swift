@@ -102,14 +102,6 @@ extension AppDatabase {
         }
     }
 
-    func arePreloadedLevels(ids: [Int64]) throws -> Bool {
-        try dbWriter.read { db in
-            try LevelRecord
-                .filter(ids.contains(LevelRecord.Columns.id) && LevelRecord.Columns.isProtected == true)
-                .fetchCount(db) > 0
-        }
-    }
-
     func saveLevel(_ level: inout LevelRecord, pegs: inout [PegRecord], blocks: inout [BlockRecord]) throws {
         try dbWriter.write { db in
             level = try LevelRecord.filter(LevelRecord.Columns.name == level.name).fetchOne(db) ?? level

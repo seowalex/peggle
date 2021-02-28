@@ -39,6 +39,6 @@ extension LevelRecord: Codable, FetchableRecord, MutablePersistableRecord {
 
 extension DerivableRequest where RowDecoder == LevelRecord {
     func orderedByName() -> Self {
-        order(LevelRecord.Columns.name)
+        order(LevelRecord.Columns.isProtected._reversed, LevelRecord.Columns.name)
     }
 }
