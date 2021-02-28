@@ -30,17 +30,17 @@ final class PowerSystem: System {
         }
 
         let position = physicsComponent.physicsBody.position
-        let entities = entityManager.getEntities(for: LightComponent.self)
+        let entities = entityManager.getEntities(for: ScoreComponent.self)
 
         for entity in entities {
-            guard let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
+            guard let scoreComponent = entityManager.getComponent(ScoreComponent.self, for: entity),
                   let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity),
                   physicsComponent.physicsBody.position.distance(to: position) < 0.2
-                    && lightComponent.isLit == false else {
+                    && scoreComponent.isHit == false else {
                 continue
             }
 
-            lightComponent.isLit = true
+            scoreComponent.isHit = true
         }
 
         powerComponent.turnsRemaining -= 1
@@ -67,6 +67,10 @@ final class PowerSystem: System {
             guard let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity),
                   powerComponent.isActivated == true else {
                 continue
+            }
+
+            if powerComponent.turnsRemaining < 0 {
+                entityManager.removeEntity(entity)
             }
 
             switch (powerComponent.power, powerComponent.turnsRemaining) {

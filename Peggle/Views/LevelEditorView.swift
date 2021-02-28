@@ -420,7 +420,7 @@ struct LevelEditorView: View {
             count = String(viewModel.level.elements.compactMap { $0 as? Peg }.filter { $0.color == .orange }.count)
         case .addBlock:
             count = String(viewModel.level.elements.compactMap { $0 as? Block }.count)
-        case .delete:
+        default:
             break
         }
 

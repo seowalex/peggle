@@ -3,12 +3,24 @@ import CoreGraphics
 import Foundation
 
 final class GameEngine {
+    var gameState: GameState {
+        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
+
+        return GameState(orangePegsRemainingCount: scoreComponents
+                            .filter { $0.color == .orange && $0.isHit == false }.count,
+                         orangePegsCount: internalGameState.orangePegsCount)
+    }
+    var renderComponents: [RenderComponent] {
+        entityManager.getComponents(RenderComponent.self)
+    }
+
     private let entityManager = EntityManager()
     private let physicsWorld = PhysicsWorld()
 
     private let entityFactory: EntityFactory
     private let systems: [System]
 
+    private let internalGameState: GameState
     private var bucketEntity: Entity!
 
     private var componentsCancellable: AnyCancellable?
@@ -21,12 +33,14 @@ final class GameEngine {
             PowerSystem(entityManager: entityManager),
             AimSystem(entityManager: entityManager),
             TrajectorySystem(entityManager: entityManager),
-            LightSystem(entityManager: entityManager),
+            ScoreSystem(entityManager: entityManager),
             ClearSystem(entityManager: entityManager),
             PhysicsSystem(entityManager: entityManager),
             RenderSystem(entityManager: entityManager)
         ]
 
+        internalGameState = GameState(orangePegsCount: elements.compactMap { $0 as? Peg }
+                                        .filter { $0.color == .orange }.count)
         createEntities(elements: elements)
 
         componentsCancellable = entityManager.$components.sink { [weak self] _ in
@@ -54,8 +68,8 @@ final class GameEngine {
                 }
 
                 // Light pegs
-                if let lightComponent = self?.entityManager.getComponent(LightComponent.self, for: entity) {
-                    lightComponent.isLit = true
+                if let scoreComponent = self?.entityManager.getComponent(ScoreComponent.self, for: entity) {
+                    scoreComponent.isHit = true
                 }
 
                 // Check for ball entering bucket
@@ -92,6 +106,7 @@ final class GameEngine {
 
             if let peg = element as? Peg {
                 entityFactory.createPeg(position: position,
+                                        color: peg.color,
                                         imageName: peg.imageName,
                                         rotation: element.rotation,
                                         size: element.size,
@@ -113,6 +128,7 @@ final class GameEngine {
         for peg in greenPegs {
             let pegEntity = entityFactory.createPeg(position: peg.position.applying(CGAffineTransform(translationX: 0,
                                                                                                       y: 0.3)),
+                                                    color: .green,
                                                     imageName: "peg-green",
                                                     rotation: peg.rotation,
                                                     size: peg.size,
@@ -122,10 +138,6 @@ final class GameEngine {
                                                     frequency: peg.frequency)
             entityManager.addComponent(PowerComponent(power: .spaceBlast), to: pegEntity)
         }
-    }
-
-    func getRenderComponents() -> [RenderComponent] {
-        entityManager.getComponents(RenderComponent.self)
     }
 
     func onDrag(position: CGPoint) {
@@ -182,6 +194,10 @@ final class GameEngine {
                                      maxCollisions: trajectoryComponent.maxCollisions)
         }
     }
+    
+    func updateScore() {
+        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
+    }
 
     func update(deltaTime seconds: CGFloat) {
         physicsWorld.update(deltaTime: seconds)
@@ -190,5 +206,7 @@ final class GameEngine {
         for system in systems {
             system.update(deltaTime: seconds)
         }
+        
+        updateScore()
     }
 }

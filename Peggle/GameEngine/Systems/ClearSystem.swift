@@ -54,9 +54,14 @@ final class ClearSystem: System {
     }
 
     func clearNearestPeg(entity: Entity, body: PhysicsBody) {
-        if let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
-           lightComponent.isLit == true {
-            entityManager.removeEntity(entity)
+        if let scoreComponent = entityManager.getComponent(ScoreComponent.self, for: entity),
+           scoreComponent.isHit == true {
+            if let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity) {
+                entityManager.removeEntity(entity)
+                entityManager.addComponent(powerComponent, to: entity)
+            } else {
+                entityManager.removeEntity(entity)
+            }
         } else if let physicsComponent = entityManager
                     .getComponent(PhysicsComponent.self, for: entity),
                   let renderComponent = entityManager.getComponent(RenderComponent.self, for: entity) {
@@ -81,11 +86,11 @@ final class ClearSystem: System {
             return
         }
 
-        let lightEntities = entityManager.getEntities(for: LightComponent.self)
+        let scoreEntities = entityManager.getEntities(for: ScoreComponent.self)
 
-        for entity in lightEntities {
-            guard let lightComponent = entityManager.getComponent(LightComponent.self, for: entity),
-                  lightComponent.isLit == true else {
+        for entity in scoreEntities {
+            guard let scoreComponent = entityManager.getComponent(ScoreComponent.self, for: entity),
+                  scoreComponent.isHit == true else {
                 continue
             }
 
@@ -108,10 +113,6 @@ final class ClearSystem: System {
             }
 
             powerComponent.turnsRemaining -= 1
-
-            if powerComponent.turnsRemaining < 0 {
-                entityManager.removeEntity(entity)
-            }
         }
     }
 

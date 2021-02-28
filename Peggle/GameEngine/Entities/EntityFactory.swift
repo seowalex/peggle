@@ -61,9 +61,9 @@ final class EntityFactory {
     }
 
     @discardableResult
-    func createPeg(position: CGPoint, imageName: String, rotation: CGFloat = 0.0, size: CGSize = Peg.defaultSize,
-                   isOscillating: Bool = false, minCoefficient: CGFloat = -1.0, maxCoefficient: CGFloat = 1.0,
-                   frequency: CGFloat = 0.4) -> Entity {
+    func createPeg(position: CGPoint, color: Peg.Color, imageName: String, rotation: CGFloat = 0.0,
+                   size: CGSize = Peg.defaultSize, isOscillating: Bool = false, minCoefficient: CGFloat = -1.0,
+                   maxCoefficient: CGFloat = 1.0, frequency: CGFloat = 0.4) -> Entity {
         let entity = Entity()
         entityManager.addComponent(PhysicsComponent(physicsBody: PhysicsBody(shape: .circle,
                                                                              size: size,
@@ -80,7 +80,7 @@ final class EntityFactory {
                                                    transition: AnyTransition.opacity
                                                     .animation(.easeInOut(duration: 0.2))),
                                    to: entity)
-        entityManager.addComponent(LightComponent(), to: entity)
+        entityManager.addComponent(ScoreComponent(color: color), to: entity)
         entityManager.addComponent(RemoveComponent(), to: entity)
 
         if isOscillating == true {

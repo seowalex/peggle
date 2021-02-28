@@ -7,7 +7,7 @@ struct LevelPlayerView: View {
     var body: some View {
         VStack(spacing: 0) {
             Main()
-//            ActionBar()
+            GameBar()
         }
         .navigationTitle(viewModel.name)
         .navigationBarTitleDisplayMode(.inline)
@@ -71,13 +71,15 @@ struct LevelPlayerView: View {
             .clipped()
     }
 
-    private func ActionBar() -> some View {
+    private func GameBar() -> some View {
         HStack(spacing: 16) {
+            Text("Score: \(viewModel.gameState.score)")
             Spacer()
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }) {
-                Text("Stop")
+            HStack {
+                Image("peg-orange")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                Text("\(viewModel.gameState.orangePegsRemainingCount) / \(viewModel.gameState.orangePegsCount)")
             }
         }
         .padding()

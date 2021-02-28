@@ -40,6 +40,7 @@ struct LevelSelectView: View {
                     LevelTileView(level: level, frame: frame)
                 }
             }
+            .padding([.top, .bottom])
         }
     }
 

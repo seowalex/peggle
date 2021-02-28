@@ -20,6 +20,9 @@
 		0E152C2525EA4F560098E288 /* LevelSelectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C2425EA4F560098E288 /* LevelSelectViewModel.swift */; };
 		0E152C2D25EA62EB0098E288 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C2C25EA62EB0098E288 /* Level.swift */; };
 		0E152C3325EA956E0098E288 /* AnyShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C3225EA956E0098E288 /* AnyShape.swift */; };
+		0E152C3925EAA8CB0098E288 /* ScoreComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C3825EAA8CB0098E288 /* ScoreComponent.swift */; };
+		0E152C3D25EAA9BA0098E288 /* ScoreSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C3C25EAA9BA0098E288 /* ScoreSystem.swift */; };
+		0E152C4325EAB3990098E288 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E152C4225EAB3990098E288 /* GameState.swift */; };
 		0E18E20725D627C400A2B74A /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E20625D627C400A2B74A /* Component.swift */; };
 		0E18E21125D628F600A2B74A /* RenderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E21025D628F600A2B74A /* RenderComponent.swift */; };
 		0E18E21525D6296600A2B74A /* PhysicsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E18E21425D6296600A2B74A /* PhysicsComponent.swift */; };
@@ -36,8 +39,6 @@
 		0E2A454025BFEABA00B0DCA7 /* LevelEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2A453F25BFEABA00B0DCA7 /* LevelEditorViewModel.swift */; };
 		0E3BB28325E0DEBE0021A9F6 /* PhysicsSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */; };
 		0E3D4C9F25D9626600C3E8FB /* PhysicsBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3D4C9E25D9626600C3E8FB /* PhysicsBodyTests.swift */; };
-		0E61D56925D6C4EE0091D9D0 /* LightComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E61D56825D6C4EE0091D9D0 /* LightComponent.swift */; };
-		0E61D56D25D6C6200091D9D0 /* LightSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E61D56C25D6C6200091D9D0 /* LightSystem.swift */; };
 		0E61D57525D6CCE70091D9D0 /* AimComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E61D57425D6CCE70091D9D0 /* AimComponent.swift */; };
 		0E61D57B25D6CD2F0091D9D0 /* AimSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E61D57A25D6CD2F0091D9D0 /* AimSystem.swift */; };
 		0E6D679B25D64C9D0096FE5B /* GameRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6D679A25D64C9D0096FE5B /* GameRenderer.swift */; };
@@ -98,6 +99,9 @@
 		0E152C2425EA4F560098E288 /* LevelSelectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectViewModel.swift; sourceTree = "<group>"; };
 		0E152C2C25EA62EB0098E288 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		0E152C3225EA956E0098E288 /* AnyShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShape.swift; sourceTree = "<group>"; };
+		0E152C3825EAA8CB0098E288 /* ScoreComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreComponent.swift; sourceTree = "<group>"; };
+		0E152C3C25EAA9BA0098E288 /* ScoreSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreSystem.swift; sourceTree = "<group>"; };
+		0E152C4225EAB3990098E288 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		0E18E20625D627C400A2B74A /* Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		0E18E21025D628F600A2B74A /* RenderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderComponent.swift; sourceTree = "<group>"; };
 		0E18E21425D6296600A2B74A /* PhysicsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsComponent.swift; sourceTree = "<group>"; };
@@ -114,8 +118,6 @@
 		0E2A453F25BFEABA00B0DCA7 /* LevelEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelEditorViewModel.swift; sourceTree = "<group>"; };
 		0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsSystem.swift; sourceTree = "<group>"; };
 		0E3D4C9E25D9626600C3E8FB /* PhysicsBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsBodyTests.swift; sourceTree = "<group>"; };
-		0E61D56825D6C4EE0091D9D0 /* LightComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightComponent.swift; sourceTree = "<group>"; };
-		0E61D56C25D6C6200091D9D0 /* LightSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightSystem.swift; sourceTree = "<group>"; };
 		0E61D57425D6CCE70091D9D0 /* AimComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AimComponent.swift; sourceTree = "<group>"; };
 		0E61D57A25D6CD2F0091D9D0 /* AimSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AimSystem.swift; sourceTree = "<group>"; };
 		0E6D679A25D64C9D0096FE5B /* GameRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRenderer.swift; sourceTree = "<group>"; };
@@ -267,12 +269,12 @@
 				0E18E20625D627C400A2B74A /* Component.swift */,
 				0E61D57425D6CCE70091D9D0 /* AimComponent.swift */,
 				0E892B4325E69EBE005573EF /* ClearComponent.swift */,
-				0E61D56825D6C4EE0091D9D0 /* LightComponent.swift */,
 				0E892B2725E51522005573EF /* OscillateComponent.swift */,
 				0E18E21425D6296600A2B74A /* PhysicsComponent.swift */,
 				0E892B3125E581E3005573EF /* PowerComponent.swift */,
 				0EB94A6625E7FE1F00D3DFDA /* RemoveComponent.swift */,
 				0E18E21025D628F600A2B74A /* RenderComponent.swift */,
+				0E152C3825EAA8CB0098E288 /* ScoreComponent.swift */,
 				0E032D3125E7A2DE00AB1165 /* TrajectoryComponent.swift */,
 			);
 			path = Components;
@@ -284,11 +286,11 @@
 				0E18E22125D635EE00A2B74A /* System.swift */,
 				0E61D57A25D6CD2F0091D9D0 /* AimSystem.swift */,
 				0E892B4725E69EDC005573EF /* ClearSystem.swift */,
-				0E61D56C25D6C6200091D9D0 /* LightSystem.swift */,
 				0E892B2B25E518C7005573EF /* OscillateSystem.swift */,
 				0E3BB28225E0DEBE0021A9F6 /* PhysicsSystem.swift */,
 				0E892B3725E58281005573EF /* PowerSystem.swift */,
 				0E18E22F25D63B1300A2B74A /* RenderSystem.swift */,
+				0E152C3C25EAA9BA0098E288 /* ScoreSystem.swift */,
 				0E032D3525E7A31700AB1165 /* TrajectorySystem.swift */,
 			);
 			path = Systems;
@@ -313,6 +315,7 @@
 				0ED13CF025E23CEE00B0428C /* Element.swift */,
 				0ED13CEC25E2104800B0428C /* Peg.swift */,
 				0ED13D0425E3749200B0428C /* Block.swift */,
+				0E152C4225EAB3990098E288 /* GameState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -471,7 +474,6 @@
 			files = (
 				0EB94A6725E7FE1F00D3DFDA /* RemoveComponent.swift in Sources */,
 				0E2A452D25BDE62100B0DCA7 /* PegRecord.swift in Sources */,
-				0E61D56D25D6C6200091D9D0 /* LightSystem.swift in Sources */,
 				0EE69DD325D17A1000BD142A /* CGAffineTransform+Extensions.swift in Sources */,
 				0E18E21125D628F600A2B74A /* RenderComponent.swift in Sources */,
 				0E892B3225E581E3005573EF /* PowerComponent.swift in Sources */,
@@ -496,7 +498,6 @@
 				0E61D57525D6CCE70091D9D0 /* AimComponent.swift in Sources */,
 				0E20620725D048CC004DF11C /* PhysicsWorld.swift in Sources */,
 				0E152C2D25EA62EB0098E288 /* Level.swift in Sources */,
-				0E61D56925D6C4EE0091D9D0 /* LightComponent.swift in Sources */,
 				0ED13CF125E23CEE00B0428C /* Element.swift in Sources */,
 				0EA3451625BDB53000DD1BBB /* LevelEditorListViewModel.swift in Sources */,
 				0ED13D0525E3749200B0428C /* Block.swift in Sources */,
@@ -508,6 +509,7 @@
 				0EFC552B25D27DC000C053FF /* LazyView.swift in Sources */,
 				0EFC550D25D191EC00C053FF /* LevelPlayerView.swift in Sources */,
 				0ED13CFF25E2C32C00B0428C /* BlockRecord.swift in Sources */,
+				0E152C3D25EAA9BA0098E288 /* ScoreSystem.swift in Sources */,
 				0E61D57B25D6CD2F0091D9D0 /* AimSystem.swift in Sources */,
 				0E892B4425E69EBE005573EF /* ClearComponent.swift in Sources */,
 				0EE69DCF25D14B6A00BD142A /* CGRect+Extensions.swift in Sources */,
@@ -515,8 +517,10 @@
 				0E18E21525D6296600A2B74A /* PhysicsComponent.swift in Sources */,
 				0E85317825C30034008B012D /* CGPoint+Extensions.swift in Sources */,
 				0E152C3325EA956E0098E288 /* AnyShape.swift in Sources */,
+				0E152C4325EAB3990098E288 /* GameState.swift in Sources */,
 				0E892B2825E51522005573EF /* OscillateComponent.swift in Sources */,
 				0E3BB28325E0DEBE0021A9F6 /* PhysicsSystem.swift in Sources */,
+				0E152C3925EAA8CB0098E288 /* ScoreComponent.swift in Sources */,
 				0E152C2125EA4F300098E288 /* LevelSelectView.swift in Sources */,
 				0E08491F25BD19F9004CE733 /* PeggleApp.swift in Sources */,
 				0E6F771725D6B7E900E4C8B8 /* EntityFactory.swift in Sources */,
