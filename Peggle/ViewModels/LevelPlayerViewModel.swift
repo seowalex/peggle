@@ -6,6 +6,10 @@ final class LevelPlayerViewModel: ObservableObject {
     @Published private(set) var gameState = StateComponent()
     @Published private(set) var components: [RenderComponent] = []
 
+    @Published var alertIsPresented = false
+    @Published private(set) var alertTitle = ""
+    @Published private(set) var alertMessage = ""
+
     private let gameEngine: GameEngine
     private let gameRenderer: GameRenderer
     private var gameStateCancellable: AnyCancellable?
@@ -20,12 +24,17 @@ final class LevelPlayerViewModel: ObservableObject {
             self?.gameState = gameState
 
             if case .ended(let state) = gameState.status {
+                self?.gameRenderer.invalidateDisplayLink()
+
                 switch state {
                 case .won:
-                    print("Won with score: \(gameState.score)")
+                    self?.alertTitle = "You Won!"
                 case .lost:
-                    print("Lost with score: \(gameState.score)")
+                    self?.alertTitle = "You Lost..."
                 }
+
+                self?.alertMessage = "Score: \(gameState.score)"
+                self?.alertIsPresented = true
             }
         }
 

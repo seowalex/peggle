@@ -129,6 +129,8 @@ final class ClearSystem: System {
             if score >= 125_000 {
                 stateComponent.ballsCount += 1
             }
+
+            stateComponent.ballsCount -= 1
         }
 
         let powerComponents = entityManager.getComponents(PowerComponent.self)

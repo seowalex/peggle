@@ -169,7 +169,6 @@ final class GameEngine {
             entityFactory.createBall(position: aimComponent.position,
                                      velocity: velocity,
                                      physicsSpeed: physicsWorld.speed)
-            entityManager.getComponent(StateComponent.self, for: gameEntity)?.ballsCount -= 1
 
             aimComponent.target = nil
             trajectoryComponent.points = []
