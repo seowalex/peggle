@@ -83,6 +83,7 @@ final class ClearSystem: System {
         }
     }
 
+    // swiftlint:disable cyclomatic_complexity
     func clearPegs(entity: Entity, clearComponent: ClearComponent, physicsComponent: PhysicsComponent) {
         guard clearComponent.willClear == true || physicsComponent.physicsBody.position.y > 1.5 else {
             return
@@ -150,6 +151,7 @@ final class ClearSystem: System {
             }
         }
     }
+    // swiftlint:enable cyclomatic_complexity
 
     func update(deltaTime seconds: CGFloat) {
         let entities = entityManager.getEntities(for: ClearComponent.self)

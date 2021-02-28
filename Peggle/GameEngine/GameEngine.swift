@@ -38,8 +38,7 @@ final class GameEngine {
 
         gameEntity = Entity()
         entityManager.addComponent(StateComponent(orangePegsCount: elements.compactMap { $0 as? Peg }
-                                                    .filter { $0.color == .orange }.count),
-                                   to: gameEntity)
+                                                    .filter { $0.color == .orange }.count), to: gameEntity)
         createEntities(elements: elements, power: power)
 
         componentsCancellable = entityManager.$components.sink { [weak self] _ in
@@ -77,8 +76,7 @@ final class GameEngine {
                    let bucketBody = self?.entityManager.getComponent(PhysicsComponent.self, for: bucket)?.physicsBody,
                    let powerComponents = self?.entityManager.getComponents(PowerComponent.self),
                    let gameEntity = self?.gameEntity,
-                   clearComponent.willClear == false
-                    && (bucketBody === bodyA || bucketBody === bodyB)
+                   clearComponent.willClear == false && (bucketBody === bodyA || bucketBody === bodyB)
                     && !powerComponents.contains(where: { $0.power == .spookyBall && $0.isActivated == true
                                                 && $0.turnsRemaining == 1 }) {
                     clearComponent.willClear = true
@@ -113,23 +111,14 @@ final class GameEngine {
                     color = .purple
                 }
 
-                entityFactory.createPeg(position: position,
-                                        color: color,
-                                        imageName: peg.imageName,
-                                        rotation: element.rotation,
-                                        size: element.size,
-                                        isOscillating: element.isOscillating,
-                                        minCoefficient: element.minCoefficient,
-                                        maxCoefficient: element.maxCoefficient,
-                                        frequency: element.frequency)
+                entityFactory.createPeg(position: position, color: color, imageName: peg.imageName,
+                                        rotation: element.rotation, size: element.size,
+                                        isOscillating: element.isOscillating, minCoefficient: element.minCoefficient,
+                                        maxCoefficient: element.maxCoefficient, frequency: element.frequency)
             } else if element is Block {
-                entityFactory.createBlock(position: position,
-                                          rotation: element.rotation,
-                                          size: element.size,
-                                          isOscillating: element.isOscillating,
-                                          minCoefficient: element.minCoefficient,
-                                          maxCoefficient: element.maxCoefficient,
-                                          frequency: element.frequency)
+                entityFactory.createBlock(position: position, rotation: element.rotation, size: element.size,
+                                          isOscillating: element.isOscillating, minCoefficient: element.minCoefficient,
+                                          maxCoefficient: element.maxCoefficient, frequency: element.frequency)
             }
         }
 
