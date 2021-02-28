@@ -2,6 +2,7 @@ import Combine
 import SwiftUI
 
 final class LevelPlayerViewModel: ObservableObject {
+    @EnvironmentObject var settings: GameSettings
     @Published private(set) var name = ""
     @Published private(set) var gameState = StateComponent()
     @Published private(set) var components: [RenderComponent] = []
@@ -15,9 +16,9 @@ final class LevelPlayerViewModel: ObservableObject {
     private var gameStateCancellable: AnyCancellable?
     private var renderCancellable: AnyCancellable?
 
-    init(level: Level) {
+    init(level: Level, power: PowerComponent.Power) {
         name = level.name
-        gameEngine = GameEngine(elements: level.elements)
+        gameEngine = GameEngine(elements: level.elements, power: power)
         gameRenderer = GameRenderer(gameEngine: gameEngine)
 
         gameStateCancellable = gameRenderer.gameStatePublisher.sink { [weak self] gameState in

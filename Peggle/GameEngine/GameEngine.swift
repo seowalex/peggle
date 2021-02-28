@@ -22,7 +22,7 @@ final class GameEngine {
     private var componentsCancellable: AnyCancellable?
     private var collisionCancellable: AnyCancellable?
 
-    init(elements: [Element]) {
+    init(elements: [Element], power: PowerComponent.Power) {
         entityFactory = EntityFactory(entityManager: entityManager)
         systems = [
             StateSystem(entityManager: entityManager),
@@ -40,7 +40,7 @@ final class GameEngine {
         entityManager.addComponent(StateComponent(orangePegsCount: elements.compactMap { $0 as? Peg }
                                                     .filter { $0.color == .orange }.count),
                                    to: gameEntity)
-        createEntities(elements: elements)
+        createEntities(elements: elements, power: power)
 
         componentsCancellable = entityManager.$components.sink { [weak self] _ in
             guard let bodies = self?.entityManager.getComponents(PhysicsComponent.self).map({ $0.physicsBody }) else {
@@ -88,7 +88,7 @@ final class GameEngine {
         }
     }
 
-    func createEntities(elements: [Element]) {
+    func createEntities(elements: [Element], power: PowerComponent.Power) {
         entityFactory.createWall(position: CGPoint(x: 0.5, y: -0.2), size: CGSize(width: 1, height: 0.4))
         entityFactory.createWall(position: CGPoint(x: -0.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
         entityFactory.createWall(position: CGPoint(x: 1.2, y: 0.7), size: CGSize(width: 0.4, height: 1.4))
@@ -144,7 +144,7 @@ final class GameEngine {
                                                     minCoefficient: peg.minCoefficient,
                                                     maxCoefficient: peg.maxCoefficient,
                                                     frequency: peg.frequency)
-            entityManager.addComponent(PowerComponent(power: .spaceBlast), to: pegEntity)
+            entityManager.addComponent(PowerComponent(power: power), to: pegEntity)
         }
     }
 

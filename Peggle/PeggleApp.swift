@@ -2,6 +2,8 @@ import SwiftUI
 
 @main
 struct PeggleApp: App {
+    @StateObject var settings = GameSettings()
+
     let appDatabase = AppDatabase.shared
 
     var body: some Scene {
@@ -11,6 +13,7 @@ struct PeggleApp: App {
             }
             .navigationViewStyle(StackNavigationViewStyle())
             .accentColor(.init(red: 1, green: 0.75, blue: 0))
+            .environmentObject(settings)
         }
     }
 

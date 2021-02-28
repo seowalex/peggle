@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct LevelSelectView: View {
+    @EnvironmentObject var settings: GameSettings
     @ObservedObject var viewModel: LevelSelectViewModel
 
     private let columns = [
@@ -21,6 +22,19 @@ struct LevelSelectView: View {
         }
         .navigationTitle("Level Select")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                HStack {
+                    Text("Powerup:")
+                    Picker(settings.power.rawValue, selection: $settings.power) {
+                        ForEach(PowerComponent.Power.allCases, id: \.self) {
+                            Text($0.rawValue)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                }
+            }
+        }
     }
 
     private func EmptyLevelsList() -> some View {
@@ -48,7 +62,7 @@ struct LevelSelectView: View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX / 4, y: frame.maxX / 4)
 
         return NavigationLink(destination: LazyView {
-            LevelPlayerView(viewModel: LevelPlayerViewModel(level: level))
+            LevelPlayerView(viewModel: LevelPlayerViewModel(level: level, power: settings.power))
         }) {
             VStack(spacing: 16) {
                 ZStack {

@@ -82,6 +82,7 @@ struct LevelPlayerView: View {
         HStack(spacing: 16) {
             VStack(alignment: .leading) {
                 Text("Score")
+                    .foregroundColor(.accentColor)
                 Text("\(viewModel.gameState.score)")
                     .font(.system(size: 60))
                     .fontWeight(.thin)
@@ -109,6 +110,6 @@ struct LevelPlayerView: View {
 
 struct LevelPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        LevelPlayerView(viewModel: LevelPlayerViewModel(level: Level()))
+        LevelPlayerView(viewModel: LevelPlayerViewModel(level: Level(), power: .spaceBlast))
     }
 }

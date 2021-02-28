@@ -2,6 +2,7 @@ import SwiftUI
 
 // swiftlint:disable type_body_length
 struct LevelEditorView: View {
+    @EnvironmentObject var settings: GameSettings
     @ObservedObject var viewModel: LevelEditorViewModel
 
     @GestureState private var dragState: LevelEditorViewModel.DragState?
@@ -18,6 +19,19 @@ struct LevelEditorView: View {
         }
         .navigationTitle("Level Editor")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                HStack {
+                    Text("Powerup:")
+                    Picker(settings.power.rawValue, selection: $settings.power) {
+                        ForEach(PowerComponent.Power.allCases, id: \.self) {
+                            Text($0.rawValue)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                }
+            }
+        }
         .background(
             Image("background")
                 .resizable()
@@ -403,7 +417,7 @@ struct LevelEditorView: View {
             TextField("Level Name", text: $viewModel.level.name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             NavigationLink(destination: LazyView {
-                LevelPlayerView(viewModel: LevelPlayerViewModel(level: viewModel.level))
+                LevelPlayerView(viewModel: LevelPlayerViewModel(level: viewModel.level, power: settings.power))
             }) {
                 Text("Start")
             }

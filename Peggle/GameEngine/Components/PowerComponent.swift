@@ -16,7 +16,9 @@ final class PowerComponent: Component {
 }
 
 extension PowerComponent {
-    enum Power {
-        case superGuide, spaceBlast, spookyBall
+    enum Power: String, CaseIterable {
+        case spaceBlast = "Space Blast"
+        case spookyBall = "Spooky Ball"
+        case superGuide = "Super Guide"
     }
 }

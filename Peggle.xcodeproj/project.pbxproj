@@ -65,6 +65,7 @@
 		0ED2812525EB2D2200F7FD9A /* StateComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED2812425EB2D2200F7FD9A /* StateComponent.swift */; };
 		0ED2812D25EB302300F7FD9A /* StateSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED2812C25EB302300F7FD9A /* StateSystem.swift */; };
 		0ED2813525EB562400F7FD9A /* RenderSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED2813425EB562400F7FD9A /* RenderSystem.swift */; };
+		0ED2813B25EB75C400F7FD9A /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED2813A25EB75C400F7FD9A /* GameSettings.swift */; };
 		0EE69DCF25D14B6A00BD142A /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DCE25D14B6A00BD142A /* CGRect+Extensions.swift */; };
 		0EE69DD325D17A1000BD142A /* CGAffineTransform+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DD225D17A1000BD142A /* CGAffineTransform+Extensions.swift */; };
 		0EE69DD925D1804200BD142A /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE69DD825D1804200BD142A /* CGVector+Extensions.swift */; };
@@ -145,6 +146,7 @@
 		0ED2812425EB2D2200F7FD9A /* StateComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateComponent.swift; sourceTree = "<group>"; };
 		0ED2812C25EB302300F7FD9A /* StateSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateSystem.swift; sourceTree = "<group>"; };
 		0ED2813425EB562400F7FD9A /* RenderSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderSystem.swift; sourceTree = "<group>"; };
+		0ED2813A25EB75C400F7FD9A /* GameSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettings.swift; sourceTree = "<group>"; };
 		0EE69DCE25D14B6A00BD142A /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		0EE69DD225D17A1000BD142A /* CGAffineTransform+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Extensions.swift"; sourceTree = "<group>"; };
 		0EE69DD825D1804200BD142A /* CGVector+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extensions.swift"; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 				0E2A453F25BFEABA00B0DCA7 /* LevelEditorViewModel.swift */,
 				0EA3451525BDB53000DD1BBB /* LevelEditorListViewModel.swift */,
 				0EFC551A25D1A9E100C053FF /* LevelPlayerViewModel.swift */,
+				0ED2813A25EB75C400F7FD9A /* GameSettings.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				0E152C3D25EAA9BA0098E288 /* ScoreSystem.swift in Sources */,
 				0E61D57B25D6CD2F0091D9D0 /* AimSystem.swift in Sources */,
 				0E892B4425E69EBE005573EF /* ClearComponent.swift in Sources */,
+				0ED2813B25EB75C400F7FD9A /* GameSettings.swift in Sources */,
 				0EE69DCF25D14B6A00BD142A /* CGRect+Extensions.swift in Sources */,
 				0E18E23E25D6412200A2B74A /* EntityManager.swift in Sources */,
 				0E18E21525D6296600A2B74A /* PhysicsComponent.swift in Sources */,
