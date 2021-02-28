@@ -60,44 +60,44 @@ struct LevelSelectView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 32) {
                 ForEach(viewModel.levels, id: \.name) { level in
-                    LevelView(level: level, frame: frame)
+                    NavigationLink(destination: LazyView {
+                        LevelPlayerView(viewModel: LevelPlayerViewModel(level: level, power: settings.power),
+                                        parentView: "Level Select")
+                    }) {
+                        VStack(spacing: 16) {
+                            PreviewView(elements: level.elements, frame: frame)
+                            Text(level.name)
+                                .lineLimit(1)
+                        }
+                    }
                 }
             }
             .padding([.top, .bottom])
         }
     }
 
-    private func LevelView(level: Level, frame: CGRect) -> some View {
+    private func PreviewView(elements: [Element], frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX / 4, y: frame.maxX / 4)
 
-        return NavigationLink(destination: LazyView {
-            LevelPlayerView(viewModel: LevelPlayerViewModel(level: level, power: settings.power),
-                            parentView: "Level Select")
-        }) {
-            VStack(spacing: 16) {
-                ZStack {
-                    ForEach(level.elements, id: \.self) { element in
-                        Image(element.imageName)
-                            .resizable()
-                            .rotationEffect(.radians(Double(element.rotation)))
-                            .frame(width: element.size.applying(denormalize).width,
-                                   height: element.size.applying(denormalize).height)
-                            .position(element.position.applying(denormalize))
-                            .clipped()
-                    }
-                }
-                .frame(width: frame.maxX / 4, height: frame.maxX / 4)
-                .background(
-                    Image("background")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: frame.maxX / 4, height: frame.maxX / 4, alignment: .leading)
-                        .clipped()
-                )
-                Text(level.name)
-                    .lineLimit(1)
+        return ZStack {
+            ForEach(elements, id: \.self) { element in
+                Image(element.imageName)
+                    .resizable()
+                    .rotationEffect(.radians(Double(element.rotation)))
+                    .frame(width: element.size.applying(denormalize).width,
+                           height: element.size.applying(denormalize).height)
+                    .position(element.position.applying(denormalize))
+                    .clipped()
             }
         }
+        .frame(width: frame.maxX / 4, height: frame.maxX / 4)
+        .background(
+            Image("background")
+                .resizable()
+                .scaledToFill()
+                .frame(width: frame.maxX / 4, height: frame.maxX / 4, alignment: .leading)
+                .clipped()
+        )
     }
 }
 
