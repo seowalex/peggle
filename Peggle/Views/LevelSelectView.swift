@@ -15,9 +15,9 @@ struct LevelSelectView: View {
             let frame = geometry.frame(in: .local)
 
             if viewModel.levels.isEmpty {
-                EmptyLevelsList()
+                NoLevelsView()
             } else {
-                LevelsList(frame: frame)
+                LevelsView(frame: frame)
             }
         }
         .navigationTitle("Level Select")
@@ -46,7 +46,7 @@ struct LevelSelectView: View {
         )
     }
 
-    private func EmptyLevelsList() -> some View {
+    private func NoLevelsView() -> some View {
         VStack(spacing: 10) {
             Image(systemName: "xmark.bin")
                 .font(.system(size: 60))
@@ -56,18 +56,18 @@ struct LevelSelectView: View {
         .foregroundColor(.secondary)
     }
 
-    private func LevelsList(frame: CGRect) -> some View {
+    private func LevelsView(frame: CGRect) -> some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 32) {
                 ForEach(viewModel.levels, id: \.name) { level in
-                    LevelTileView(level: level, frame: frame)
+                    LevelView(level: level, frame: frame)
                 }
             }
             .padding([.top, .bottom])
         }
     }
 
-    private func LevelTileView(level: Level, frame: CGRect) -> some View {
+    private func LevelView(level: Level, frame: CGRect) -> some View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX / 4, y: frame.maxX / 4)
 
         return NavigationLink(destination: LazyView {
