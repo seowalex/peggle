@@ -97,7 +97,7 @@ extension AppDatabase {
     func isPreloadedLevel(name: String) throws -> Bool {
         try dbWriter.read { db in
             try LevelRecord
-                .filter(LevelRecord.Columns.isProtected == true && LevelRecord.Columns.name == name)
+                .filter(LevelRecord.Columns.name == name && LevelRecord.Columns.isProtected == true)
                 .fetchCount(db) > 0
         }
     }
@@ -124,9 +124,10 @@ extension AppDatabase {
 
             let bodies = pegs.map { PhysicsBody(shape: .circle, size: $0.size,
                                                 position: $0.position, rotation: $0.rotation)
-            } + blocks.map { PhysicsBody(shape: .rectangle, size: $0.size,
-                                         position: $0.position, rotation: $0.rotation)
             }
+                + blocks.map { PhysicsBody(shape: .rectangle, size: $0.size,
+                                           position: $0.position, rotation: $0.rotation)
+                }
 
             guard bodies.allSatisfy({ !$0.isColliding(with: bodies) }) else {
                 throw DatabaseError(message: "Pegs/blocks are colliding with each other")
@@ -262,11 +263,11 @@ extension AppDatabase {
         }
 
         var bodies: [PhysicsBody] = []
-        let orangePegCount = 25
-        let bluePegCount = 45
-        var pegCount = orangePegCount + bluePegCount
-        let colors = (Array(repeating: Peg.Color.orange, count: orangePegCount)
-                        + Array(repeating: Peg.Color.blue, count: bluePegCount)).shuffled()
+        let orangePegsCount = 25
+        let bluePegsCount = 45
+        var pegsCount = orangePegsCount + bluePegsCount
+        let colors = (Array(repeating: Peg.Color.orange, count: orangePegsCount)
+                        + Array(repeating: Peg.Color.blue, count: bluePegsCount)).shuffled()
 
         for i in 0..<2 {
             bodies.append(PhysicsBody(shape: .rectangle,
@@ -274,7 +275,7 @@ extension AppDatabase {
                                       position: CGPoint(x: 0.5, y: 0.3 + CGFloat(i) * 0.4)))
         }
 
-        while pegCount > 0 {
+        while pegsCount > 0 {
             let body = PhysicsBody(shape: .circle,
                                    size: CGSize(width: 0.08, height: 0.08),
                                    position: CGPoint(x: .random(in: 0.06...0.94), y: .random(in: 0.06...0.94)))
@@ -284,7 +285,7 @@ extension AppDatabase {
             }
 
             bodies.append(body)
-            pegCount -= 1
+            pegsCount -= 1
         }
 
         for i in 0..<2 {

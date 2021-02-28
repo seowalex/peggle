@@ -194,7 +194,6 @@ final class PhysicsBody {
         position += velocity * actualSeconds + 0.5 * acceleration * actualSeconds * actualSeconds
         velocity += acceleration * actualSeconds
 
-        // TODO: Better resting calculations
         if isDynamic == true && velocity.magnitude() < 0.04 {
             isResting = true
         } else if isDynamic == true && velocity.magnitude() > 0.06 {

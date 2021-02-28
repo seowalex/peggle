@@ -8,7 +8,7 @@ final class Block: Element {
     }
 
     init(position: CGPoint, rotation: CGFloat = 0.0, size: CGSize = defaultSize, isOscillating: Bool = false,
-         minCoefficient: CGFloat = -1.0, maxCoefficient: CGFloat = 1.0, frequency: CGFloat = 0.4) {
+         minCoefficient: CGFloat = -1.0, maxCoefficient: CGFloat = 1.0, frequency: CGFloat = 0.2) {
         super.init(position: position,
                    rotation: rotation,
                    size: size,

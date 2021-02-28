@@ -16,12 +16,6 @@ extension AppDatabase {
 
             return appDatabase
         } catch {
-            // TODO: More robust error handling. Possible errors include:
-            //
-            // * The parent directory cannot be created, or disallows writing.
-            // * The database is not accessible, due to permissions or data protection when the device is locked.
-            // * The device is out of space.
-            // * The database could not be migrated to its latest schema version.
             fatalError("Unresolved error \(error)")
         }
     }

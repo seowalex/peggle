@@ -13,7 +13,7 @@ struct BlockRecord: Equatable {
     var isOscillating: Bool = false
     var minCoefficient: CGFloat = -1.0
     var maxCoefficient: CGFloat = 1.0
-    var frequency: CGFloat = 0.4
+    var frequency: CGFloat = 0.2
 }
 
 // MARK: - Persistence

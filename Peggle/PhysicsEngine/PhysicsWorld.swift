@@ -34,22 +34,22 @@ final class PhysicsWorld {
 
                 subject.send((bodyA, bodyB))
 
-                guard [bodyA, bodyB].allSatisfy({ $0.affectedByCollisions == true }) else {
+                // Only handles static collisions
+                guard [bodyA, bodyB].allSatisfy({ $0.affectedByCollisions == true }) && bodyB.isDynamic == false else {
                     continue
                 }
 
-                // TODO: Dynamic collision
-                if bodyB.isDynamic == false {
-                    resolveStaticCollision(dynamicBody: bodyA, staticBody: bodyB)
-                }
+                resolveStaticCollision(dynamicBody: bodyA, staticBody: bodyB)
             }
         }
     }
 
     func resolveStaticCollision(dynamicBody: PhysicsBody, staticBody: PhysicsBody) {
+        // Make sure that the two bodies are no longer colliding
         let normalVector = resolveStaticCollisionResolution(dynamicBody: dynamicBody, staticBody: staticBody)
 
         // Calculate elastic collision (with restitution)
+        // and make sure the dynamic body is able to move away from the static body (if it is moving)
         let dx = dynamicBody.velocity.dx
         let dy = dynamicBody.velocity.dy
         let angle = normalVector.angle()
@@ -74,6 +74,7 @@ final class PhysicsWorld {
                 return .zero
             }
 
+            // Get the position of the dynamic body relative to the static body
             let positionVector = dynamicBody.position - vertices[0]
             let x = positionVector.dot((vertices[2] - vertices[0]).normalized())
             let y = positionVector.dot((vertices[1] - vertices[0]).normalized())
@@ -81,7 +82,8 @@ final class PhysicsWorld {
             var isBetweenLeftRight = x > 0 && x < staticBody.size.width
             var isBetweenTopBottom = y > 0 && y < staticBody.size.height
 
-            // dynamicBody has moved too far into staticBody, so we need to check which edge to bounce off
+            // Dynamic body has moved too far into static body,
+            // so we need to check which edge to bounce off (choose the closest edge)
             if isBetweenLeftRight && isBetweenTopBottom {
                 isBetweenLeftRight = min(y, abs(staticBody.size.height - y)) < min(x, abs(staticBody.size.width - x))
                 isBetweenTopBottom = min(x, abs(staticBody.size.width - x)) < min(y, abs(staticBody.size.height - y))
@@ -133,14 +135,12 @@ final class PhysicsWorld {
 
             for otherBody in bodies {
                 guard body.isColliding(with: otherBody)
-                    && [body, otherBody].allSatisfy({ $0.affectedByCollisions == true }) else {
+                        && [body, otherBody].allSatisfy({ $0.affectedByCollisions == true })
+                        && otherBody.isDynamic == false else {
                     continue
                 }
 
-                // TODO: Dynamic collision
-                if otherBody.isDynamic == false {
-                    resolveStaticCollision(dynamicBody: body, staticBody: otherBody)
-                }
+                resolveStaticCollision(dynamicBody: body, staticBody: otherBody)
 
                 collisions += 1
             }
