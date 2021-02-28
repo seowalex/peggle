@@ -3,7 +3,7 @@ import SwiftUI
 
 final class LevelPlayerViewModel: ObservableObject {
     @Published private(set) var name = ""
-    @Published private(set) var gameState = GameState()
+    @Published private(set) var gameState = StateComponent()
     @Published private(set) var components: [RenderComponent] = []
 
     private let gameEngine: GameEngine

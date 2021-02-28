@@ -36,11 +36,11 @@ final class PowerSystem: System {
             guard let scoreComponent = entityManager.getComponent(ScoreComponent.self, for: entity),
                   let physicsComponent = entityManager.getComponent(PhysicsComponent.self, for: entity),
                   physicsComponent.physicsBody.position.distance(to: position) < 0.2
-                    && scoreComponent.isHit == false else {
+                    && scoreComponent.isScored == false else {
                 continue
             }
 
-            scoreComponent.isHit = true
+            scoreComponent.isScored = true
         }
 
         powerComponent.turnsRemaining -= 1

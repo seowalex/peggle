@@ -55,13 +55,15 @@ final class ClearSystem: System {
 
     func clearNearestPeg(entity: Entity, body: PhysicsBody) {
         if let scoreComponent = entityManager.getComponent(ScoreComponent.self, for: entity),
-           scoreComponent.isHit == true {
+           scoreComponent.isScored == true {
             if let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity) {
                 entityManager.removeEntity(entity)
                 entityManager.addComponent(powerComponent, to: entity)
             } else {
                 entityManager.removeEntity(entity)
             }
+
+            entityManager.addComponent(scoreComponent, to: entity)
         } else if let physicsComponent = entityManager
                     .getComponent(PhysicsComponent.self, for: entity),
                   let renderComponent = entityManager.getComponent(RenderComponent.self, for: entity) {
@@ -87,12 +89,17 @@ final class ClearSystem: System {
         }
 
         let scoreEntities = entityManager.getEntities(for: ScoreComponent.self)
+        var baseScore = 0
+        var pegsCount = 0
 
         for entity in scoreEntities {
             guard let scoreComponent = entityManager.getComponent(ScoreComponent.self, for: entity),
-                  scoreComponent.isHit == true else {
+                  scoreComponent.isScored == true else {
                 continue
             }
+
+            baseScore += scoreComponent.score
+            pegsCount += 1
 
             if let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity) {
                 entityManager.removeEntity(entity)
@@ -104,14 +111,15 @@ final class ClearSystem: System {
 
         entityManager.removeEntity(entity)
 
-        let powerEntities = entityManager.getEntities(for: PowerComponent.self)
+        let stateComponents = entityManager.getComponents(StateComponent.self)
 
-        for entity in powerEntities {
-            guard let powerComponent = entityManager.getComponent(PowerComponent.self, for: entity),
-                  powerComponent.isActivated == true else {
-                continue
-            }
+        for stateComponent in stateComponents {
+            stateComponent.score += baseScore * pegsCount
+        }
 
+        let powerComponents = entityManager.getComponents(PowerComponent.self)
+
+        for powerComponent in powerComponents.filter({ $0.isActivated == true }) {
             powerComponent.turnsRemaining -= 1
         }
     }

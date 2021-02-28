@@ -3,12 +3,8 @@ import CoreGraphics
 import Foundation
 
 final class GameEngine {
-    var gameState: GameState {
-        let scoreComponents = entityManager.getComponents(ScoreComponent.self)
-
-        return GameState(orangePegsRemainingCount: scoreComponents
-                            .filter { $0.color == .orange && $0.isHit == false }.count,
-                         orangePegsCount: internalGameState.orangePegsCount)
+    var gameState: StateComponent? {
+        entityManager.getComponent(StateComponent.self, for: gameEntity)
     }
     var renderComponents: [RenderComponent] {
         entityManager.getComponents(RenderComponent.self)
@@ -20,7 +16,7 @@ final class GameEngine {
     private let entityFactory: EntityFactory
     private let systems: [System]
 
-    private let internalGameState: GameState
+    private var gameEntity: Entity
     private var bucketEntity: Entity!
 
     private var componentsCancellable: AnyCancellable?
@@ -29,6 +25,7 @@ final class GameEngine {
     init(elements: [Element]) {
         entityFactory = EntityFactory(entityManager: entityManager)
         systems = [
+            StateSystem(entityManager: entityManager),
             OscillateSystem(entityManager: entityManager),
             PowerSystem(entityManager: entityManager),
             AimSystem(entityManager: entityManager),
@@ -39,8 +36,10 @@ final class GameEngine {
             RenderSystem(entityManager: entityManager)
         ]
 
-        internalGameState = GameState(orangePegsCount: elements.compactMap { $0 as? Peg }
-                                        .filter { $0.color == .orange }.count)
+        gameEntity = Entity()
+        entityManager.addComponent(StateComponent(orangePegsCount: elements.compactMap { $0 as? Peg }
+                                                    .filter { $0.color == .orange }.count),
+                                   to: gameEntity)
         createEntities(elements: elements)
 
         componentsCancellable = entityManager.$components.sink { [weak self] _ in
@@ -69,7 +68,7 @@ final class GameEngine {
 
                 // Light pegs
                 if let scoreComponent = self?.entityManager.getComponent(ScoreComponent.self, for: entity) {
-                    scoreComponent.isHit = true
+                    scoreComponent.isScored = true
                 }
 
                 // Check for ball entering bucket
@@ -194,7 +193,7 @@ final class GameEngine {
                                      maxCollisions: trajectoryComponent.maxCollisions)
         }
     }
-    
+
     func updateScore() {
         let scoreComponents = entityManager.getComponents(ScoreComponent.self)
     }
@@ -206,7 +205,7 @@ final class GameEngine {
         for system in systems {
             system.update(deltaTime: seconds)
         }
-        
+
         updateScore()
     }
 }

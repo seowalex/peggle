@@ -8,7 +8,8 @@ final class ScoreSystem: System {
     }
 
     func update(deltaTime seconds: CGFloat) {
-        let orangePegCount = entityManager.getComponents(ScoreComponent.self).filter { $0.color == .orange }.count
+        let orangePegCount = entityManager.getComponents(ScoreComponent.self)
+            .filter { $0.color == .orange && $0.isScored == false }.count
         let entities = entityManager.getEntities(for: ScoreComponent.self)
 
         for entity in entities {
@@ -17,11 +18,9 @@ final class ScoreSystem: System {
                 continue
             }
 
-            if scoreComponent.isHit == true {
+            if scoreComponent.isScored == true {
                 renderComponent.state.formUnion(.lit)
-            }
-
-            if scoreComponent.isScored == false {
+            } else {
                 switch orangePegCount {
                 case 0:
                     scoreComponent.multiplier = 100

@@ -2,7 +2,7 @@ import Combine
 import SwiftUI
 
 final class GameRenderer {
-    var gameStatePublisher: AnyPublisher<GameState, Never> {
+    var gameStatePublisher: AnyPublisher<StateComponent, Never> {
         gameStateSubject.eraseToAnyPublisher()
     }
     var renderPublisher: AnyPublisher<[RenderComponent], Never> {
@@ -10,7 +10,7 @@ final class GameRenderer {
     }
 
     private let gameEngine: GameEngine
-    private let gameStateSubject = PassthroughSubject<GameState, Never>()
+    private let gameStateSubject = PassthroughSubject<StateComponent, Never>()
     private let renderSubject = PassthroughSubject<[RenderComponent], Never>()
 
     private var displayLink: CADisplayLink!
@@ -33,7 +33,10 @@ final class GameRenderer {
             lag -= 1 / preferredFramesPerSecond
         }
 
-        gameStateSubject.send(gameEngine.gameState)
+        if let gameState = gameEngine.gameState {
+            gameStateSubject.send(gameState)
+        }
+
         renderSubject.send(gameEngine.renderComponents)
     }
 

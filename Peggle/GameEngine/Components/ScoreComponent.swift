@@ -3,6 +3,9 @@ import CoreGraphics
 final class ScoreComponent: Component {
     let color: Peg.Color
     var score: Int {
+        baseScore * multiplier
+    }
+    var baseScore: Int {
         switch color {
         case .blue, .green:
             return 10
@@ -13,7 +16,6 @@ final class ScoreComponent: Component {
         }
     }
     var multiplier: Int = 1
-    var isHit: Bool = false
     var isScored: Bool = false
 
     init(color: Peg.Color) {
