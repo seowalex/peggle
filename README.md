@@ -113,10 +113,129 @@ Levels can be previewed in the level select screen, which will automatically be 
 ### Scoring System
 A scoring system that attempts to closely mimic Peggle's has been implemented, complete with multipliers and purple pegs. Free balls are also awarded when the player scores above 25000, 75000 and 125000 points, and when the player catches the ball with the bucket. 
 
+### Game UI
+The current score, as well as the balls and orange pegs remaining, can be seen below the playing area.
+
 ## Tests
-If you decide to write how you are going to do your tests instead of writing
-actual tests, please write in this section. If you decide to write all of your
-tests in code, please delete this section.
+### Add peg (not overlapping/out of bounds)
+
+1. Select the blue peg button
+2. Tap on an empty space on the board
+3. A blue peg should be added
+4. Repeat steps 1 to 3 with the orange peg button
+
+### Add peg (overlapping/out of bounds)
+
+1. Select the blue peg button
+2. Tap on an empty space on the board
+3. A blue peg should be added
+4. Tap on the same spot that was previously tapped
+5. A peg will not be added as it will overlap with an existing peg
+6. Tap on the toolbar
+7. A peg will not be added as it is out of bounds
+8. Repeat steps 1 to 7 with the orange peg button
+
+### Delete peg (long press)
+
+1. Add a blue peg
+2. Long press the blue peg
+3. The blue peg should be deleted
+4. Repeat steps 1 to 3 with the orange peg button
+
+### Delete peg (tap)
+
+1. Add a blue peg
+2. Select the delete button
+3. Tap the blue peg
+4. The blue peg should be deleted
+5. Repeat steps 1 to 4 with the orange peg button
+
+### Drag peg (not overlapping/out of bounds)
+
+1. Add a blue peg
+2. Tap and drag the blue peg to a new position
+3. The blue peg should be moved
+4. Repeat steps 1 to 3 with the orange peg button
+
+### Drag peg (overlapping/out of bounds)
+
+1. Add two blue pegs
+2. Tap and drag one blue peg to the other blue peg
+3. The blue peg should not be moved as it will overlap with an existing peg
+4. Tap and drag one blue peg offscreen or into the toolbar
+5. The blue peg should not be moved as it is out of bounds
+6. Repeat steps 1 to 5 with the orange peg button
+
+### Saving a level
+
+1. Add some pegs
+2. Type a name for the level in the text box
+3. Tap the save button
+4. A popup should show, and the level should be saved
+
+### Loading a level
+
+1. Save a level
+2. Tap the load button
+3. A list of levels should be shown
+4. Tap any level
+5. The corresponding level should be loaded
+
+### Resetting a level
+
+1. Add some pegs
+2. Tap the reset button
+3. The level should be resetted
+
+### Start Level
+1. Use the level editor to place pegs as desired
+2. Tap the start button
+3. The designed level should be ready to be played
+
+### Ball Launch
+1. Start a level
+2. Tap and drag anywhere in the playing field: the cannon should rotate to face the direction of the tap
+3. Release the tap
+4. The ball should be launched in the corresponding direction
+
+### Ball Launch (direction restriction)
+1. Start a level
+2. Try to rotate the cannon such that it launches the ball upwards
+3. The cannon should not be able to rotate or launch a ball more than 60 degrees away from the center
+
+### Ball Launch (number of balls restriction)
+1. Start a level
+2. Launch a ball
+3. Should be unable to launch another ball (or rotate the cannon) while the previous ball has not exited the stage
+
+### Ball Movement
+1. Start a level
+2. Launch a ball
+3. The ball should travel in a parabolic trajectory affected by both gravity and the launch force
+
+### Ball Collision
+1. Start a level
+2. Launch a ball at a peg
+3. The ball should collide with the peg and bounce away in a realistic manner
+4. The ball should also collide with the wall and bounce away in a realistic manner
+
+### Peg Lighting
+1. Start a level
+2. Launch a ball at a peg
+3. The peg should be lit, and remain lit while the ball is still on the stage
+
+### Peg Removal
+1. Start a level
+2. Launch a ball at a peg
+3. Any hit pegs should be lit
+4. When the ball exits the stage, any lit pegs should be removed
+
+### Peg Removal (stuck)
+1. Start a level
+2. Launch a ball such that it is stuck between pegs and cannot exit the stage
+3. Any hit pegs should be lit
+4. After a short delay, the lit peg closest to the ball should be removed
+5. The ball should continue hitting pegs or exiting the stage
 
 ## Written Answers
 
@@ -129,4 +248,8 @@ tests in code, please delete this section.
 > - if you were to redo the entire application, is there anything you would
 >   have done differently?
 
-Your answer here
+Overall, I am fairly happy with my architecture from Problem Sets 2 and 3, and did not have to clean up a large amount of technical debt from previous problem sets. One thing I have found out is that while SwiftUI provides a lot of sensible defaults, and makes it easy to bootstrap an application, custom behaviour can sometimes be hard to implement, and requires falling back onto UIKit. An example is custom alert boxes, which is not possible in SwiftUI.
+
+For my level editor from Problem Set 2, I was able to extend it to include blocks with not much changes. I considered using an Entity-Component-System architecture used in my game engine for my game editor, but after several tries, I deemed it as too much effort and probably not a good fit for my level editor. This is because my level editor requires a lot of custom views with custom drag gestures that are non-reusable, which did not fit well with ECS.
+
+Given that my level player used ECS, I did not face problems with multiple levels of inheritance. However, I did find that managing global state is slightly tricky with ECS. I ended up creating components that are only used once to keep track of global state, which does not seem like a good practice. If I redid the entire application, I would probably try to rely less on ECS, and use global states whenever appropriate.
