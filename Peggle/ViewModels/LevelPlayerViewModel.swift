@@ -2,7 +2,6 @@ import Combine
 import SwiftUI
 
 final class LevelPlayerViewModel: ObservableObject {
-    @EnvironmentObject var settings: GameSettings
     @Published private(set) var name = ""
     @Published private(set) var gameState = StateComponent()
     @Published private(set) var components: [RenderComponent] = []

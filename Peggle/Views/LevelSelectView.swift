@@ -71,7 +71,8 @@ struct LevelSelectView: View {
         let denormalize = CGAffineTransform(scaleX: frame.maxX / 4, y: frame.maxX / 4)
 
         return NavigationLink(destination: LazyView {
-            LevelPlayerView(viewModel: LevelPlayerViewModel(level: level, power: settings.power))
+            LevelPlayerView(viewModel: LevelPlayerViewModel(level: level, power: settings.power),
+                            parentView: "Level Select")
         }) {
             VStack(spacing: 16) {
                 ZStack {

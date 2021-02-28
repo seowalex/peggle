@@ -4,6 +4,8 @@ struct LevelPlayerView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: LevelPlayerViewModel
 
+    let parentView: String
+
     var body: some View {
         VStack(spacing: 0) {
             Main()
@@ -21,7 +23,7 @@ struct LevelPlayerView: View {
         .alert(isPresented: $viewModel.alertIsPresented) {
             Alert(title: Text(viewModel.alertTitle),
                   message: Text(viewModel.alertMessage),
-                  dismissButton: .default(Text("Return to Level Select")) {
+                  dismissButton: .default(Text("Return to \(parentView)")) {
                     presentationMode.wrappedValue.dismiss()
                   })
         }
@@ -110,6 +112,6 @@ struct LevelPlayerView: View {
 
 struct LevelPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        LevelPlayerView(viewModel: LevelPlayerViewModel(level: Level(), power: .spaceBlast))
+        LevelPlayerView(viewModel: LevelPlayerViewModel(level: Level(), power: .spaceBlast), parentView: "")
     }
 }

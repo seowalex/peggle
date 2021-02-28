@@ -150,7 +150,8 @@ struct LevelEditorView: View {
             TextField("Level Name", text: $viewModel.level.name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             NavigationLink(destination: LazyView {
-                LevelPlayerView(viewModel: LevelPlayerViewModel(level: viewModel.level, power: settings.power))
+                LevelPlayerView(viewModel: LevelPlayerViewModel(level: viewModel.level, power: settings.power),
+                                parentView: "Level Editor")
             }) {
                 Text("Start")
             }
